@@ -7,14 +7,16 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Leafy">
-    <link rel="apple-touch-icon" href="https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/potted_plant/default/192px.svg">
+    
+    <!-- APP ICON: Pointing to your custom icon.png in your repository -->
+    <link rel="apple-touch-icon" href="icon.png">
     
     <title>Leafy</title>
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
     
     <style>
@@ -31,7 +33,6 @@
             --safe-bot: env(safe-area-inset-bottom, 20px);
         }
 
-        /* Icon fix to ensure symbols show as icons, not text */
         .mi {
             font-family: 'Material Symbols Outlined' !important;
             font-weight: normal; font-style: normal; font-size: 24px; line-height: 1;
@@ -43,6 +44,7 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--surface); color: var(--on-surface);
             position: fixed; width: 100%; height: 100%; overflow: hidden;
+            transition: background 0.3s ease;
         }
 
         .scroll-container {
@@ -54,8 +56,8 @@
 
         /* --- UI COMPONENTS --- */
         .page { display: none; min-height: 100%; padding-bottom: calc(var(--safe-bot) + 8rem); }
-        .page.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .page.active { display: block; animation: fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
         .app-header {
             position: sticky; top: 0; z-index: 100;
@@ -65,7 +67,7 @@
         }
 
         .app-header .inner { display: flex; align-items: center; justify-content: space-between; max-width: 56rem; margin: 0 auto; }
-        .header-subtitle { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--secondary); text-align: center; margin-top: 2px; }
+        .header-subtitle { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--secondary); text-align: center; }
 
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
@@ -74,38 +76,53 @@
             padding: 0.7rem 0.5rem calc(var(--safe-bot) + 0.5rem); border-top: 1px solid var(--surf-c);
         }
 
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--secondary); opacity: 0.5; border: none; background: none; flex: 1; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--secondary); opacity: 0.5; border: none; background: none; flex: 1; font-family: inherit; }
         .nav-item.active { opacity: 1; color: var(--primary); }
-        .nav-item .mi { font-variation-settings: 'FILL' 0; transition: 0.2s; }
-        .nav-item.active .mi { font-variation-settings: 'FILL' 1; }
-        .nav-item .label { font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 4px; }
+        .nav-item .label { font-size: 9px; font-weight: 800; text-transform: uppercase; margin-top: 4px; }
 
-        .stat-card { background: var(--surf-low); border-radius: 1.25rem; padding: 1.25rem; }
-        .plant-card { background: #fff; border-radius: 1.25rem; border: 1px solid var(--surf-c); box-shadow: 0 4px 10px rgba(0,0,0,0.03); overflow: hidden; }
+        .stat-card { background: var(--surf-low); border-radius: 1.5rem; padding: 1.25rem; }
+        .plant-card { background: #fff; border-radius: 1.5rem; border: 1px solid var(--surf-c); box-shadow: 0 4px 15px rgba(0,0,0,0.04); overflow: hidden; position: relative; cursor: pointer; }
         
-        .care-btn { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
-        .weather-bar { display: flex; gap: 1.25rem; overflow-x: auto; padding: 0.5rem 0 1rem; scrollbar-width: none; }
-        .season-banner { background: var(--primary-fixed); color: var(--primary); padding: 1.25rem; border-radius: 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; }
+        .plant-img-wrap { height: 160px; width: 100%; background: var(--surf-c); overflow: hidden; position: relative; }
+        .plant-img { width: 100%; height: 100%; object-fit: cover; }
+        .plant-img-placeholder { height: 100%; display: flex; align-items: center; justify-content: center; color: var(--primary-dim); }
+        
+        .care-btn { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: transform 0.1s; }
+        .care-btn:active { transform: scale(0.9); }
+
+        .weather-bar { display: flex; gap: 1.5rem; overflow-x: auto; padding: 0.5rem 0 1.25rem; scrollbar-width: none; }
+        .weather-item { display: flex; align-items: center; gap: 0.5rem; color: var(--on-surf-v); }
 
         .leafy-toast { position: fixed; bottom: calc(var(--safe-bot) + 6.5rem); left: 50%; transform: translateX(-50%); background: var(--on-surface); color: var(--surface); padding: 0.8rem 1.5rem; border-radius: 99px; font-size: 0.9rem; font-weight: 700; z-index: 3000; opacity: 0; transition: 0.3s; pointer-events: none; }
         .leafy-toast.show { opacity: 1; }
 
         .leafy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 4000; display: none; align-items: center; justify-content: center; padding: 2rem; backdrop-filter: blur(8px); }
-        .leafy-modal-content { background: var(--surface); border-radius: 1.5rem; padding: 2rem; width: 100%; max-width: 340px; }
+        .leafy-modal-content { background: var(--surface); border-radius: 1.5rem; padding: 2rem; width: 100%; max-width: 340px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
 
-        /* Utility */
+        .field-label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--on-surf-v); letter-spacing: 0.05em; margin-bottom: 6px; display: block; }
+        .field-wrap { background: var(--surf-low); border-radius: 1rem; overflow: hidden; margin-top: 4px; border: 1px solid transparent; transition: 0.2s; }
+        .field-wrap:focus-within { border-color: var(--primary-dim); background: #fff; }
+        .field-wrap input { width: 100%; padding: 1.1rem; border: none; background: transparent; font-size: 16px; font-family: inherit; color: var(--on-surface); }
+        
+        .photo-picker { background: var(--surf-c); height: 100px; border-radius: 1rem; border: 2px dashed var(--outline); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden; transition: 0.2s; }
+        .photo-picker img { width: 100%; height: 100%; object-fit: cover; position: absolute; }
+
+        .chip { background: var(--surf-low); padding: 0.8rem 1.25rem; border-radius: 99px; border: none; font-weight: 700; cursor: pointer; color: var(--on-surface); font-family: inherit; flex: 1; text-align: center; }
+        .chip.active { background: var(--primary); color: #fff; }
+
+        html.dark-mode { 
+            --primary: #a9d293; --primary-fixed: #2d4f1e; --surface: #1a1c16; --surf-low: #242720; --surf-c: #2f332a;
+            --on-surface: #e2e3d9; --on-surf-v: #c3c8bb; --outline: #8d9387; 
+        }
+        html.dark-mode .app-header, html.dark-mode .bottom-nav { background: rgba(26,28,22,0.92); border-color: #2f332a; }
+        html.dark-mode .plant-card { background: #242720; border-color: #2f332a; }
+
         .px { padding-left: 1.5rem; padding-right: 1.5rem; }
         .max-w { max-width: 56rem; margin: 0 auto; }
         .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         .flex { display: flex; } .items-center { align-items: center; } .justify-between { justify-content: space-between; }
         .gap1 { gap: 0.5rem; } .gap2 { gap: 1rem; } .mb3 { margin-bottom: 1.5rem; } .mt3 { margin-top: 1.5rem; }
-        .muted { color: var(--on-surf-v); } .small { font-size: 0.85rem; } .uppercase { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; }
-        .field-wrap { background: var(--surf-low); border-radius: 1rem; overflow: hidden; margin-top: 0.5rem; }
-        .field-wrap input { width: 100%; padding: 1.1rem; border: none; background: transparent; font-size: 16px; font-family: inherit; }
-        .chip { background: var(--surf-low); padding: 0.7rem 1.2rem; border-radius: 99px; border: none; font-weight: 700; cursor: pointer; color: var(--on-surface); }
-        .chip.active { background: var(--primary); color: #fff; }
-
-        html.dark-mode { --primary: #a9d293; --primary-fixed: #2d4f1e; --surface: #1a1c16; --surf-low: #242720; --on-surface: #e2e3d9; --on-surf-v: #c3c8bb; }
+        .small { font-size: 0.85rem; } .uppercase { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; }
     </style>
 </head>
 <body>
@@ -115,113 +132,132 @@
     <div id="leafy-modal" class="leafy-modal">
         <div class="leafy-modal-content">
             <h3 id="modal-title">Confirm</h3>
-            <p id="modal-body" class="muted mt3 small" style="line-height:1.4"></p>
+            <p id="modal-body" class="mt3 small" style="line-height:1.5; color: var(--on-surf-v);"></p>
             <div class="flex gap2 mt3">
-                <button class="chip" onclick="closeModal()" style="flex:1;">Cancel</button>
-                <button id="modal-confirm-btn" class="chip active" style="flex:1;">Confirm</button>
+                <button class="chip" onclick="closeModal()">Cancel</button>
+                <button id="modal-confirm-btn" class="chip active">Confirm</button>
             </div>
         </div>
     </div>
 
     <div class="scroll-container" id="main-scroll">
-        
-        <!-- PAGE: SANCTUARY -->
         <div id="page-sanctuary" class="page active">
             <header class="app-header">
                 <div class="inner"><div style="width:40px;"></div><div style="text-align:center;"><h1>Leafy</h1><span class="header-subtitle">Sanctuary</span></div><div style="width:40px;"></div></div>
             </header>
             <div class="px mt3 max-w">
-                <h2 id="welcome-text" style="font-size:2.2rem; font-weight:700; color:var(--primary); margin-bottom:0.2rem;">Good morning</h2>
+                <h2 id="welcome-text" style="font-size:2.2rem; font-weight:800; color:var(--primary); margin-bottom:0.2rem;">Good afternoon</h2>
                 <div class="weather-bar">
-                    <div class="flex items-center gap1"><span class="mi" style="color:var(--secondary)">humidity_percentage</span> <span id="env-humidity" class="small uppercase">--%</span></div>
-                    <div class="flex items-center gap1"><span class="mi" style="color:var(--secondary)">wb_sunny</span> <span id="env-sunrise" class="small uppercase">--:--</span></div>
-                    <div class="flex items-center gap1"><span class="mi" style="color:var(--secondary)">dark_mode</span> <span id="env-sunset" class="small uppercase">--:--</span></div>
-                </div>
-                <div id="season-insight" class="season-banner" style="display:none;">
-                    <span class="mi" id="season-icon" style="font-size:2.2rem;">local_florist</span>
-                    <div><h4 id="season-name" class="uppercase" style="font-size:10px; margin-bottom:2px;">Season</h4><p id="season-tip" style="font-size:0.85rem; line-height:1.3;">Insights loading...</p></div>
+                    <div class="weather-item"><span class="mi" style="color:var(--secondary)">humidity_percentage</span> <span id="env-humidity" class="small uppercase">--%</span></div>
+                    <div class="weather-item"><span class="mi" style="color:var(--secondary)">wb_sunny</span> <span id="env-sunrise" class="small uppercase">--:--</span></div>
+                    <div class="weather-item"><span class="mi" style="color:var(--secondary)">dark_mode</span> <span id="env-sunset" class="small uppercase">--:--</span></div>
                 </div>
                 <div class="grid2 mb3">
-                    <div class="stat-card"><span class="small uppercase muted">Hydration</span><div id="stat-hydration" style="font-size:2.5rem; font-family:'Noto Serif'; color:var(--primary);">100%</div></div>
+                    <div class="stat-card"><span class="small uppercase" style="color:var(--secondary)">Hydration</span><div id="stat-hydration" style="font-size:2.5rem; font-family:'Noto Serif'; color:var(--primary);">100%</div></div>
                     <div class="stat-card" style="background:var(--primary-c); color:var(--primary-fixed);"><span class="small uppercase" style="opacity:0.7">Collection</span><div id="stat-total" style="font-size:1.8rem; font-family:'Noto Serif';">0 Plants</div></div>
                 </div>
-                <div id="plant-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:1rem;"></div>
+                <div id="plant-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:1.25rem;"></div>
                 <div id="empty-sanctuary" style="text-align:center; padding:5rem 1rem; display:none;"><span class="mi" style="font-size:4rem; color:var(--surf-c); font-variation-settings:'FILL' 1">potted_plant</span><p class="muted mt3">Your sanctuary is empty.</p></div>
             </div>
         </div>
 
-        <!-- PAGE: ADD -->
         <div id="page-add" class="page">
-             <header class="app-header"><div class="inner"><div style="width:40px;"></div><div style="text-align:center;"><h1>Leafy</h1><span class="header-subtitle">New Plant</span></div><div style="width:40px;"></div></div></header>
+            <header class="app-header">
+                <div class="inner"><button class="nav-item" onclick="showPage('sanctuary')" style="opacity:1"><span class="mi">close</span></button><div style="text-align:center;"><h1 id="add-page-title">New Plant</h1><span class="header-subtitle" id="add-page-sub">Add to Sanctuary</span></div><div style="width:40px;"></div></div>
+            </header>
             <div class="px mt3 max-w">
-                <div class="mb3"><label class="small uppercase muted">Plant Name</label><div class="field-wrap"><input type="text" id="p-name" placeholder="e.g. Monty"></div></div>
-                <div class="grid2 mb3">
-                    <div><label class="small uppercase muted">Water (Days)</label><div class="field-wrap"><input type="number" id="p-water" value="7" min="1"></div></div>
-                    <div><label class="small uppercase muted">Fertilize (Days)</label><div class="field-wrap"><input type="number" id="p-fert" value="30" min="0"></div></div>
+                <input type="hidden" id="edit-id">
+                <div class="mb3">
+                    <label class="field-label">Photo</label>
+                    <div class="photo-picker" onclick="document.getElementById('p-image').click()">
+                        <span class="mi" id="photo-icon">add_a_photo</span>
+                        <img id="photo-preview" style="display:none;">
+                    </div>
+                    <input type="file" id="p-image" style="display:none;" accept="image/*" onchange="handleImage(event)">
                 </div>
-                <button onclick="savePlant()" style="width:100%; background:var(--primary); border:none; color:#fff; border-radius:1rem; padding:1.25rem; font-weight:700; font-family:inherit; font-size:1rem; cursor:pointer;">Bring Home</button>
+                <div class="mb3">
+                    <label class="field-label">Plant Name</label>
+                    <div class="field-wrap"><input type="text" id="p-name" placeholder="e.g. Monty"></div>
+                </div>
+                <div class="grid2 mb3">
+                    <div><label class="field-label">Water (Days)</label><div class="field-wrap"><input type="number" id="p-water" value="7" min="1"></div></div>
+                    <div><label class="field-label">Fertilize (Days)</label><div class="field-wrap"><input type="number" id="p-fert" value="30" min="0"></div></div>
+                </div>
+                <button onclick="savePlant()" style="width:100%; background:var(--primary); border:none; color:#fff; border-radius:1rem; padding:1.25rem; font-weight:800; font-family:inherit; font-size:1rem; cursor:pointer;">Save Plant</button>
+                <button id="delete-btn" onclick="confirmDelete()" style="width:100%; background:transparent; border:none; color:var(--error); margin-top:1.5rem; font-weight:700; font-family:inherit; display:none;">Delete Plant</button>
             </div>
         </div>
 
-        <!-- PAGE: JOURNAL -->
         <div id="page-journal" class="page">
-            <header class="app-header"><div class="inner"><div style="width:40px;"></div><div style="text-align:center;"><h1>Leafy</h1><span class="header-subtitle">Journal</span></div><div style="width:40px;"></div></div></header>
+            <header class="app-header"><div class="inner"><div style="width:40px;"></div><div style="text-align:center;"><h1>Journal</h1><span class="header-subtitle">Care History</span></div><div style="width:40px;"></div></div></header>
             <div class="px mt3 max-w"><div id="journal-history" class="flex" style="flex-direction:column; gap:0.75rem;"></div></div>
         </div>
 
-        <!-- PAGE: SETTINGS -->
         <div id="page-settings" class="page">
-            <header class="app-header"><div class="inner"><div style="width:40px;"></div><div style="text-align:center;"><h1>Leafy</h1><span class="header-subtitle">Settings</span></div><div style="width:40px;"></div></div></header>
+            <header class="app-header"><div class="inner"><div style="width:40px;"></div><div style="text-align:center;"><h1>Settings</h1><span class="header-subtitle">Preferences</span></div><div style="width:40px;"></div></div></header>
             <div class="px mt3 max-w">
-                <div class="stat-card mb3"><span class="small uppercase muted">Care Alerts</span><div class="flex items-center justify-between mt1"><span style="font-weight:700;">Notifications</span><button class="chip" id="notif-btn" onclick="toggleNotifications()">Setup</button></div></div>
-                <div class="stat-card mb3"><span class="small uppercase muted">Backup</span><div class="flex gap2 mt2"><button class="chip" onclick="exportData()" style="flex:1;">Export</button><button class="chip" onclick="triggerImport()" style="flex:1;">Import</button></div><input type="file" id="import-input" style="display:none;" accept=".json" onchange="handleImport(event)"></div>
-                <div class="stat-card mb3"><span class="small uppercase muted">Theme</span><div class="flex gap2 mt2"><button class="chip" id="mode-light" onclick="setMode('light')" style="flex:1;">Light</button><button class="chip" id="mode-dark" onclick="setMode('dark')" style="flex:1;">Dark</button></div></div>
-                <button onclick="confirmReset()" style="color:var(--error); width:100%; border:none; padding:1.25rem; background:var(--surf-low); border-radius:1rem; font-weight:800; font-family:inherit; cursor:pointer;">Reset All Data</button>
+                <div class="stat-card mb3">
+                    <span class="small uppercase muted">Care Alerts</span>
+                    <div class="flex items-center justify-between mt2">
+                        <span style="font-weight:700;">Notifications</span>
+                        <button class="chip" id="notif-btn" onclick="toggleNotifications()">Setup</button>
+                    </div>
+                </div>
+                <div class="stat-card mb3">
+                    <span class="small uppercase muted">Backup & Restore</span>
+                    <div class="flex gap2 mt2">
+                        <button class="chip" onclick="exportData()">Export</button>
+                        <button class="chip" onclick="document.getElementById('import-input').click()">Import</button>
+                    </div>
+                    <input type="file" id="import-input" style="display:none;" accept=".json" onchange="handleImport(event)">
+                </div>
+                <div class="stat-card mb3">
+                    <span class="small uppercase muted">Appearance</span>
+                    <div class="flex gap2 mt2" style="flex-wrap:wrap">
+                        <button class="chip" id="mode-light" onclick="setMode('light')">Light</button>
+                        <button class="chip" id="mode-dark" onclick="setMode('dark')">Dark</button>
+                        <button class="chip" id="mode-auto" onclick="setMode('auto')">System</button>
+                    </div>
+                </div>
+                <button onclick="confirmReset()" style="color:var(--error); width:100%; border:none; padding:1.25rem; background:var(--surf-low); border-radius:1rem; font-weight:800; font-family:inherit; cursor:pointer; text-transform:uppercase; letter-spacing:0.05em;">Reset All Data</button>
             </div>
         </div>
     </div>
 
     <nav class="bottom-nav">
         <button class="nav-item active" onclick="showPage('sanctuary')" id="nav-sanctuary"><span class="mi">potted_plant</span><span class="label">Home</span></button>
-        <button class="nav-item" onclick="showPage('add')" id="nav-add"><span class="mi">add_circle</span><span class="label">Add</span></button>
+        <button class="nav-item" onclick="openAddPage()" id="nav-add"><span class="mi">add_circle</span><span class="label">Add</span></button>
         <button class="nav-item" onclick="showPage('journal')" id="nav-journal"><span class="mi">menu_book</span><span class="label">Journal</span></button>
         <button class="nav-item" onclick="showPage('settings')" id="nav-settings"><span class="mi">settings</span><span class="label">Settings</span></button>
     </nav>
 
     <script>
         const DB = {
-            key: 'leafy_v4_stable',
-            defaults: { plants: [], logs: [], settings: { mode: 'light', notifications: false } },
+            key: 'leafy_v5_pro',
+            defaults: { plants: [], logs: [], settings: { mode: 'auto', notifications: false } },
             data: null,
             init() {
                 const saved = localStorage.getItem(this.key);
                 this.data = saved ? JSON.parse(saved) : this.defaults;
                 this.data = { ...this.defaults, ...this.data };
-                this.data.settings = { ...this.defaults.settings, ...this.data.settings };
+                this.data.settings = { ...this.defaults.settings, ...(this.data.settings || {}) };
                 this.apply();
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => this.apply());
             },
             save() { localStorage.setItem(this.key, JSON.stringify(this.data)); render(); },
             apply() {
-                document.documentElement.classList.toggle('dark-mode', this.data.settings.mode === 'dark');
+                const mode = this.data.settings.mode;
+                let isDark = mode === 'dark';
+                if (mode === 'auto') isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.classList.toggle('dark-mode', isDark);
+                ['light', 'dark', 'auto'].forEach(m => {
+                    const btn = document.getElementById('mode-' + m);
+                    if (btn) btn.classList.toggle('active', mode === m);
+                });
                 const nBtn = document.getElementById('notif-btn');
-                if(nBtn) { nBtn.innerText = this.data.settings.notifications ? 'Active' : 'Setup'; nBtn.classList.toggle('active', !!this.data.settings.notifications); }
-                const lBtn = document.getElementById('mode-light'); const dBtn = document.getElementById('mode-dark');
-                if(lBtn) lBtn.classList.toggle('active', this.data.settings.mode === 'light');
-                if(dBtn) dBtn.classList.toggle('active', this.data.settings.mode === 'dark');
-            },
-            reset() { localStorage.clear(); location.reload(); }
+                if(nBtn) nBtn.innerText = this.data.settings.notifications ? 'Active' : 'Setup';
+            }
         };
-
-        function showModal(title, body, confirmCallback) {
-            const m = document.getElementById('leafy-modal');
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-body').innerText = body;
-            m.style.display = 'flex';
-            document.getElementById('modal-confirm-btn').onclick = () => { confirmCallback(); closeModal(); };
-        }
-        function closeModal() { document.getElementById('leafy-modal').style.display = 'none'; }
-        function confirmReset() { showModal("Wipe Data?", "Delete all plants and history?", () => DB.reset()); }
-        function showToast(msg) { const t = document.getElementById('leafy-toast'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
 
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -234,48 +270,89 @@
             document.getElementById('main-scroll').scrollTop = 0;
         }
 
-        function savePlant() {
-            const nameEl = document.getElementById('p-name'); const waterEl = document.getElementById('p-water'); const fertEl = document.getElementById('p-fert');
-            const name = nameEl.value.trim(); const water = parseInt(waterEl.value); const fert = parseInt(fertEl.value);
-            if(!name) return showToast("Name your plant");
-            DB.data.plants.push({ id: Date.now(), name, waterInterval: water, fertInterval: fert, lastWatered: new Date().toISOString(), lastFertilized: new Date().toISOString() });
-            DB.save();
-            nameEl.value = ''; waterEl.value = '7'; fertEl.value = '30';
-            showPage('sanctuary'); showToast("Added " + name);
+        function openAddPage() {
+            document.getElementById('add-page-title').innerText = "New Plant";
+            document.getElementById('add-page-sub').innerText = "Add to Sanctuary";
+            document.getElementById('edit-id').value = '';
+            document.getElementById('p-name').value = '';
+            document.getElementById('p-water').value = '7';
+            document.getElementById('p-fert').value = '30';
+            document.getElementById('photo-preview').style.display = 'none';
+            document.getElementById('photo-icon').style.display = 'block';
+            document.getElementById('delete-btn').style.display = 'none';
+            showPage('add');
         }
 
-        function logCare(id, type) {
-            const p = DB.data.plants.find(x => x.id === id); if(!p) return;
+        function openEditPage(id) {
+            const p = DB.data.plants.find(x => x.id === id);
+            if(!p) return;
+            document.getElementById('add-page-title').innerText = "Edit Plant";
+            document.getElementById('add-page-sub').innerText = p.name;
+            document.getElementById('edit-id').value = id;
+            document.getElementById('p-name').value = p.name;
+            document.getElementById('p-water').value = p.waterInterval;
+            document.getElementById('p-fert').value = p.fertInterval || 0;
+            const prev = document.getElementById('photo-preview');
+            const icon = document.getElementById('photo-icon');
+            if(p.image) { prev.src = p.image; prev.style.display = 'block'; icon.style.display = 'none'; }
+            else { prev.style.display = 'none'; icon.style.display = 'block'; }
+            document.getElementById('delete-btn').style.display = 'block';
+            showPage('add');
+        }
+
+        function handleImage(e) {
+            const file = e.target.files[0]; if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
+                    const size = 600; canvas.width = size; canvas.height = size;
+                    const scale = Math.max(size / img.width, size / img.height);
+                    const x = (size - img.width * scale) / 2; const y = (size - img.height * scale) / 2;
+                    ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+                    const base64 = canvas.toDataURL('image/jpeg', 0.7);
+                    document.getElementById('photo-preview').src = base64;
+                    document.getElementById('photo-preview').style.display = 'block';
+                    document.getElementById('photo-icon').style.display = 'none';
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function savePlant() {
+            const editId = document.getElementById('edit-id').value;
+            const name = document.getElementById('p-name').value.trim();
+            const water = parseInt(document.getElementById('p-water').value);
+            const fert = parseInt(document.getElementById('p-fert').value);
+            const img = document.getElementById('photo-preview').style.display === 'block' ? document.getElementById('photo-preview').src : null;
+            if(!name) return showToast("Enter a name");
+            const now = new Date().toISOString();
+            const plantData = { id: editId ? parseInt(editId) : Date.now(), name, waterInterval: water, fertInterval: fert, image: img, lastWatered: now, lastFertilized: now };
+            if(editId) {
+                const idx = DB.data.plants.findIndex(x => x.id === parseInt(editId));
+                plantData.lastWatered = DB.data.plants[idx].lastWatered;
+                plantData.lastFertilized = DB.data.plants[idx].lastFertilized || DB.data.plants[idx].lastWatered;
+                DB.data.plants[idx] = plantData;
+            } else { DB.data.plants.push(plantData); }
+            DB.save(); showPage('sanctuary'); showToast("Sanctuary updated!");
+        }
+
+        function confirmDelete() {
+            showModal("Delete Plant?", "This will remove the plant and its care history.", () => {
+                const id = parseInt(document.getElementById('edit-id').value);
+                DB.data.plants = DB.data.plants.filter(x => x.id !== id);
+                DB.save(); showPage('sanctuary'); showToast("Plant removed.");
+            });
+        }
+
+        function logCare(e, id, type) {
+            e.stopPropagation(); const p = DB.data.plants.find(x => x.id === id);
             const now = new Date().toISOString();
             if(type === 'water') p.lastWatered = now; else p.lastFertilized = now;
             DB.data.logs.push({ plant: p.name, type, date: now });
             DB.save(); showToast(`${type === 'water' ? 'Watered' : 'Fertilized'} ${p.name}`);
-        }
-
-        function exportData() {
-            const blob = new Blob([JSON.stringify(DB.data)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = `leafy_backup.json`; a.click();
-            showToast("Backup exported!");
-        }
-
-        function triggerImport() { document.getElementById('import-input').click(); }
-        function handleImport(e) {
-            const file = e.target.files[0]; if(!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                try {
-                    const parsed = JSON.parse(ev.target.result);
-                    if(parsed.plants) { DB.data = parsed; DB.save(); DB.apply(); showPage('sanctuary'); showToast("Imported!"); }
-                } catch(err) { showToast("Invalid file."); }
-            };
-            reader.readAsText(file);
-        }
-
-        async function toggleNotifications() {
-            if(!("Notification" in window)) return showToast("Not supported.");
-            const perm = await Notification.requestPermission();
-            if(perm === "granted") { DB.data.settings.notifications = !DB.data.settings.notifications; DB.save(); DB.apply(); }
         }
 
         function render() {
@@ -285,45 +362,91 @@
             document.getElementById('stat-total').innerText = DB.data.plants.length + " Plants";
             let thirstyCount = 0;
             DB.data.plants.forEach(p => {
-                const overdue = (new Date() - new Date(p.lastWatered)) / 3600000 > (p.waterInterval * 24);
+                const overdue = (new Date() - new Date(p.lastWatered)) / 86400000 > p.waterInterval;
                 if(overdue) thirstyCount++;
-                const card = document.createElement('div'); card.className = 'plant-card';
-                card.innerHTML = `<div style="height:120px; background:var(--surf-c); display:flex; align-items:center; justify-content:center;"><span class="mi" style="font-size:3.5rem; color:var(--primary-dim); opacity:0.6; font-variation-settings:'FILL' 1">potted_plant</span></div><div class="info" style="padding:1rem;"><div style="font-weight:700; color:var(--primary); font-size:1.1rem; margin-bottom:4px;">${p.name}</div><div class="flex justify-between items-center mt1"><span class="small uppercase" style="${overdue?'color:var(--error);font-weight:800;':'color:var(--outline);'}">${overdue?'Thirsty':'Happy'}</span><div class="flex gap1"><button class="care-btn" style="background:var(--ter-fixed-dim); color:var(--tertiary); width:36px; height:36px;" onclick="logCare(${p.id}, 'fert')"><span class="mi" style="font-size:18px;">nutrition</span></button><button class="care-btn" style="background:var(--sec-c); color:var(--primary); width:36px; height:36px;" onclick="logCare(${p.id}, 'water')"><span class="mi" style="font-size:18px;">water_drop</span></button></div></div></div>`;
-                grid.appendChild(card);
+                const div = document.createElement('div'); div.className = 'plant-card'; div.onclick = () => openEditPage(p.id);
+                div.innerHTML = `<div class="plant-img-wrap">${p.image ? `<img src="${p.image}" class="plant-img">` : `<div class="plant-img-placeholder"><span class="mi" style="font-size:4rem">potted_plant</span></div>`}</div><div style="padding:1rem;"><div style="font-weight:800; font-size:1.1rem; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.name}</div><div class="flex justify-between items-center mt1"><span class="small uppercase" style="${overdue?'color:var(--error); font-weight:800;':'color:var(--outline);'}">${overdue?'Thirsty':'Healthy'}</span><div class="flex gap1"><button class="care-btn" style="background:var(--ter-fixed-dim); color:var(--tertiary); width:36px; height:36px;" onclick="logCare(event, ${p.id}, 'fert')"><span class="mi" style="font-size:18px;">nutrition</span></button><button class="care-btn" style="background:var(--sec-c); color:var(--primary); width:36px; height:36px;" onclick="logCare(event, ${p.id}, 'water')"><span class="mi" style="font-size:18px;">water_drop</span></button></div></div></div>`;
+                grid.appendChild(div);
             });
-            const total = DB.data.plants.length;
-            const hydration = total ? Math.round(((total - thirstyCount) / total) * 100) : 100;
+            const hydration = DB.data.plants.length ? Math.round(((DB.data.plants.length - thirstyCount) / DB.data.plants.length) * 100) : 100;
             document.getElementById('stat-hydration').innerText = hydration + "%";
         }
 
         function renderJournal() {
             const h = document.getElementById('journal-history'); if(!h) return;
-            h.innerHTML = DB.data.logs.slice().reverse().map(l => `<div style="background:var(--surf-low); padding:1rem; border-radius:1rem; display:flex; justify-content:space-between; align-items:center; border: 1px solid var(--surf-c);"><div class="flex items-center gap2"><span class="mi" style="font-size:18px; color:var(--primary)">${l.type==='water'?'water_drop':'nutrition'}</span><span style="font-weight:700;">${l.plant}</span></div><span class="small muted">${new Date(l.date).toLocaleDateString()}</span></div>`).join('');
+            h.innerHTML = DB.data.logs.slice(-50).reverse().map(l => `<div style="background:var(--surf-low); padding:1rem; border-radius:1rem; display:flex; justify-content:space-between; align-items:center; border: 1px solid var(--surf-c);"><div class="flex items-center gap2"><span class="mi" style="font-size:18px; color:var(--primary)">${l.type==='water'?'water_drop':'nutrition'}</span><span style="font-weight:700;">${l.plant}</span></div><span class="small muted">${new Date(l.date).toLocaleDateString()}</span></div>`).join('');
         }
 
         async function fetchEnv() {
             if (!navigator.geolocation) return;
             navigator.geolocation.getCurrentPosition(async (pos) => {
                 try {
-                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true&relative_humidity_2m=true&daily=sunrise,sunset&timezone=auto`);
+                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current=relative_humidity_2m&daily=sunrise,sunset&timezone=auto`);
                     const d = await res.json();
-                    document.getElementById('env-humidity').innerText = (d.current_weather.relative_humidity_2m || '--') + "%";
+                    document.getElementById('env-humidity').innerText = (d.current.relative_humidity_2m || '--') + "%";
                     document.getElementById('env-sunrise').innerText = new Date(d.daily.sunrise[0]).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
                     document.getElementById('env-sunset').innerText = new Date(d.daily.sunset[0]).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-                    const m = new Date().getMonth(); const b = document.getElementById('season-insight'); b.style.display = 'flex';
-                    const name = document.getElementById('season-name'); const tip = document.getElementById('season-tip'); const icon = document.getElementById('season-icon');
-                    if(m >= 2 && m <= 4) { name.innerText="Spring Awakening"; icon.innerText="local_florist"; tip.innerText="Plants are waking up! Increase watering."; }
-                    else if(m >= 5 && m <= 8) { name.innerText="Summer Growth"; icon.innerText="wb_sunny"; tip.innerText="Peak growth. Watch for heat stress."; }
-                    else if(m >= 9 && m <= 10) { name.innerText="Autumn Slumber"; icon.innerText="eco"; tip.innerText="Scale back watering."; }
-                    else { name.innerText="Winter Dormancy"; icon.innerText="ac_unit"; tip.innerText="Water sparingly."; }
                 } catch(e) {}
             });
+        }
+
+        async function toggleNotifications() {
+            if(!("Notification" in window)) return showToast("Not supported.");
+            const perm = await Notification.requestPermission();
+            if(perm === "granted") {
+                DB.data.settings.notifications = !DB.data.settings.notifications; DB.save(); DB.apply();
+                if(DB.data.settings.notifications) { new Notification("Leafy", { body: "Care alerts active!" }); checkCareAlerts(); }
+            }
+        }
+
+        function checkCareAlerts() {
+            if(!DB.data.settings.notifications) return;
+            const now = new Date(); const thirsty = []; const hungry = [];
+            DB.data.plants.forEach(p => {
+                const waterHours = (now - new Date(p.lastWatered)) / 3600000;
+                const fertHours = (now - new Date(p.lastFertilized || p.lastWatered)) / 3600000;
+                if(waterHours > (p.waterInterval * 24)) thirsty.push(p.name);
+                if(p.fertInterval && fertHours > (p.fertInterval * 24)) hungry.push(p.name);
+            });
+            if(thirsty.length || hungry.length) {
+                const msg = thirsty.length ? `${thirsty[0]} needs water!` : `${hungry[0]} needs nutrients!`;
+                sendNotification("Leafy Care", msg);
+            }
+        }
+
+        function sendNotification(title, body) {
+            const lastNotif = sessionStorage.getItem('last_notif_' + title);
+            if (!lastNotif || (Date.now() - lastNotif > 86400000)) { 
+                new Notification(title, { body, icon: 'icon.png' });
+                sessionStorage.setItem('last_notif_' + title, Date.now());
+            }
+        }
+
+        function showModal(title, body, confirmCallback) {
+            const m = document.getElementById('leafy-modal');
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerText = body;
+            m.style.display = 'flex';
+            document.getElementById('modal-confirm-btn').onclick = () => { confirmCallback(); closeModal(); };
+        }
+        function closeModal() { document.getElementById('leafy-modal').style.display = 'none'; }
+        function showToast(m) { const t = document.getElementById('leafy-toast'); t.innerText = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+        function setMode(m) { DB.data.settings.mode = m; DB.save(); DB.apply(); }
+        function exportData() { const blob = new Blob([JSON.stringify(DB.data)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `leafy_backup.json`; a.click(); showToast("Exported!"); }
+        function confirmReset() { showModal("Wipe Data?", "Delete all plants and history?", () => { localStorage.removeItem(DB.key); location.reload(); }); }
+        function handleImport(event) {
+            const file = event.target.files[0]; if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => { try { const parsed = JSON.parse(e.target.result); if(parsed.plants) { DB.data = parsed; DB.save(); DB.apply(); showPage('sanctuary'); showToast("Imported!"); } } catch(err) { showToast("Invalid file."); } };
+            reader.readAsText(file);
         }
 
         window.onload = () => {
             DB.init(); render(); fetchEnv();
             const hr = new Date().getHours();
             document.getElementById('welcome-text').innerText = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening';
+            setInterval(checkCareAlerts, 3600000);
+            checkCareAlerts();
         };
     </script>
 </body>
