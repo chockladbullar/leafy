@@ -1,688 +1,155 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.3">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Leafy">
+    <link rel="apple-touch-icon" href="[https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/potted_plant/default/192px.svg](https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/potted_plant/default/192px.svg)">
+    <title>Leafy</title>
+    <link href="[https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap)" rel="stylesheet"/>
+    <link href="[https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap](https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap)" rel="stylesheet"/>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
+        input,textarea,select{-webkit-user-select:text;user-select:text;outline:none;}
+        :root{
+            --primary:#173809;--primary-c:#2d4f1e;--primary-dim:#a9d293;--primary-fixed:#c5efad;
+            --secondary:#526442;--sec-c:#d2e6bc;--sec-fixed:#d5e9bf;
+            --tertiary:#571f00;--ter-fixed-dim:#ffb694;
+            --surface:#fafaef;--surf-low:#f4f4ea;--surf-c:#eeefe4;--surf-high:#e8e9df;--surf-highest:#e2e3d9;
+            --on-surface:#1a1c16;--on-surf-v:#43493e;--outline:#73796d;
+            --error:#ba1a1a;
+            --safe-top: env(safe-area-inset-top, 20px);
+            --safe-bot: env(safe-area-inset-bottom, 20px);
+        }
+        body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:var(--on-surface);min-height:100dvh;transition: background 0.3s;position: fixed;width: 100%;height: 100%;overflow: hidden;}
+        .scroll-container {position: absolute;top: 0; left: 0; right: 0; bottom: 0;overflow-y: auto;-webkit-overflow-scrolling: touch;}
+        h1,h2,h3,h4{font-family:'Noto Serif',serif;}
+        .mi{font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;font-size:24px;line-height:1;display:inline-block;vertical-align:middle;}
+        .page{display:none;min-height:100%;padding-bottom:calc(var(--safe-bot) + 8.5rem);}
+        .page.active{display:block;animation:fadeIn 0.25s ease;}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+        .app-header{position:sticky;top:0;z-index:100;background:rgba(250,250,239,0.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding: calc(var(--safe-top) + 0.5rem) 1.5rem 0.75rem;width:100%;border-bottom: 1px solid var(--surf-c);}
+        .app-header .inner{display:flex;align-items:center;justify-content:space-between;max-width:56rem;margin:0 auto;}
+        .app-header h1{font-style:italic;color:var(--primary);font-size:1.5rem;}
+        .header-subtitle{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--secondary);display:block;text-align:center;margin-top:1px;}
+        .bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;align-items:center;padding: 0.6rem 0.5rem calc(var(--safe-bot) + 0.4rem);background:rgba(250,250,239,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top: 1px solid var(--surf-c);z-index:1000;}
+        .nav-item{display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:0.5rem 1rem;border-radius:0.75rem;color:var(--secondary);opacity:0.65;transition:all 0.2s;border:none;background:none;font-family:inherit;flex:1;}
+        .nav-item.active{color:var(--primary);opacity:1;}
+        .nav-item.active .mi{font-variation-settings:'FILL' 1;}
+        .nav-item span.label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-top:4px;}
+        .stat-card{background:var(--surf-low);border-radius:1.25rem;padding:1.25rem;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+        .plant-card{background:#fff;border-radius:1.25rem;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.03);}
+        .plant-card .info{padding:1rem;}
+        .care-btn{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:all 0.2s;-webkit-tap-highlight-color:transparent;}
+        .weather-bar{display:flex;gap:1.5rem;overflow-x:auto;padding:0.5rem 0;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+        .season-banner{background:var(--primary-fixed);color:var(--primary);padding:1.2rem;border-radius:1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;}
+        .leafy-toast{position:fixed;bottom:calc(var(--safe-bot) + 6.5rem);left:50%;transform:translateX(-50%);background:var(--on-surface);color:var(--surface);padding:0.8rem 1.5rem;border-radius:9999px;font-size:0.9rem;font-weight:700;z-index:3000;opacity:0;transition:opacity 0.2s;pointer-events:none;width:max-content;max-width:90vw;text-align:center;}
+        .leafy-toast.show{opacity:1;}
+        .leafy-modal{position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:4000;display:flex; align-items:center; justify-content:center; padding:2rem;backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);}
+        .leafy-modal-content{background:var(--surface); border-radius:1.5rem; padding:1.75rem; width:100%; max-width:340px;box-shadow: 0 10px 30px rgba(0,0,0,0.15);}
+        .field-wrap{background:var(--surf-low);border-radius:1rem;overflow:hidden;border:1px solid transparent;}
+        .field-wrap input, .field-wrap select {padding:1rem;font-size:16px !important; width:100%; background:transparent; border:none;}
+        .alert-box{background:var(--primary-fixed); color:var(--primary); padding:1rem; border-radius:1rem; margin-bottom:1rem; font-size:0.85rem; line-height:1.4;}
+        html.dark-mode {--primary:#a9d293;--primary-c:#c5efad;--primary-dim:#526442;--primary-fixed:#2d4f1e;--surface:#1a1c16;--surf-low:#1f2119;--surf-c:#242720;--on-surface:#e2e3d9;}
+        .px{padding-left:1.5rem;padding-right:1.5rem;}
+        .max-w{max-width:56rem;margin:0 auto;}
+        .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+        .flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;} .gap1{gap:0.5rem;} .gap2{gap:1rem;}
+        .mb3{margin-bottom:1.5rem;} .mt3{margin-top:1.5rem;}
+        .muted{color:var(--on-surf-v);} .small{font-size:0.85rem;} .uppercase{text-transform:uppercase; letter-spacing:0.05em; font-weight:800;}
+        .chip{background:var(--surf-low); padding: 0.6rem 1rem; border-radius: 999px; border:none; color: var(--on-surface); font-weight:600; cursor:pointer; font-family:inherit;}
+        .chip.active{background:var(--primary); color:#fff;}
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="utf-8"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- iOS Specific Meta Tags for App-like Experience --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="apple-mobile-web-app-capable" content="yes"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="apple-mobile-web-app-title" content="Leafy"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;link rel="apple-touch-icon" href="https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/potted_plant/default/192px.svg"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Leafy&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>input,textarea,select{-webkit-user-select:text;user-select:text;outline:none;}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>:root{</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--primary:#173809;--primary-c:#2d4f1e;--primary-dim:#a9d293;--primary-fixed:#c5efad;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--secondary:#526442;--sec-c:#d2e6bc;--sec-fixed:#d5e9bf;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--tertiary:#571f00;--ter-fixed-dim:#ffb694;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--surface:#fafaef;--surf-low:#f4f4ea;--surf-c:#eeefe4;--surf-high:#e8e9df;--surf-highest:#e2e3d9;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--on-surface:#1a1c16;--on-surf-v:#43493e;--outline:#73796d;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--error:#ba1a1a;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--safe-top: env(safe-area-inset-top, 20px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--safe-bot: env(safe-area-inset-bottom, 20px);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>body{</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-family:'Plus Jakarta Sans',sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background:var(--surface);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color:var(--on-surface);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>min-height:100dvh;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: background 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: fixed;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Fixed container to prevent iOS Safari rubber-banding issues */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.scroll-container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>top: 0; left: 0; right: 0; bottom: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>overflow-y: auto;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>-webkit-overflow-scrolling: touch;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>h1,h2,h3,h4{font-family:'Noto Serif',serif;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.mi{font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;font-size:24px;line-height:1;display:inline-block;vertical-align:middle;}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.page{display:none;min-height:100%;padding-bottom:calc(var(--safe-bot) + 8.5rem);}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.page.active{display:block;animation:fadeIn 0.25s ease;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes fadeIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.app-header{</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position:sticky;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>top:0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>z-index:100;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background:rgba(250,250,239,0.9);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>backdrop-filter:blur(16px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>-webkit-backdrop-filter:blur(16px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: calc(var(--safe-top) + 0.5rem) 1.5rem 0.75rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width:100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 1px solid var(--surf-c);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.app-header .inner{display:flex;align-items:center;justify-content:space-between;max-width:56rem;margin:0 auto;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.app-header h1{font-style:italic;color:var(--primary);font-size:1.5rem;}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.header-subtitle{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--secondary);display:block;text-align:center;margin-top:1px;}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.bottom-nav{</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position:fixed;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>bottom:0;left:0;right:0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display:flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content:space-around;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items:center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 0.6rem 0.5rem calc(var(--safe-bot) + 0.4rem);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background:rgba(250,250,239,0.95);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>backdrop-filter:blur(20px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>-webkit-backdrop-filter:blur(20px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-top: 1px solid var(--surf-c);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>z-index:1000;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-item{display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:0.5rem 1rem;border-radius:0.75rem;color:var(--secondary);opacity:0.65;transition:all 0.2s;border:none;background:none;font-family:inherit;flex:1;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-item.active{color:var(--primary);opacity:1;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-item.active .mi{font-variation-settings:'FILL' 1;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-item span.label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-top:4px;}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.stat-card{background:var(--surf-low);border-radius:1.25rem;padding:1.25rem;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.plant-card{background:#fff;border-radius:1.25rem;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.03);}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.plant-card .info{padding:1rem;}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.care-btn{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:all 0.2s;-webkit-tap-highlight-color:transparent;}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.weather-bar{display:flex;gap:1.5rem;overflow-x:auto;padding:0.5rem 0;scrollbar-width:none;-webkit-overflow-scrolling:touch;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.weather-bar::-webkit-scrollbar{display:none;}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.season-banner{background:var(--primary-fixed);color:var(--primary);padding:1.2rem;border-radius:1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.season-banner .mi{font-size:2rem;}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.leafy-toast{position:fixed;bottom:calc(var(--safe-bot) + 6.5rem);left:50%;transform:translateX(-50%);background:var(--on-surface);color:var(--surface);padding:0.8rem 1.5rem;border-radius:9999px;font-size:0.9rem;font-weight:700;z-index:3000;opacity:0;transition:opacity 0.2s;pointer-events:none;width:max-content;max-width:90vw;text-align:center;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.leafy-toast.show{opacity:1;}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.leafy-modal{</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:4000;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display:flex; align-items:center; justify-content:center; padding:2rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.leafy-modal-content{</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background:var(--surface); border-radius:1.5rem; padding:1.75rem; width:100%; max-width:340px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 30px rgba(0,0,0,0.15);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.field-wrap{background:var(--surf-low);border-radius:1rem;overflow:hidden;border:1px solid transparent;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.field-wrap input, .field-wrap select {padding:1rem;font-size:16px !important; width:100%; background:transparent; border:none;}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.alert-box{background:var(--primary-fixed); color:var(--primary); padding:1rem; border-radius:1rem; margin-bottom:1rem; font-size:0.85rem; line-height:1.4;}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>html.dark-mode {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--primary:#a9d293;--primary-c:#c5efad;--primary-dim:#526442;--primary-fixed:#2d4f1e;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--surface:#1a1c16;--surf-low:#1f2119;--surf-c:#242720;--on-surface:#e2e3d9;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--on-surf-v:#c3c8bb;--outline:#8d9387;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.px{padding-left:1.5rem;padding-right:1.5rem;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.max-w{max-width:56rem;margin:0 auto;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;} .gap1{gap:0.5rem;} .gap2{gap:1rem;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.mb3{margin-bottom:1.5rem;} .mt3{margin-top:1.5rem;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.muted{color:var(--on-surf-v);} .small{font-size:0.85rem;} .uppercase{text-transform:uppercase; letter-spacing:0.05em; font-weight:800;}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.chip{background:var(--surf-low); padding: 0.6rem 1rem; border-radius: 999px; border:none; color: var(--on-surface); font-weight:600; cursor:pointer; font-family:inherit;}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.chip.active{background:var(--primary); color:#fff;}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="leafy-toast" class="leafy-toast"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Custom Confirmation Modal --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="leafy-modal" class="leafy-modal" style="display:none;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="leafy-modal-content"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h3 id="modal-title"&gt;Confirm Action&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p id="modal-body" class="muted mt3 small"&gt;&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex gap2 mt3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="chip" onclick="closeModal()" style="flex:1;"&gt;Cancel&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="modal-confirm-btn" class="chip active" style="flex:1;"&gt;Continue&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="scroll-container" id="main-scroll"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- SANCTUARY PAGE --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="page-sanctuary" class="page active"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;header class="app-header"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="inner"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="width:40px;"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="text-align:center;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h1&gt;Leafy&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="header-subtitle"&gt;Sanctuary&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="width:40px;"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/header&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="px mt3 max-w"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 id="welcome-text" style="font-size:2.2rem;font-weight:700;color:var(--primary);margin-bottom:0.2rem;"&gt;Good morning&lt;/h2&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="weather-bar mb1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="weather-item" style="display:flex;align-items:center;gap:0.5rem;"&gt;&lt;span class="mi" style="color:var(--secondary)"&gt;humidity_percentage&lt;/span&gt; &lt;span id="env-humidity" class="small uppercase"&gt;--%&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="weather-item" style="display:flex;align-items:center;gap:0.5rem;"&gt;&lt;span class="mi" style="color:var(--secondary)"&gt;wb_sunny&lt;/span&gt; &lt;span id="env-sunrise" class="small uppercase"&gt;--:--&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="weather-item" style="display:flex;align-items:center;gap:0.5rem;"&gt;&lt;span class="mi" style="color:var(--secondary)"&gt;dark_mode&lt;/span&gt; &lt;span id="env-sunset" class="small uppercase"&gt;--:--&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="season-insight" class="season-banner" style="display:none;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;span class="mi" id="season-icon"&gt;ac_unit&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h4 id="season-name" class="uppercase" style="font-size:0.75rem;"&gt;Season&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p id="season-tip" style="font-size:0.85rem;"&gt;Environment tip loading...&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="grid2 mb3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="stat-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="small uppercase muted"&gt;Hydration&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div id="stat-hydration" style="font-size:2.5rem;font-family:'Noto Serif';color:var(--primary);"&gt;100%&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="stat-card" style="background:var(--primary-c);color:var(--primary-fixed);"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="small uppercase" style="opacity:0.7"&gt;Collection&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div id="stat-total" style="font-size:1.8rem;font-family:'Noto Serif';"&gt;0 Plants&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="plant-grid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));gap:1rem;"&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="empty-sanctuary" style="text-align:center; padding:5rem 1rem; display:none;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;span class="mi" style="font-size:4rem; color:var(--surf-high); font-variation-settings:'FILL' 1"&gt;potted_plant&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="muted mt3"&gt;Your sanctuary is empty.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- ADD PLANT PAGE --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="page-add" class="page"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">             </span>&lt;header class="app-header"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="inner"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="width:40px;"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="text-align:center;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h1&gt;Leafy&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="header-subtitle"&gt;New Plant&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="width:40px;"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/header&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="px mt3 max-w"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="mb3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;label class="small uppercase muted"&gt;Plant Name&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="field-wrap mt1"&gt;&lt;input type="text" id="p-name" placeholder="e.g. Monty"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="grid2 mb3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label class="small uppercase muted"&gt;Water (Days)&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="field-wrap mt1"&gt;&lt;input type="number" id="p-water" value="7" min="1"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label class="small uppercase muted"&gt;Fertilize (Days)&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="field-wrap mt1"&gt;&lt;input type="number" id="p-fert" value="30" min="0"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="savePlant()" style="width:100%; background:var(--primary); border:none; color:#fff; border-radius:1rem; padding:1.25rem; font-weight:700; font-family:inherit; font-size:1rem; cursor:pointer;"&gt;Bring Home&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- JOURNAL PAGE --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="page-journal" class="page"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;header class="app-header"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="inner"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="width:40px;"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="text-align:center;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h1&gt;Leafy&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="header-subtitle"&gt;Journal&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="width:40px;"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/header&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="px mt3 max-w"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="journal-history" class="flex" style="flex-direction:column; gap:1rem;"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- SETTINGS PAGE --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="page-settings" class="page"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;header class="app-header"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="inner"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="width:40px;"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="text-align:center;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h1&gt;Leafy&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="header-subtitle"&gt;Settings&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="width:40px;"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/header&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="px mt3 max-w"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="ios-notif-warning" class="alert-box" style="display:none;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;strong&gt;iPhone Tip:&lt;/strong&gt; To receive notifications, tap the Share icon and "Add to Home Screen".</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="stat-card mb3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;span class="small uppercase muted"&gt;Care Alerts&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex items-center justify-between mt1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span style="font-weight:600;"&gt;Enable Notifications&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button class="chip" id="notif-btn" onclick="toggleNotifications()"&gt;Setup&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="stat-card mb3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;span class="small uppercase muted"&gt;Data Backup&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="small muted mt1"&gt;Transfer your sanctuary between devices.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex gap2 mt3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button class="chip" onclick="exportData()" style="flex:1;"&gt;Export&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button class="chip" onclick="triggerImport()" style="flex:1;"&gt;Import&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;input type="file" id="import-input" style="display:none;" accept=".json" onchange="handleImport(event)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="stat-card mb3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;span class="small uppercase muted"&gt;Theme&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex gap2 mt3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button class="chip" id="mode-light" onclick="setMode('light')"&gt;Light&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button class="chip" id="mode-dark" onclick="setMode('dark')"&gt;Dark&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="confirmReset()" style="color:var(--error); width:100%; border:none; padding:1.25rem; background:var(--surf-low); border-radius:1rem; font-weight:700; font-family:inherit; cursor:pointer;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>Reset All Data</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Bottom Navigation Bar --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;nav class="bottom-nav"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="nav-item active" onclick="showPage('sanctuary')" id="nav-sanctuary"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="mi"&gt;potted_plant&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="label"&gt;Home&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="nav-item" onclick="showPage('add')" id="nav-add"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="mi"&gt;add_circle&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="label"&gt;Add&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="nav-item" onclick="showPage('journal')" id="nav-journal"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="mi"&gt;menu_book&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="label"&gt;Journal&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="nav-item" onclick="showPage('settings')" id="nav-settings"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="mi"&gt;settings&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="label"&gt;Settings&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/nav&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const DB = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>key: 'leafy_v3_core',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>defaults: { plants: [], logs: [], settings: { mode: 'light', notifications: false } },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>data: null,</p>
-<p class="p1"><span class="Apple-converted-space">            </span>init() {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const saved = localStorage.getItem(this.key);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>this.data = saved ? JSON.parse(saved) : this.defaults;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>// Merge in case of missing keys from older backups</p>
-<p class="p1"><span class="Apple-converted-space">                </span>this.data = { ...this.defaults, ...this.data };</p>
-<p class="p1"><span class="Apple-converted-space">                </span>this.data.settings = { ...this.defaults.settings, ...this.data.settings };</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>this.apply();</p>
-<p class="p1"><span class="Apple-converted-space">                </span>this.checkNotifCapability();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>save() {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>localStorage.setItem(this.key, JSON.stringify(this.data));</p>
-<p class="p1"><span class="Apple-converted-space">                </span>render();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>apply() {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.documentElement.classList.toggle('dark-mode', this.data.settings.mode === 'dark');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const btn = document.getElementById('notif-btn');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if(btn) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>btn.innerText = this.data.settings.notifications ? 'Active' : 'Setup';</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>btn.classList.toggle('active', !!this.data.settings.notifications);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const lBtn = document.getElementById('mode-light');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const dBtn = document.getElementById('mode-dark');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if(lBtn) lBtn.classList.toggle('active', this.data.settings.mode === 'light');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if(dBtn) dBtn.classList.toggle('active', this.data.settings.mode === 'dark');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>checkNotifCapability() {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const warning = document.getElementById('ios-notif-warning');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (!isStandalone &amp;&amp; /iPhone|iPad|iPod/.test(navigator.userAgent)) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if(warning) warning.style.display = 'block';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>reset() {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>localStorage.clear();<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>location.reload();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Custom Modal UI</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function showModal(title, body, confirmCallback) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const modal = document.getElementById('leafy-modal');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const titleEl = document.getElementById('modal-title');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const bodyEl = document.getElementById('modal-body');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const btn = document.getElementById('modal-confirm-btn');</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>titleEl.innerText = title;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>bodyEl.innerText = body;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>modal.style.display = 'flex';</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>btn.onclick = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>confirmCallback();</p>
-<p class="p1"><span class="Apple-converted-space">                </span>closeModal();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>};</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function closeModal() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('leafy-modal').style.display = 'none';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function confirmReset() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>showModal("Reset Everything?", "This will permanently delete all your plants and history.", () =&gt; DB.reset());</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Backup Export/Import</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function exportData() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const dataStr = JSON.stringify(DB.data, null, 2);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const blob = new Blob([dataStr], { type: 'application/json' });</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const url = URL.createObjectURL(blob);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const a = document.createElement('a');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>a.href = url;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>a.download = `leafy_backup_${new Date().toISOString().split('T')[0]}.json`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.body.appendChild(a);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>a.click();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.body.removeChild(a);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>URL.revokeObjectURL(url);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>showToast("Backup exported!");</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function triggerImport() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('import-input').click();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function handleImport(event) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const file = event.target.files[0];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!file) return;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const reader = new FileReader();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>reader.onload = (e) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const importedData = JSON.parse(e.target.result);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (importedData.plants) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>showModal("Overwrite Data?", "This will replace all current plants with the backup data.", () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>const settings = { ...DB.defaults.settings, ...(importedData.settings || {}) };</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>DB.data = { ...DB.defaults, ...importedData, settings };</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>DB.save();</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>DB.apply();</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>showToast("Data imported!");</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>showPage('sanctuary');</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>showToast("Invalid backup file.");</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>} catch (err) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>showToast("Error reading file.");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>event.target.value = '';<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>};</p>
-<p class="p1"><span class="Apple-converted-space">            </span>reader.readAsText(file);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Care Notifications</p>
-<p class="p1"><span class="Apple-converted-space">        </span>async function toggleNotifications() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!("Notification" in window)) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>showToast("Notifications not supported.");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (Notification.permission === "granted") {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>DB.data.settings.notifications = !DB.data.settings.notifications;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>DB.save();</p>
-<p class="p1"><span class="Apple-converted-space">                </span>DB.apply();</p>
-<p class="p1"><span class="Apple-converted-space">                </span>showToast(DB.data.settings.notifications ? "Alerts enabled!" : "Alerts off.");</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const permission = await Notification.requestPermission();</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (permission === "granted") {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>DB.data.settings.notifications = true;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>DB.save();</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>DB.apply();</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>new Notification("Leafy", { body: "Care alerts are now active!" });</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function checkPlantCare() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!DB.data.settings.notifications) return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const now = new Date();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const thirsty = [];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const hungry = [];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>DB.data.plants.forEach(p =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const hoursSinceWater = (now - new Date(p.lastWatered)) / 3600000;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const hoursSinceFert = (now - new Date(p.lastFertilized || p.lastWatered)) / 3600000;</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (hoursSinceWater &gt; (p.waterInterval * 24)) thirsty.push(p.name);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (p.fertInterval &amp;&amp; hoursSinceFert &gt; (p.fertInterval * 24)) hungry.push(p.name);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (thirsty.length) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const body = thirsty.length &gt; 1 ? `${thirsty[0]} and ${thirsty.length - 1} others need water.` : `${thirsty[0]} needs water!`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>sendNotification("Leafy Care", body);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (hungry.length) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const body = hungry.length &gt; 1 ? `${hungry[0]} and ${hungry.length - 1} others need nutrients.` : `${hungry[0]} needs fertilizing!`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>sendNotification("Leafy Food", body);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function sendNotification(title, body) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const lastNotif = sessionStorage.getItem('last_notif_' + title);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const cooldown = 86400000; // 24 hour throttle</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!lastNotif || (Date.now() - lastNotif &gt; cooldown)) {<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>new Notification(title, { body, icon: 'https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/potted_plant/default/192px.svg' });</p>
-<p class="p1"><span class="Apple-converted-space">                </span>sessionStorage.setItem('last_notif_' + title, Date.now());</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Navigation &amp; Rendering</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function showPage(id) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.page').forEach(p =&gt; p.classList.remove('active'));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const pg = document.getElementById('page-'+id);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(pg) pg.classList.add('active');</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.nav-item').forEach(n =&gt; n.classList.remove('active'));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const nav = document.getElementById('nav-'+id);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(nav) nav.classList.add('active');</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(id === 'journal') renderJournal();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('main-scroll').scrollTop = 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function savePlant() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const nameEl = document.getElementById('p-name');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const waterEl = document.getElementById('p-water');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const fertEl = document.getElementById('p-fert');</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const name = nameEl.value.trim();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const water = parseInt(waterEl.value);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const fert = parseInt(fertEl.value);</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(!name) return showToast("Enter a name");</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(water &lt; 1) return showToast("Water interval must be at least 1 day");</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>DB.data.plants.push({</p>
-<p class="p1"><span class="Apple-converted-space">                </span>id: Date.now(), name, waterInterval: water, fertInterval: fert,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>lastWatered: new Date().toISOString(),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>lastFertilized: new Date().toISOString()</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>DB.save();</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>nameEl.value = '';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>waterEl.value = '7';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>fertEl.value = '30';</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>showPage('sanctuary');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>showToast("Plant added!");</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function logCare(id, type) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const p = DB.data.plants.find(x =&gt; x.id === id);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(!p) return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const now = new Date().toISOString();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(type === 'water') p.lastWatered = now;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>else p.lastFertilized = now;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>DB.data.logs.push({ plant: p.name, type: type, date: now });</p>
-<p class="p1"><span class="Apple-converted-space">            </span>DB.save();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>showToast(`${type === 'water' ? 'Watered' : 'Fertilized'} ${p.name}`);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function render() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const grid = document.getElementById('plant-grid');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(!grid) return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid.innerHTML = '';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('empty-sanctuary').style.display = DB.data.plants.length ? 'none' : 'block';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('stat-total').innerText = DB.data.plants.length + " Plants";</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>let thirstyCount = 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>DB.data.plants.forEach(p =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const daysSince = (new Date() - new Date(p.lastWatered)) / 86400000;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const overdue = daysSince &gt; p.waterInterval;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if(overdue) thirstyCount++;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const div = document.createElement('div');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>div.className = 'plant-card';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>div.innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="height:120px; background:var(--surf-c); display:flex; align-items:center; justify-content:center;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="mi" style="font-size:3.5rem; color:var(--primary-dim); opacity:0.6;"&gt;potted_plant&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="info"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div style="font-weight:700; color:var(--primary); font-size:1.1rem; margin-bottom:4px;"&gt;${p.name}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="flex justify-between items-center mt1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="small uppercase" style="${overdue?'color:var(--error);font-weight:800;':'color:var(--outline);'}"&gt;${overdue?'Thirsty':'Healthy'}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="flex gap1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="care-btn" style="background:var(--ter-fixed-dim); color:var(--tertiary); width:38px; height:38px;" onclick="logCare(${p.id}, 'fert')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;span class="mi" style="font-size:18px;"&gt;nutrition&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="care-btn" style="background:var(--sec-c); color:var(--primary); width:38px; height:38px;" onclick="logCare(${p.id}, 'water')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;span class="mi" style="font-size:18px;"&gt;water_drop&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grid.appendChild(div);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const hydration = DB.data.plants.length ? Math.round(((DB.data.plants.length - thirstyCount) / DB.data.plants.length) * 100) : 100;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('stat-hydration').innerText = hydration + "%";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function renderJournal() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const hist = document.getElementById('journal-history');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(!hist) return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>hist.innerHTML = DB.data.logs.slice().reverse().map(l =&gt; `</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div style="background:var(--surf-low); padding:1rem; border-radius:1rem; display:flex; justify-content:space-between; align-items:center;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex items-center gap2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="mi" style="font-size:18px; color:var(--primary)"&gt;${l.type==='water'?'water_drop':'nutrition'}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span style="font-weight:600;"&gt;${l.plant}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;span class="small muted"&gt;${new Date(l.date).toLocaleDateString()}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>`).join('');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function showToast(m) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const t = document.getElementById('leafy-toast');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>t.innerText = m; t.classList.add('show');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; t.classList.remove('show'), 2000);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function setMode(m) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>DB.data.settings.mode = m; DB.save(); DB.apply();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Environment Data</p>
-<p class="p1"><span class="Apple-converted-space">        </span>async function fetchEnv() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!navigator.geolocation) return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>navigator.geolocation.getCurrentPosition(async (pos) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&amp;longitude=${pos.coords.longitude}&amp;current_weather=true&amp;relative_humidity_2m=true&amp;daily=sunrise,sunset&amp;timezone=auto`);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const d = await res.json();</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const humEl = document.getElementById('env-humidity');</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const srEl = document.getElementById('env-sunrise');</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const ssEl = document.getElementById('env-sunset');</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if(humEl) humEl.innerText = (d.current_weather.relative_humidity_2m || '--') + "%";</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if(srEl) srEl.innerText = new Date(d.daily.sunrise[0]).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if(ssEl) ssEl.innerText = new Date(d.daily.sunset[0]).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>updateSeasonInfo();</p>
-<p class="p1"><span class="Apple-converted-space">                </span>} catch(e) {}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function updateSeasonInfo() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const month = new Date().getMonth();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const banner = document.getElementById('season-insight');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const icon = document.getElementById('season-icon');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const name = document.getElementById('season-name');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const tip = document.getElementById('season-tip');</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(!banner) return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>banner.style.display = 'flex';</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (month &gt;= 2 &amp;&amp; month &lt;= 4) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>name.innerText = "Spring Awakening"; icon.innerText = "local_florist";</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tip.innerText = "Plants are waking up! Increase watering and start fertilizing.";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else if (month &gt;= 5 &amp;&amp; month &lt;= 8) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>name.innerText = "Summer Growth"; icon.innerText = "wb_sunny";</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tip.innerText = "High growth phase. Keep soil moist and watch for heat stress.";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else if (month &gt;= 9 &amp;&amp; month &lt;= 10) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>name.innerText = "Autumn Slumber"; icon.innerText = "eco";</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tip.innerText = "Growth is slowing. Scale back watering as light levels drop.";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>name.innerText = "Winter Dormancy"; icon.innerText = "ac_unit";</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tip.innerText = "Plants are resting. Water sparingly and stop fertilizing.";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Initialization</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.onload = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>DB.init();<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>render();<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>fetchEnv();</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const h = new Date().getHours();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const welcomeText = document.getElementById('welcome-text');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(welcomeText) welcomeText.innerText = h &lt; 12 ? 'Good morning' : h &lt; 18 ? 'Good afternoon' : 'Good evening';</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>setInterval(checkPlantCare, 3600000); // Check once an hour</p>
-<p class="p1"><span class="Apple-converted-space">            </span>checkPlantCare();<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+    <div id="leafy-toast" class="leafy-toast"></div>
+    <div id="leafy-modal" class="leafy-modal" style="display:none;">
+        <div class="leafy-modal-content">
+            <h3 id="modal-title">Confirm Action</h3>
+            <p id="modal-body" class="muted mt3 small"></p>
+            <div class="flex gap2 mt3"><button class="chip" onclick="closeModal()" style="flex:1;">Cancel</button><button id="modal-confirm-btn" class="chip active" style="flex:1;">Continue</button></div>
+        </div>
+    </div>
+    <div class="scroll-container" id="main-scroll">
+        <div id="page-sanctuary" class="page active">
+            <header class="app-header">
+                <div class="inner"><div style="width:40px;"></div><div style="text-align:center;"><h1>Leafy</h1><span class="header-subtitle">Sanctuary</span></div><div style="width:40px;"></div></div>
+            </header>
+            <div class="px mt3 max-w">
+                <h2 id="welcome-text" style="font-size:2.2rem;font-weight:700;color:var(--primary);margin-bottom:0.2rem;">Good morning</h2>
+                <div class="weather-bar mb1">
+                    <div class="weather-item" style="display:flex;align-items:center;gap:0.5rem;"><span class="mi" style="color:var(--secondary)">humidity_percentage</span> <span id="env-humidity" class="small uppercase">--%</span></div>
+                    <div class="weather-item" style="display:flex;align-items:center;gap:0.5rem;"><span class="mi" style="color:var(--secondary)">wb_sunny</span> <span id="env-sunrise" class="small uppercase">--:--</span></div>
+                    <div class="weather-item" style="display:flex;align-items:center;gap:0.5rem;"><span class="mi" style="color:var(--secondary)">dark_mode</span> <span id="env-sunset" class="small uppercase">--:--</span></div>
+                </div>
+                <div id="season-insight" class="season-banner" style="display:none;"><span class="mi" id="season-icon">ac_unit</span><div><h4 id="season-name" class="uppercase" style="font-size:0.75rem;">Season</h4><p id="season-tip" style="font-size:0.85rem;">Environment tip loading...</p></div></div>
+                <div class="grid2 mb3">
+                    <div class="stat-card"><span class="small uppercase muted">Hydration</span><div id="stat-hydration" style="font-size:2.5rem;font-family:'Noto Serif';color:var(--primary);">100%</div></div>
+                    <div class="stat-card" style="background:var(--primary-c);color:var(--primary-fixed);"><span class="small uppercase" style="opacity:0.7">Collection</span><div id="stat-total" style="font-size:1.8rem;font-family:'Noto Serif';">0 Plants</div></div>
+                </div>
+                <div id="plant-grid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));gap:1rem;"></div>
+                <div id="empty-sanctuary" style="text-align:center; padding:5rem 1rem; display:none;"><span class="mi" style="font-size:4rem; color:var(--surf-high); font-variation-settings:'FILL' 1">potted_plant</span><p class="muted mt3">Your sanctuary is empty.</p></div>
+            </div>
+        </div>
+        <div id="page-add" class="page">
+             <header class="app-header"><div class="inner"><div style="width:40px;"></div><div style="text-align:center;"><h1>Leafy</h1><span class="header-subtitle">New Plant</span></div><div style="width:40px;"></div></div></header>
+            <div class="px mt3 max-w">
+                <div class="mb3"><label class="small uppercase muted">Plant Name</label><div class="field-wrap mt1"><input type="text" id="p-name" placeholder="e.g. Monty"></div></div>
+                <div class="grid2 mb3"><div><label class="small uppercase muted">Water (Days)</label><div class="field-wrap mt1"><input type="number" id="p-water" value="7" min="1"></div></div><div><label class="small uppercase muted">Fertilize (Days)</label><div class="field-wrap mt1"><input type="number" id="p-fert" value="30" min="0"></div></div></div>
+                <button onclick="savePlant()" style="width:100%; background:var(--primary); border:none; color:#fff; border-radius:1rem; padding:1.25rem; font-weight:700; font-family:inherit; font-size:1rem; cursor:pointer;">Bring Home</button>
+            </div>
+        </div>
+        <div id="page-journal" class="page">
+            <header class="app-header"><div class="inner"><div style="width:40px;"></div><div style="text-align:center;"><h1>Leafy</h1><span class="header-subtitle">Journal</span></div><div style="width:40px;"></div></div></header>
+            <div class="px mt3 max-w"><div id="journal-history" class="flex" style="flex-direction:column; gap:1rem;"></div></div>
+        </div>
+        <div id="page-settings" class="page">
+            <header class="app-header"><div class="inner"><div style="width:40px;"></div><div style="text-align:center;"><h1>Leafy</h1><span class="header-subtitle">Settings</span></div><div style="width:40px;"></div></div></header>
+            <div class="px mt3 max-w">
+                <div id="ios-notif-warning" class="alert-box" style="display:none;"><strong>iPhone Tip:</strong> To receive notifications, tap the Share icon and "Add to Home Screen".</div>
+                <div class="stat-card mb3"><span class="small uppercase muted">Care Alerts</span><div class="flex items-center justify-between mt1"><span style="font-weight:600;">Enable Notifications</span><button class="chip" id="notif-btn" onclick="toggleNotifications()">Setup</button></div></div>
+                <div class="stat-card mb3"><span class="small uppercase muted">Data Backup</span><p class="small muted mt1">Transfer your sanctuary between devices.</p><div class="flex gap2 mt3"><button class="chip" onclick="exportData()" style="flex:1;">Export</button><button class="chip" onclick="triggerImport()" style="flex:1;">Import</button></div><input type="file" id="import-input" style="display:none;" accept=".json" onchange="handleImport(event)"></div>
+                <div class="stat-card mb3"><span class="small uppercase muted">Theme</span><div class="flex gap2 mt3"><button class="chip" id="mode-light" onclick="setMode('light')">Light</button><button class="chip" id="mode-dark" onclick="setMode('dark')">Dark</button></div></div>
+                <button onclick="confirmReset()" style="color:var(--error); width:100%; border:none; padding:1.25rem; background:var(--surf-low); border-radius:1rem; font-weight:700; font-family:inherit; cursor:pointer;">Reset All Data</button>
+            </div>
+        </div>
+    </div>
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="showPage('sanctuary')" id="nav-sanctuary"><span class="mi">potted_plant</span><span class="label">Home</span></button>
+        <button class="nav-item" onclick="showPage('add')" id="nav-add"><span class="mi">add_circle</span><span class="label">Add</span></button>
+        <button class="nav-item" onclick="showPage('journal')" id="nav-journal"><span class="mi">menu_book</span><span class="label">Journal</span></button>
+        <button class="nav-item" onclick="showPage('settings')" id="nav-settings"><span class="mi">settings</span><span class="label">Settings</span></button>
+    </nav>
+    <script>
+        const DB = {
+            key: 'leafy_v3_core', defaults: { plants: [], logs: [], settings: { mode: 'light', notifications: false } }, data: null,
+            init() { const saved = localStorage.getItem(this.key); this.data = saved ? JSON.parse(saved) : this.defaults; this.data = { ...this.defaults, ...this.data }; this.data.settings = { ...this.defaults.settings, ...this.data.settings }; this.apply(); this.checkNotifCapability(); },
+            save() { localStorage.setItem(this.key, JSON.stringify(this.data)); render(); },
+            apply() { document.documentElement.classList.toggle('dark-mode', this.data.settings.mode === 'dark'); const btn = document.getElementById('notif-btn'); if(btn) { btn.innerText = this.data.settings.notifications ? 'Active' : 'Setup'; btn.classList.toggle('active', !!this.data.settings.notifications); } const lBtn = document.getElementById('mode-light'); const dBtn = document.getElementById('mode-dark'); if(lBtn) lBtn.classList.toggle('active', this.data.settings.mode === 'light'); if(dBtn) dBtn.classList.toggle('active', this.data.settings.mode === 'dark'); },
+            checkNotifCapability() { const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches; const warning = document.getElementById('ios-notif-warning'); if (!isStandalone && /iPhone|iPad|iPod/.test(navigator.userAgent)) { if(warning) warning.style.display = 'block'; } },
+            reset() { localStorage.clear(); location.reload(); }
+        };
+        function showModal(title, body, confirmCallback) { const modal = document.getElementById('leafy-modal'); const titleEl = document.getElementById('modal-title'); const bodyEl = document.getElementById('modal-body'); const btn = document.getElementById('modal-confirm-btn'); titleEl.innerText = title; bodyEl.innerText = body; modal.style.display = 'flex'; btn.onclick = () => { confirmCallback(); closeModal(); }; }
+        function closeModal() { document.getElementById('leafy-modal').style.display = 'none'; }
+        function confirmReset() { showModal("Reset Everything?", "This will permanently delete all your plants and history.", () => DB.reset()); }
+        function exportData() { const dataStr = JSON.stringify(DB.data, null, 2); const blob = new Blob([dataStr], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `leafy_backup_${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); showToast("Backup exported!"); }
+        function triggerImport() { document.getElementById('import-input').click(); }
+        function handleImport(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (e) => { try { const importedData = JSON.parse(e.target.result); if (importedData.plants) { showModal("Overwrite Data?", "This will replace all current plants with the backup data.", () => { const settings = { ...DB.defaults.settings, ...(importedData.settings || {}) }; DB.data = { ...DB.defaults, ...importedData, settings }; DB.save(); DB.apply(); showToast("Data imported!"); showPage('sanctuary'); }); } else { showToast("Invalid backup file."); } } catch (err) { showToast("Error reading file."); } event.target.value = ''; }; reader.readAsText(file); }
+        async function toggleNotifications() { if (!("Notification" in window)) { showToast("Notifications not supported."); return; } if (Notification.permission === "granted") { DB.data.settings.notifications = !DB.data.settings.notifications; DB.save(); DB.apply(); showToast(DB.data.settings.notifications ? "Alerts enabled!" : "Alerts off."); } else { const permission = await Notification.requestPermission(); if (permission === "granted") { DB.data.settings.notifications = true; DB.save(); DB.apply(); new Notification("Leafy", { body: "Care alerts are now active!" }); } } }
+        function checkPlantCare() { if (!DB.data.settings.notifications) return; const now = new Date(); const thirsty = []; const hungry = []; DB.data.plants.forEach(p => { const hoursSinceWater = (now - new Date(p.lastWatered)) / 3600000; const hoursSinceFert = (now - new Date(p.lastFertilized || p.lastWatered)) / 3600000; if (hoursSinceWater > (p.waterInterval * 24)) thirsty.push(p.name); if (p.fertInterval && hoursSinceFert > (p.fertInterval * 24)) hungry.push(p.name); }); if (thirsty.length) { const body = thirsty.length > 1 ? `${thirsty[0]} and ${thirsty.length - 1} others need water.` : `${thirsty[0]} needs water!`; sendNotification("Leafy Care", body); } if (hungry.length) { const body = hungry.length > 1 ? `${hungry[0]} and ${hungry.length - 1} others need nutrients.` : `${hungry[0]} needs fertilizing!`; sendNotification("Leafy Food", body); } }
+        function sendNotification(title, body) { const lastNotif = sessionStorage.getItem('last_notif_' + title); const cooldown = 86400000; if (!lastNotif || (Date.now() - lastNotif > cooldown)) { new Notification(title, { body, icon: '[https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/potted_plant/default/192px.svg](https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/potted_plant/default/192px.svg)' }); sessionStorage.setItem('last_notif_' + title, Date.now()); } }
+        function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); const pg = document.getElementById('page-'+id); if(pg) pg.classList.add('active'); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); const nav = document.getElementById('nav-'+id); if(nav) nav.classList.add('active'); if(id === 'journal') renderJournal(); document.getElementById('main-scroll').scrollTop = 0; }
+        function savePlant() { const nameEl = document.getElementById('p-name'); const waterEl = document.getElementById('p-water'); const fertEl = document.getElementById('p-fert'); const name = nameEl.value.trim(); const water = parseInt(waterEl.value); const fert = parseInt(fertEl.value); if(!name) return showToast("Enter a name"); if(water < 1) return showToast("Water interval must be at least 1 day"); DB.data.plants.push({ id: Date.now(), name, waterInterval: water, fertInterval: fert, lastWatered: new Date().toISOString(), lastFertilized: new Date().toISOString() }); DB.save(); nameEl.value = ''; waterEl.value = '7'; fertEl.value = '30'; showPage('sanctuary'); showToast("Plant added!"); }
+        function logCare(id, type) { const p = DB.data.plants.find(x => x.id === id); if(!p) return; const now = new Date().toISOString(); if(type === 'water') p.lastWatered = now; else p.lastFertilized = now; DB.data.logs.push({ plant: p.name, type: type, date: now }); DB.save(); showToast(`${type === 'water' ? 'Watered' : 'Fertilized'} ${p.name}`); }
+        function render() { const grid = document.getElementById('plant-grid'); if(!grid) return; grid.innerHTML = ''; document.getElementById('empty-sanctuary').style.display = DB.data.plants.length ? 'none' : 'block'; document.getElementById('stat-total').innerText = DB.data.plants.length + " Plants"; let thirstyCount = 0; DB.data.plants.forEach(p => { const daysSince = (new Date() - new Date(p.lastWatered)) / 86400000; const overdue = daysSince > p.waterInterval; if(overdue) thirstyCount++; const div = document.createElement('div'); div.className = 'plant-card'; div.innerHTML = `<div style="height:120px; background:var(--surf-c); display:flex; align-items:center; justify-content:center;"><span class="mi" style="font-size:3.5rem; color:var(--primary-dim); opacity:0.6;">potted_plant</span></div><div class="info"><div style="font-weight:700; color:var(--primary); font-size:1.1rem; margin-bottom:4px;">${p.name}</div><div class="flex justify-between items-center mt1"><span class="small uppercase" style="${overdue?'color:var(--error);font-weight:800;':'color:var(--outline);'}">${overdue?'Thirsty':'Healthy'}</span><div class="flex gap1"><button class="care-btn" style="background:var(--ter-fixed-dim); color:var(--tertiary); width:38px; height:38px;" onclick="logCare(${p.id}, 'fert')"><span class="mi" style="font-size:18px;">nutrition</span></button><button class="care-btn" style="background:var(--sec-c); color:var(--primary); width:38px; height:38px;" onclick="logCare(${p.id}, 'water')"><span class="mi" style="font-size:18px;">water_drop</span></button></div></div></div>`; grid.appendChild(div); }); const hydration = DB.data.plants.length ? Math.round(((DB.data.plants.length - thirstyCount) / DB.data.plants.length) * 100) : 100; document.getElementById('stat-hydration').innerText = hydration + "%"; }
+        function renderJournal() { const hist = document.getElementById('journal-history'); if(!hist) return; hist.innerHTML = DB.data.logs.slice().reverse().map(l => `<div style="background:var(--surf-low); padding:1rem; border-radius:1rem; display:flex; justify-content:space-between; align-items:center;"><div class="flex items-center gap2"><span class="mi" style="font-size:18px; color:var(--primary)">${l.type==='water'?'water_drop':'nutrition'}</span><span style="font-weight:600;">${l.plant}</span></div><span class="small muted">${new Date(l.date).toLocaleDateString()}</span></div>`).join(''); }
+        function showToast(m) { const t = document.getElementById('leafy-toast'); t.innerText = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+        function setMode(m) { DB.data.settings.mode = m; DB.save(); DB.apply(); }
+        async function fetchEnv() { if (!navigator.geolocation) return; navigator.geolocation.getCurrentPosition(async (pos) => { try { const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true&relative_humidity_2m=true&daily=sunrise,sunset&timezone=auto`); const d = await res.json(); const humEl = document.getElementById('env-humidity'); const srEl = document.getElementById('env-sunrise'); const ssEl = document.getElementById('env-sunset'); if(humEl) humEl.innerText = (d.current_weather.relative_humidity_2m || '--') + "%"; if(srEl) srEl.innerText = new Date(d.daily.sunrise[0]).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); if(ssEl) ssEl.innerText = new Date(d.daily.sunset[0]).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); updateSeasonInfo(); } catch(e) {} }); }
+        function updateSeasonInfo() { const month = new Date().getMonth(); const banner = document.getElementById('season-insight'); const icon = document.getElementById('season-icon'); const name = document.getElementById('season-name'); const tip = document.getElementById('season-tip'); if(!banner) return; banner.style.display = 'flex'; if (month >= 2 && month <= 4) { name.innerText = "Spring Awakening"; icon.innerText = "local_florist"; tip.innerText = "Plants are waking up! Increase watering and start fertilizing."; } else if (month >= 5 && month <= 8) { name.innerText = "Summer Growth"; icon.innerText = "wb_sunny"; tip.innerText = "High growth phase. Keep soil moist and watch for heat stress."; } else if (month >= 9 && month <= 10) { name.innerText = "Autumn Slumber"; icon.innerText = "eco"; tip.innerText = "Growth is slowing. Scale back watering as light levels drop."; } else { name.innerText = "Winter Dormancy"; icon.innerText = "ac_unit"; tip.innerText = "Plants are resting. Water sparingly and stop fertilizing."; } }
+        window.onload = () => { DB.init(); render(); fetchEnv(); const h = new Date().getHours(); const welcomeText = document.getElementById('welcome-text'); if(welcomeText) welcomeText.innerText = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening'; setInterval(checkPlantCare, 3600000); checkPlantCare(); };
+    </script>
 </body>
 </html>
