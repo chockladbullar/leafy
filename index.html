@@ -53,6 +53,8 @@
             --fert-orange: #e67e22;
             --safe-top: env(safe-area-inset-top, 20px);
             --safe-bot: env(safe-area-inset-bottom, 20px);
+            --grad-hydration: linear-gradient(135deg, #d8f3dc, #b7e4c7);
+            --grad-collection: linear-gradient(135deg, #b7e4c7, #95d5b2);
         }
 
         .mi {
@@ -83,7 +85,7 @@
 
         .app-header {
             position: sticky; top: 0; z-index: 100;
-            background: rgba(247, 249, 247, 0.85); 
+            background: linear-gradient(to bottom, var(--primary-fixed), rgba(216, 243, 220, 0.85));
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--surf-c);
             padding: calc(var(--safe-top) + 0.5rem) 1.5rem 0.75rem;
@@ -107,41 +109,48 @@
         .nav-item .label { font-size: 9px; font-weight: 800; text-transform: uppercase; margin-top: 4px; }
 
         /* CARDS & STATS */
-        .stat-card { background: var(--primary-fixed); border-radius: 1.5rem; padding: 1.25rem; border: 1px solid rgba(0,0,0,0.05); }
+        .stat-card { border-radius: 1.5rem; padding: 1.25rem; border: 1px solid rgba(0,0,0,0.05); }
+        .stat-card.hydration { background: var(--grad-hydration); }
+        .stat-card.collection { background: var(--grad-collection); }
+        
         .plant-card { background: #fff; border-radius: 1.5rem; border: 1px solid var(--surf-c); box-shadow: 0 8px 24px rgba(27,67,50,0.06); overflow: hidden; cursor: pointer; transition: transform 0.2s; }
-        .plant-card:active { transform: scale(0.98); }
         
         .plant-img-wrap { height: 160px; width: 100%; background: var(--surf-c); overflow: hidden; position: relative; }
         .plant-img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* UPDATED CARE TOGGLE BUTTONS */
+        /* CARE TOGGLE BUTTONS */
         .care-btn { 
-            width: 42px; height: 42px; border-radius: 50%; 
+            width: 44px; height: 44px; border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
-            border: 1.5px solid var(--surf-c); cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            border: 1.5px solid transparent; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             -webkit-tap-highlight-color: transparent;
-            background: #fff;
+            background: var(--surf-low);
         }
         
-        /* Base Colored States (Standing out slightly) */
-        .btn-water { color: var(--water-blue); border-color: rgba(0, 119, 182, 0.2); background: rgba(0, 119, 182, 0.04); }
-        .btn-fert { color: var(--fert-orange); border-color: rgba(230, 126, 34, 0.2); background: rgba(230, 126, 34, 0.04); }
+        .btn-water { color: var(--water-blue); background: rgba(0, 119, 182, 0.08); border-color: rgba(0, 119, 182, 0.1); }
+        .btn-fert { color: var(--fert-orange); background: rgba(230, 126, 34, 0.08); border-color: rgba(230, 126, 34, 0.1); }
 
-        /* Active Filled States */
-        .care-btn.active-water { background: var(--water-blue) !important; color: #fff !important; border-color: var(--water-blue) !important; box-shadow: 0 4px 12px rgba(0,119,182,0.3); }
-        .care-btn.active-fert { background: var(--fert-orange) !important; color: #fff !important; border-color: var(--fert-orange) !important; box-shadow: 0 4px 12px rgba(230,126,34,0.3); }
+        .care-btn.active-water { background: var(--water-blue) !important; color: #fff !important; border-color: var(--water-blue) !important; box-shadow: 0 4px 12px rgba(0,119,182,0.3); transform: scale(1.05); }
+        .care-btn.active-fert { background: var(--fert-orange) !important; color: #fff !important; border-color: var(--fert-orange) !important; box-shadow: 0 4px 12px rgba(230,126,34,0.3); transform: scale(1.05); }
+
+        /* SORT BAR */
+        .sort-bar { display: flex; gap: 0.5rem; overflow-x: auto; scrollbar-width: none; padding: 0.5rem 1.5rem; margin-bottom: 0.5rem; }
+        .sort-bar::-webkit-scrollbar { display: none; }
+        .sort-chip { padding: 0.6rem 1.2rem; border-radius: 99px; background: var(--surf-low); border: 1px solid var(--surf-c); font-size: 11px; font-weight: 700; color: var(--on-surf-v); white-space: nowrap; cursor: pointer; transition: 0.2s; }
+        .sort-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 10px rgba(27,67,50,0.2); }
 
         /* CALENDAR STYLING */
         .cal-header { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px; }
         .cal-header span { font-size: 12px; font-weight: 800; color: var(--primary-light); text-align: center; text-transform: uppercase; letter-spacing: 0.05em; }
-        
         .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-        .cal-day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; background: var(--surf-low); position: relative; cursor: pointer; border: 1px solid transparent; }
+        .cal-day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; background: var(--surf-low); position: relative; cursor: pointer; border: 1px solid transparent; transition: background 0.2s; }
         .cal-day.today { border: 2.5px solid var(--primary-light); background: #fff; box-shadow: 0 4px 10px rgba(64,145,108,0.1); }
         .cal-dots { display: flex; gap: 3px; position: absolute; bottom: 6px; }
         .dot { width: 6px; height: 6px; border-radius: 50%; }
         .dot-water { background: var(--water-blue); }
         .dot-fert { background: var(--fert-orange); }
+        
+        .cal-nav-row { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
 
         /* MODALS & FORMS */
         .leafy-toast { position: fixed; bottom: calc(var(--safe-bot) + 6.5rem); left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 0.8rem 1.5rem; border-radius: 99px; font-size: 0.9rem; font-weight: 700; z-index: 3000; opacity: 0; transition: 0.3s; pointer-events: none; }
@@ -149,23 +158,40 @@
         .leafy-modal { position: fixed; inset: 0; background: rgba(27,67,50,0.5); z-index: 4000; display: none; align-items: center; justify-content: center; padding: 2rem; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
         .leafy-modal-content { background: var(--surface); border-radius: 1.5rem; padding: 1.5rem; width: 100%; max-width: 340px; border: 1px solid var(--surf-c); box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
         
-        .field-wrap { background: #fff; border-radius: 1rem; overflow: hidden; margin-top: 4px; border: 1px solid var(--surf-c); }
+        .field-wrap { background: #fff; border-radius: 1rem; overflow: hidden; margin-top: 4px; border: 1px solid var(--surf-c); position: relative; }
         .field-wrap input, .field-wrap textarea { width: 100%; padding: 1.1rem; border: none; background: transparent; font-size: 16px; color: var(--on-surface); font-family: inherit; display: block; }
         .photo-picker { background: var(--surf-c); height: 180px; border-radius: 1.25rem; border: 2px dashed var(--primary-light); display: flex; align-items: center; justify-content: center; cursor: move; position: relative; overflow: hidden; touch-action: none; }
+        .crop-controls { margin-top: 1rem; background: var(--surf-low); padding: 1rem; border-radius: 1rem; }
+        .crop-slider { width: 100%; height: 6px; -webkit-appearance: none; background: var(--surf-c); border-radius: 3px; margin: 10px 0; }
+        .crop-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: var(--primary); border-radius: 50%; cursor: pointer; }
         
         .chip { background: var(--surf-low); padding: 0.8rem 1.25rem; border-radius: 99px; border: 1px solid var(--surf-c); font-weight: 700; cursor: pointer; color: var(--on-surface); flex: 1; text-align: center; font-family: inherit; }
         .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        /* DARK MODE */
+        /* SEARCH SUGGESTIONS */
+        .search-results { background: #fff; border-radius: 1rem; border: 1px solid var(--surf-c); margin-top: 4px; overflow: hidden; }
+        .search-item { padding: 1rem; border-bottom: 1px solid var(--surf-low); cursor: pointer; font-size: 14px; display: flex; justify-content: space-between; }
+        .search-item:last-child { border-bottom: none; }
+        .search-item:active { background: var(--primary-fixed); }
+
+        /* DARK MODE - ENHANCED ACCESSIBILITY */
         html.dark-mode { 
-            --primary: #95d5b2; --primary-light: #b7e4c7; --primary-fixed: #1b4332; --surface: #081c15; --surf-low: #1b4332; --surf-c: #2d6a4f;
+            --primary: #95d5b2; --primary-light: #b7e4c7; --primary-fixed: #1b4332; --surface: #081c15; --surf-low: #12291f; --surf-c: #2d6a4f;
             --on-surface: #d8f3dc; --on-surf-v: #95d5b2; --outline: #40916c; 
             --water-blue: #4db3ff; --fert-orange: #ffb347;
+            --grad-hydration: linear-gradient(135deg, #1b4332, #081c15);
+            --grad-collection: linear-gradient(135deg, #2d6a4f, #1b4332);
         }
-        html.dark-mode .app-header { background: rgba(8, 28, 21, 0.85); }
+        html.dark-mode .app-header { background: linear-gradient(to bottom, #1b4332, rgba(8, 28, 21, 0.85)); }
         html.dark-mode .bottom-nav { background: rgba(8, 28, 21, 0.9); }
         html.dark-mode .plant-card { background: #1b4332; border-color: #2d6a4f; }
+        html.dark-mode .field-wrap { background: #081c15; }
         html.dark-mode .care-btn { background: #081c15; border-color: #2d6a4f; }
+        /* High contrast inactive states for Dark Mode */
+        html.dark-mode .btn-water { color: var(--water-blue); background: rgba(77, 179, 255, 0.15); }
+        html.dark-mode .btn-fert { color: var(--fert-orange); background: rgba(255, 179, 71, 0.15); }
+        html.dark-mode .cal-day.today { background: #1b4332; border-color: var(--primary); color: #fff; }
+        html.dark-mode .search-results { background: #12291f; border-color: #2d6a4f; }
 
         /* UTILS */
         .px { padding-left: 1.5rem; padding-right: 1.5rem; }
@@ -174,7 +200,7 @@
         .flex { display: flex; } .items-center { align-items: center; } .justify-between { justify-content: space-between; }
         .mb3 { margin-bottom: 1.5rem; } .mt3 { margin-top: 1.5rem; } .mb2 { margin-bottom: 1rem; } .gap1 { gap: 0.5rem; } .gap2 { gap: 1rem; }
         .small { font-size: 0.85rem; } .uppercase { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; }
-        .weather-bar { display: flex; gap: 1.25rem; overflow-x: auto; padding: 0.5rem 0 1.25rem; scrollbar-width: none; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        .weather-bar { display: flex; gap: 1.25rem; overflow-x: auto; padding: 0.5rem 0 1.25rem; scrollbar-width: none; white-space: nowrap; -webkit-overflow-scrolling: touch; align-items: center;}
         .weather-item { display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; color: var(--primary-light); font-weight: 700; }
         .btn-icon { background: none; border: none; cursor: pointer; color: var(--outline); padding: 4px; display: flex; align-items: center; justify-content: center; }
     </style>
@@ -198,19 +224,20 @@
         <!-- SANCTUARY PAGE -->
         <div id="page-sanctuary" class="page active">
             <header class="app-header">
-                <div class="inner"><div style="width:40px;"></div><div style="text-align:center;"><h1>Leafy</h1><span class="header-subtitle">Sanctuary</span></div><div style="width:40px;"></div></div>
+                <div class="inner"><div style="width:40px;"></div><div style="text-align:center;"><h1>Leafy</h1><span class="header-subtitle" id="loc-label">Sanctuary</span></div><div style="width:40px;"></div></div>
             </header>
             <div class="px mt3 max-w">
                 <h2 id="welcome-text" style="font-size:2.2rem; font-weight:800; color:var(--primary); margin-bottom:0.2rem;">Good morning</h2>
                 <div class="weather-bar">
+                    <button class="btn-icon" onclick="fetchEnv(true)" title="Refresh Weather"><span class="mi" style="font-size:18px; color: var(--primary-light)">refresh</span></button>
                     <div class="weather-item"><span class="mi">humidity_percentage</span> <span id="env-humidity" class="small uppercase">--%</span></div>
                     <div class="weather-item"><span class="mi">wb_sunny</span> <span id="env-sunrise" class="small uppercase">--:--</span></div>
                     <div class="weather-item"><span class="mi">dark_mode</span> <span id="env-sunset" class="small uppercase">--:--</span></div>
                     <div class="weather-item"><span class="mi">light_mode</span> <span id="env-daylight" class="small uppercase">--h --m</span></div>
                 </div>
                 <div class="grid2 mb3">
-                    <div class="stat-card" style="background: linear-gradient(135deg, var(--primary-fixed), #b7e4c7);"><span class="small uppercase" style="color:var(--primary-light)">Hydration</span><div id="stat-hydration" style="font-size:2.5rem; font-family:'Noto Serif'; color:var(--primary);">100%</div></div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, var(--primary-light), var(--primary-dim));"><span class="small uppercase" style="color:var(--primary)">Collection</span><div id="stat-total" style="font-size:1.8rem; font-family:'Noto Serif'; color:var(--primary);">0 Plants</div></div>
+                    <div class="stat-card hydration"><span class="small uppercase" style="color:var(--primary-light)">Hydration</span><div id="stat-hydration" style="font-size:2.5rem; font-family:'Noto Serif'; color:var(--primary);">100%</div></div>
+                    <div class="stat-card collection"><span class="small uppercase" style="color:var(--primary)">Collection</span><div id="stat-total" style="font-size:1.8rem; font-family:'Noto Serif'; color:var(--primary);">0 Plants</div></div>
                 </div>
 
                 <div class="sort-bar">
@@ -266,13 +293,16 @@
                 <div class="inner"><div style="width:40px;"></div><div style="text-align:center;"><h1>Journal</h1><span class="header-subtitle">Care History</span></div><div style="width:40px;"></div></div>
             </header>
             <div class="px mt3 max-w">
-                <h2 id="cal-month-label" style="font-size: 2.8rem; font-weight: 800; color: var(--primary); margin-bottom: 1.5rem;">Month</h2>
-                <div class="cal-header"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
-                <div id="cal-grid" class="cal-grid"></div>
+                <h2 id="cal-month-label" style="font-size: 2.8rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">Month</h2>
+                
                 <div class="cal-nav-row">
                     <button class="chip" onclick="changeMonth(-1)">Prev Month</button>
                     <button class="chip" onclick="changeMonth(1)">Next Month</button>
                 </div>
+
+                <div class="cal-header"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
+                <div id="cal-grid" class="cal-grid"></div>
+                
                 <h3 class="mt3 uppercase small muted">Recent Activity</h3>
                 <div id="journal-history" class="flex mt2" style="flex-direction:column; gap:0.75rem;"></div>
             </div>
@@ -283,7 +313,28 @@
             <header class="app-header">
                 <div class="inner"><div style="width:40px;"></div><div style="text-align:center;"><h1>Settings</h1><span class="header-subtitle">Preferences</span></div><div style="width:40px;"></div></div></header>
             <div class="px mt3 max-w">
-                <div class="stat-card mb3">
+                <!-- LOCATION SETTINGS -->
+                <div class="stat-card mb3" style="background: var(--surf-low); border: none;">
+                    <span class="small uppercase muted">Weather Location</span>
+                    <div class="flex gap1 mt2 mb2">
+                        <button class="chip" id="loc-auto" onclick="setLocationMode('auto')">Auto (GPS)</button>
+                        <button class="chip" id="loc-manual" onclick="setLocationMode('manual')">Manual City</button>
+                    </div>
+                    
+                    <div id="manual-loc-inputs" style="display:none;">
+                        <label class="small uppercase muted">Search City</label>
+                        <div class="field-wrap">
+                            <input type="text" id="city-search" placeholder="e.g. London" oninput="searchCity(this.value)">
+                        </div>
+                        <div id="city-results" class="search-results" style="display:none;"></div>
+                        
+                        <div id="coords-display" class="mt2 small muted" style="display:none;">
+                            Current: <span id="display-city-name">--</span> (<span id="display-coords">--</span>)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card mb3" style="background: var(--surf-low); border: none;">
                     <span class="small uppercase muted">Appearance</span>
                     <div class="flex gap1 mt2">
                         <button class="chip" id="mode-light" onclick="setMode('light')">Light</button>
@@ -291,7 +342,7 @@
                         <button class="chip" id="mode-auto" onclick="setMode('auto')">System</button>
                     </div>
                 </div>
-                <div class="stat-card mb3">
+                <div class="stat-card mb3" style="background: var(--surf-low); border: none;">
                     <span class="small uppercase muted">Data Management</span>
                     <div class="flex gap2 mt2">
                         <button class="chip" onclick="exportData()">Backup</button>
@@ -327,8 +378,19 @@
         let isDragging = false, dragStart = { x: 0, y: 0 };
 
         const DB = {
-            key: 'leafy_v13_pro',
-            defaults: { plants: [], logs: [], settings: { mode: 'auto', sortMode: 'thirstiest' } },
+            key: 'leafy_v14_pro',
+            defaults: { 
+                plants: [], 
+                logs: [], 
+                settings: { 
+                    mode: 'auto', 
+                    sortMode: 'thirstiest',
+                    locationMode: 'auto',
+                    lat: null,
+                    lon: null,
+                    cityName: 'Sanctuary'
+                } 
+            },
             data: null,
             init() {
                 const saved = localStorage.getItem(this.key);
@@ -338,23 +400,139 @@
                 this.apply();
                 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => this.apply());
             },
-            save() { localStorage.setItem(this.key, JSON.stringify(this.data)); render(); },
+            save() { 
+                localStorage.setItem(this.key, JSON.stringify(this.data)); 
+                render(); 
+                if(document.getElementById('page-journal').classList.contains('active')) renderCalendar();
+            },
             apply() {
                 const mode = this.data.settings.mode;
                 let isDark = mode === 'dark' || (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
                 document.documentElement.classList.toggle('dark-mode', isDark);
+                
                 ['light', 'dark', 'auto'].forEach(m => {
                     const btn = document.getElementById('mode-' + m);
                     if(btn) btn.classList.toggle('active', mode === m);
                 });
+                
                 ['thirstiest', 'name', 'newest'].forEach(s => {
                     const chip = document.getElementById('sort-' + s);
                     if(chip) chip.classList.toggle('active', this.data.settings.sortMode === s);
                 });
+
+                const locMode = this.data.settings.locationMode || 'auto';
+                document.getElementById('loc-auto').classList.toggle('active', locMode === 'auto');
+                document.getElementById('loc-manual').classList.toggle('active', locMode === 'manual');
+                document.getElementById('manual-loc-inputs').style.display = locMode === 'manual' ? 'block' : 'none';
+                
+                if(locMode === 'manual' && this.data.settings.cityName) {
+                    document.getElementById('coords-display').style.display = 'block';
+                    document.getElementById('display-city-name').innerText = this.data.settings.cityName;
+                    document.getElementById('display-coords').innerText = `${this.data.settings.lat}, ${this.data.settings.lon}`;
+                }
+
+                document.getElementById('loc-label').innerText = this.data.settings.cityName || 'Sanctuary';
             }
         };
 
-        // --- CARE LOGIC: TOGGLE ---
+        // --- CITY SEARCH ---
+        let searchTimeout = null;
+        async function searchCity(query) {
+            const resultsEl = document.getElementById('city-results');
+            if (query.length < 3) {
+                resultsEl.style.display = 'none';
+                return;
+            }
+            
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(async () => {
+                try {
+                    const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=5&language=en&format=json`);
+                    const data = await res.json();
+                    if (data.results && data.results.length > 0) {
+                        resultsEl.innerHTML = data.results.map(city => `
+                            <div class="search-item" onclick="selectCity('${city.name}', ${city.latitude}, ${city.longitude})">
+                                <strong>${city.name}</strong>
+                                <span class="small muted">${city.admin1 || ''}, ${city.country_code.toUpperCase()}</span>
+                            </div>
+                        `).join('');
+                        resultsEl.style.display = 'block';
+                    } else {
+                        resultsEl.innerHTML = '<div class="search-item muted">No results found.</div>';
+                        resultsEl.style.display = 'block';
+                    }
+                } catch (e) { console.error("Search failed", e); }
+            }, 500);
+        }
+
+        function selectCity(name, lat, lon) {
+            DB.data.settings.cityName = name;
+            DB.data.settings.lat = lat;
+            DB.data.settings.lon = lon;
+            DB.save();
+            DB.apply();
+            document.getElementById('city-search').value = '';
+            document.getElementById('city-results').style.display = 'none';
+            showToast(`Sanctuary set to ${name}`);
+            fetchEnv(true); 
+        }
+
+        // --- WEATHER LOGIC ---
+        function setLocationMode(mode) {
+            DB.data.settings.locationMode = mode;
+            if(mode === 'auto') DB.data.settings.cityName = 'Sanctuary';
+            DB.save();
+            DB.apply();
+            if(mode === 'auto') fetchEnv(true);
+        }
+
+        async function fetchEnv(manual = false) {
+            const locMode = DB.data.settings.locationMode || 'auto';
+            if(locMode === 'manual' && DB.data.settings.lat) {
+                return performWeatherFetch(DB.data.settings.lat, DB.data.settings.lon, manual);
+            }
+            if (!navigator.geolocation) {
+                if(manual) showToast("GPS not supported");
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                performWeatherFetch(pos.coords.latitude, pos.coords.longitude, manual);
+            }, (err) => { if(manual) showToast("GPS error/denied."); }, { timeout: 10000 });
+        }
+
+        async function performWeatherFetch(lat, lon, isManualTrigger) {
+            try {
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=relative_humidity_2m&daily=sunrise,sunset&timezone=auto`);
+                const d = await res.json();
+                document.getElementById('env-humidity').innerText = (d.current ? d.current.relative_humidity_2m : '--') + "%";
+                const f24 = (iso) => new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                document.getElementById('env-sunrise').innerText = f24(d.daily.sunrise[0]);
+                document.getElementById('env-sunset').innerText = f24(d.daily.sunset[0]);
+                const diff = new Date(d.daily.sunset[0]) - new Date(d.daily.sunrise[0]);
+                document.getElementById('env-daylight').innerText = `${Math.floor(diff/3600000)}h ${Math.round((diff%3600000)/60000)}m`;
+                if(isManualTrigger) showToast("Lush weather sync complete!");
+            } catch(e) { if(isManualTrigger) showToast("Weather service error."); }
+        }
+
+        // --- NAVIGATION ---
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + id).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('nav-' + id).classList.add('active');
+            if(id === 'journal') renderCalendar();
+            if(id === 'sanctuary') render();
+            document.getElementById('main-scroll').scrollTop = 0;
+        }
+
+        function setSort(mode) {
+            DB.data.settings.sortMode = mode;
+            DB.save();
+            DB.apply();
+            render();
+        }
+
+        // --- CARE LOGIC ---
         function logCare(e, id, type) {
             e.stopPropagation();
             const p = DB.data.plants.find(x => x.id === id);
@@ -363,11 +541,9 @@
 
             if (existingIdx !== -1) {
                 DB.data.logs.splice(existingIdx, 1);
-                showToast(`Undone: ${type}`);
+                showToast(`Undone today's ${type}`);
             } else {
-                const now = new Date().toISOString();
-                if(type === 'water') p.lastWatered = now; else p.lastFertilized = now;
-                DB.data.logs.push({ id: Date.now(), plantId: id, plant: p.name, type, date: now });
+                DB.data.logs.push({ id: Date.now(), plantId: id, plant: p.name, type, date: new Date().toISOString() });
                 showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} logged!`);
             }
             DB.save();
@@ -377,104 +553,16 @@
             DB.data.logs = DB.data.logs.filter(l => l.id !== logId);
             DB.save();
             renderCalendar();
+            render();
             closeModal();
             showToast("Activity removed");
         }
 
-        // --- PHOTO LOGIC ---
-        function initImageAdjustment(e) {
-            const file = e.target.files[0]; if(!file) return;
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                rawImage = new Image();
-                rawImage.onload = () => {
-                    cropState = { zoom: 1, offsetX: 0, offsetY: 0 };
-                    document.getElementById('adjust-ui').style.display = 'block';
-                    document.getElementById('crop-zoom').value = 1;
-                    updateCropPreview();
-                };
-                rawImage.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function startDrag(e) {
-            if(!rawImage) return;
-            isDragging = true;
-            const clientX = e.clientX || (e.touches ? e.touches[0].clientX : 0);
-            const clientY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
-            dragStart = { x: clientX - cropState.offsetX, y: clientY - cropState.offsetY };
-            const onDrag = (ev) => {
-                if(!isDragging) return;
-                const cX = ev.clientX || (ev.touches ? ev.touches[0].clientX : 0);
-                const cY = ev.clientY || (ev.touches ? ev.touches[0].clientY : 0);
-                cropState.offsetX = cX - dragStart.x;
-                cropState.offsetY = cY - dragStart.y;
-                updateCropPreview();
-            };
-            const endDrag = () => { isDragging = false; window.removeEventListener('mousemove', onDrag); window.removeEventListener('mouseup', endDrag); window.removeEventListener('touchmove', onDrag); window.removeEventListener('touchend', endDrag); };
-            window.addEventListener('mousemove', onDrag);
-            window.addEventListener('mouseup', endDrag);
-            window.addEventListener('touchmove', onDrag, { passive: false });
-            window.addEventListener('touchend', endDrag);
-        }
-
-        function updateCropPreview() {
-            const zoom = document.getElementById('crop-zoom').value;
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = 500; canvas.height = 500;
-            const scale = Math.max(500/rawImage.width, 500/rawImage.height) * zoom;
-            const w = rawImage.width * scale;
-            const h = rawImage.height * scale;
-            ctx.drawImage(rawImage, (500-w)/2 + cropState.offsetX, (500-h)/2 + cropState.offsetY, w, h);
-            document.getElementById('photo-preview').src = canvas.toDataURL('image/jpeg', 0.8);
-            document.getElementById('photo-preview').style.display = 'block';
-            document.getElementById('photo-icon').style.display = 'none';
-        }
-
-        // --- RENDERING ---
-        function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('page-' + id).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('nav-' + id).classList.add('active');
-            if(id === 'journal') renderCalendar();
-            document.getElementById('main-scroll').scrollTop = 0;
-        }
-
-        function openAddPage() {
-            document.getElementById('add-page-title').innerText = "New Plant";
-            document.getElementById('edit-id').value = '';
-            document.getElementById('p-name').value = '';
-            document.getElementById('p-species').value = '';
-            document.getElementById('p-notes').value = '';
-            document.getElementById('photo-preview').style.display = 'none';
-            document.getElementById('photo-icon').style.display = 'block';
-            document.getElementById('adjust-ui').style.display = 'none';
-            document.getElementById('delete-btn').style.display = 'none';
-            rawImage = null;
-            showPage('add');
-        }
-
-        function openEditPage(id) {
-            const p = DB.data.plants.find(x => x.id == id);
-            if(!p) return;
-            document.getElementById('add-page-title').innerText = "Edit Profile";
-            document.getElementById('edit-id').value = id;
-            document.getElementById('p-name').value = p.name;
-            document.getElementById('p-species').value = p.species || '';
-            document.getElementById('p-water').value = p.waterInterval;
-            document.getElementById('p-fert').value = p.fertInterval || 0;
-            document.getElementById('p-notes').value = p.notes || '';
-            if(p.image) { 
-                document.getElementById('photo-preview').src = p.image; 
-                document.getElementById('photo-preview').style.display = 'block';
-                document.getElementById('photo-icon').style.display = 'none';
-            }
-            document.getElementById('adjust-ui').style.display = 'none';
-            document.getElementById('delete-btn').style.display = 'block';
-            showPage('add');
+        // --- RENDERING HELPERS ---
+        function getLastCaredDate(plantId, type) {
+            const logs = DB.data.logs.filter(l => l.plantId === plantId && l.type === type);
+            if(logs.length === 0) return null;
+            return new Date(Math.max(...logs.map(l => new Date(l.date))));
         }
 
         function render() {
@@ -485,11 +573,14 @@
             
             let plants = [...DB.data.plants];
             const sortMode = DB.data.settings.sortMode || 'thirstiest';
+            
             if(sortMode === 'thirstiest') {
                 plants.sort((a, b) => {
-                    const aOverdue = (new Date() - new Date(a.lastWatered)) / (a.waterInterval * 86400000);
-                    const bOverdue = (new Date() - new Date(b.lastWatered)) / (b.waterInterval * 86400000);
-                    return bOverdue - aOverdue;
+                    const aLast = getLastCaredDate(a.id, 'water') || new Date(a.createdAt || 0);
+                    const bLast = getLastCaredDate(b.id, 'water') || new Date(b.createdAt || 0);
+                    const aRatio = (new Date() - aLast) / (a.waterInterval * 86400000);
+                    const bRatio = (new Date() - bLast) / (b.waterInterval * 86400000);
+                    return bRatio - aRatio;
                 });
             } else if(sortMode === 'name') {
                 plants.sort((a, b) => a.name.localeCompare(b.name));
@@ -497,12 +588,14 @@
                 plants.sort((a, b) => b.id - a.id);
             }
 
-            let thirsty = 0;
+            let thirstyCount = 0;
             const today = new Date().toDateString();
 
             plants.forEach(p => {
-                const overdue = (new Date() - new Date(p.lastWatered)) / 86400000 > p.waterInterval;
-                if(overdue) thirsty++;
+                const lastWatered = getLastCaredDate(p.id, 'water') || new Date(p.createdAt || p.id);
+                const waterHours = (new Date() - lastWatered) / 3600000;
+                const overdue = waterHours > (p.waterInterval * 24);
+                if(overdue) thirstyCount++;
                 
                 const wateredToday = DB.data.logs.some(l => l.plantId === p.id && l.type === 'water' && new Date(l.date).toDateString() === today);
                 const fertToday = DB.data.logs.some(l => l.plantId === p.id && l.type === 'fert' && new Date(l.date).toDateString() === today);
@@ -513,9 +606,9 @@
                     <div class="plant-img-wrap">${p.image ? `<img src="${p.image}" class="plant-img">` : '<div class="flex items-center justify-center h-full"><span class="mi" style="font-size:3rem; opacity:0.1; color: var(--primary)">potted_plant</span></div>'}</div>
                     <div style="padding:1.1rem;">
                         <div style="font-weight:800; font-size:1.1rem; color: var(--primary);">${p.name}</div>
-                        <div class="small muted" style="margin-top:2px;">${p.species || 'Unknown'}</div>
+                        <div class="small muted" style="margin-top:2px; height:1.2rem; overflow:hidden; text-overflow:ellipsis; display:block;">${p.species || 'Unknown Species'}</div>
                         <div class="flex justify-between items-center mt3">
-                            <span class="small uppercase" style="${overdue?'color:var(--error); font-weight:800;':'color:var(--secondary);'}">${overdue?'Thirsty':'Happy'}</span>
+                            <span class="small uppercase" style="${overdue?'color:var(--error); font-weight:800;':'color:var(--secondary);'}">${overdue?'Thirsty':'Healthy'}</span>
                             <div class="flex gap1">
                                 <button class="care-btn btn-fert ${fertToday?'active-fert':''}" onclick="logCare(event, ${p.id}, 'fert')"><span class="mi" style="font-size:18px;">${fertToday?'check':'nutrition'}</span></button>
                                 <button class="care-btn btn-water ${wateredToday?'active-water':''}" onclick="logCare(event, ${p.id}, 'water')"><span class="mi" style="font-size:18px;">${wateredToday?'check':'water_drop'}</span></button>
@@ -524,7 +617,7 @@
                     </div>`;
                 grid.appendChild(div);
             });
-            document.getElementById('stat-hydration').innerText = (DB.data.plants.length ? Math.round(((DB.data.plants.length - thirsty) / DB.data.plants.length) * 100) : 100) + "%";
+            document.getElementById('stat-hydration').innerText = (DB.data.plants.length ? Math.round(((DB.data.plants.length - thirstyCount) / DB.data.plants.length) * 100) : 100) + "%";
         }
 
         // --- CALENDAR ---
@@ -552,46 +645,115 @@
         function showDaySummary(date, logs) {
             const body = document.getElementById('modal-body');
             document.getElementById('modal-title').innerText = date;
-            body.innerHTML = logs.length ? logs.map(l => `<div class="flex items-center justify-between mb2" style="border-bottom: 1px solid var(--surf-c); padding-bottom: 8px;"><div class="flex items-center gap2"><span class="mi" style="color:${l.type==='water'?'var(--water-blue)':'var(--fert-orange)'}; font-size:20px;">${l.type==='water'?'water_drop':'nutrition'}</span><div><strong>${l.plant}</strong></div></div><button class="btn-icon" onclick="deleteLog(${l.id})"><span class="mi" style="color:var(--error); font-size:18px;">delete</span></button></div>`).join('') : '<p class="muted">No care tasks logged.</p>';
+            body.innerHTML = logs.length ? logs.map(l => {
+                const iconColor = l.type === 'water' ? 'var(--water-blue)' : 'var(--fert-orange)';
+                return `<div class="flex items-center justify-between mb2" style="border-bottom: 1px solid var(--surf-c); padding-bottom: 8px;"><div class="flex items-center gap2"><span class="mi" style="color:${iconColor}; font-size:20px;">${l.type==='water'?'water_drop':'nutrition'}</span><div><strong>${l.plant}</strong></div></div><button class="btn-icon" onclick="deleteLog(${l.id})"><span class="mi" style="color:var(--error); font-size:18px;">delete</span></button></div>`;
+            }).join('') : '<p class="muted">No activity logged.</p>';
             document.getElementById('leafy-modal').style.display = 'flex';
         }
 
         function renderHistoryList() {
             const h = document.getElementById('journal-history');
-            h.innerHTML = DB.data.logs.slice(-20).reverse().map(l => `<div style="background: #fff; padding:1.2rem; border-radius:1.25rem; display:flex; justify-content:space-between; align-items:center; border: 1px solid var(--surf-c); box-shadow: 0 4px 10px rgba(0,0,0,0.02);"><div class="flex items-center gap2"><span class="mi" style="color:${l.type==='water'?'var(--water-blue)':'var(--fert-orange)'}; font-size:22px;">${l.type==='water'?'water_drop':'nutrition'}</span><span style="font-weight:700; color: var(--primary);">${l.plant}</span></div><div class="flex items-center gap1"><span class="small muted">${new Date(l.date).toLocaleDateString()}</span><button class="btn-icon" onclick="deleteLog(${l.id})"><span class="mi" style="font-size:18px; color:var(--error)">delete</span></button></div></div>`).join('');
+            h.innerHTML = DB.data.logs.slice(-15).reverse().map(l => `<div style="background: #fff; padding:1.2rem; border-radius:1.25rem; display:flex; justify-content:space-between; align-items:center; border: 1px solid var(--surf-c); box-shadow: 0 4px 10px rgba(0,0,0,0.02);"><div class="flex items-center gap2"><span class="mi" style="color:${l.type==='water'?'var(--water-blue)':'var(--fert-orange)'}; font-size:22px;">${l.type==='water'?'water_drop':'nutrition'}</span><span style="font-weight:700; color: var(--primary);">${l.plant}</span></div><div class="flex items-center gap1"><span class="small muted">${new Date(l.date).toLocaleDateString()}</span><button class="btn-icon" onclick="deleteLog(${l.id})"><span class="mi" style="font-size:18px; color:var(--error)">delete</span></button></div></div>`).join('');
         }
 
-        // --- UTILS ---
-        function closeModal() { document.getElementById('leafy-modal').style.display = 'none'; }
-        function showToast(m) { const t = document.getElementById('leafy-toast'); t.innerText = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
-        function setMode(m) { DB.data.settings.mode = m; DB.save(); DB.apply(); }
-        function setSort(mode) { DB.data.settings.sortMode = mode; DB.save(); DB.apply(); }
-        function confirmReset() { if(confirm("Wipe all data?")) { localStorage.removeItem(DB.key); location.reload(); } }
-        function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(DB.data)], { type: 'application/json' })); a.download = `leafy_backup.json`; a.click(); }
-        function handleImport(ev) { const file = ev.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = (e) => { const p = JSON.parse(e.target.result); if(p.plants) { DB.data = p; DB.save(); DB.apply(); showPage('sanctuary'); } }; reader.readAsText(file); }
-        function confirmDelete() { if(confirm("Delete plant?")) { DB.data.plants = DB.data.plants.filter(x => x.id != document.getElementById('edit-id').value); DB.save(); showPage('sanctuary'); } }
+        // --- IMAGE & CROP ---
+        function initImageAdjustment(e) {
+            const file = e.target.files[0]; if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                rawImage = new Image();
+                rawImage.onload = () => {
+                    cropState = { zoom: 1, offsetX: 0, offsetY: 0 };
+                    document.getElementById('adjust-ui').style.display = 'block';
+                    document.getElementById('crop-zoom').value = 1;
+                    updateCropPreview();
+                };
+                rawImage.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function startDrag(e) {
+            if(!rawImage) return;
+            isDragging = true;
+            const touch = e.touches ? e.touches[0] : e;
+            dragStart = { x: touch.clientX - cropState.offsetX, y: touch.clientY - cropState.offsetY };
+            const onDrag = (ev) => {
+                if(!isDragging) return;
+                const mTouch = ev.touches ? ev.touches[0] : ev;
+                cropState.offsetX = mTouch.clientX - dragStart.x;
+                cropState.offsetY = mTouch.clientY - dragStart.y;
+                updateCropPreview();
+            };
+            const endDrag = () => { isDragging = false; window.removeEventListener('mousemove', onDrag); window.removeEventListener('mouseup', endDrag); window.removeEventListener('touchmove', onDrag); window.removeEventListener('touchend', endDrag); };
+            window.addEventListener('mousemove', onDrag);
+            window.addEventListener('mouseup', endDrag);
+            window.addEventListener('touchmove', onDrag, { passive: false });
+            window.addEventListener('touchend', endDrag);
+        }
+
+        function updateCropPreview() {
+            if(!rawImage) return;
+            const zoom = document.getElementById('crop-zoom').value;
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 500; canvas.height = 500;
+            const scale = Math.max(500/rawImage.width, 500/rawImage.height) * zoom;
+            ctx.drawImage(rawImage, (500-rawImage.width*scale)/2 + cropState.offsetX, (500-rawImage.height*scale)/2 + cropState.offsetY, rawImage.width*scale, rawImage.height*scale);
+            document.getElementById('photo-preview').src = canvas.toDataURL('image/jpeg', 0.8);
+            document.getElementById('photo-preview').style.display = 'block';
+            document.getElementById('photo-icon').style.display = 'none';
+        }
+
+        // --- MODALS & UTILS ---
+        function openAddPage() {
+            document.getElementById('add-page-title').innerText = "New Plant";
+            document.getElementById('edit-id').value = '';
+            document.getElementById('p-name').value = '';
+            document.getElementById('p-species').value = '';
+            document.getElementById('p-notes').value = '';
+            document.getElementById('photo-preview').style.display = 'none';
+            document.getElementById('photo-icon').style.display = 'block';
+            document.getElementById('adjust-ui').style.display = 'none';
+            document.getElementById('delete-btn').style.display = 'none';
+            rawImage = null;
+            showPage('add');
+        }
+
+        function openEditPage(id) {
+            const p = DB.data.plants.find(x => x.id == id);
+            if(!p) return;
+            document.getElementById('add-page-title').innerText = "Edit Profile";
+            document.getElementById('edit-id').value = id;
+            document.getElementById('p-name').value = p.name;
+            document.getElementById('p-species').value = p.species || '';
+            document.getElementById('p-water').value = p.waterInterval;
+            document.getElementById('p-fert').value = p.fertInterval || 0;
+            document.getElementById('p-notes').value = p.notes || '';
+            if(p.image) { document.getElementById('photo-preview').src = p.image; document.getElementById('photo-preview').style.display = 'block'; document.getElementById('photo-icon').style.display = 'none'; }
+            document.getElementById('adjust-ui').style.display = 'none';
+            document.getElementById('delete-btn').style.display = 'block';
+            showPage('add');
+        }
+
         function savePlant() {
             const id = document.getElementById('edit-id').value;
             const name = document.getElementById('p-name').value.trim();
             if(!name) return showToast("Name required!");
             const img = document.getElementById('photo-preview').style.display === 'block' ? document.getElementById('photo-preview').src : null;
             const pData = { name, species: document.getElementById('p-species').value, notes: document.getElementById('p-notes').value, waterInterval: parseInt(document.getElementById('p-water').value), fertInterval: parseInt(document.getElementById('p-fert').value), image: img };
-            if(id) { Object.assign(DB.data.plants.find(x => x.id == id), pData); } else { DB.data.plants.push({ ...pData, id: Date.now(), lastWatered: new Date().toISOString(), lastFertilized: new Date().toISOString() }); }
+            if(id) { Object.assign(DB.data.plants.find(x => x.id == id), pData); } else { DB.data.plants.push({ ...pData, id: Date.now(), createdAt: new Date().toISOString() }); }
             DB.save(); showPage('sanctuary');
         }
 
-        async function fetchEnv() {
-            navigator.geolocation.getCurrentPosition(async (pos) => {
-                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true&relative_humidity_2m=true&daily=sunrise,sunset&timezone=auto`);
-                const d = await res.json();
-                document.getElementById('env-humidity').innerText = (d.current.relative_humidity_2m || '--') + "%";
-                const f24 = (iso) => new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-                document.getElementById('env-sunrise').innerText = f24(d.daily.sunrise[0]);
-                document.getElementById('env-sunset').innerText = f24(d.daily.sunset[0]);
-                const diff = new Date(d.daily.sunset[0]) - new Date(d.daily.sunrise[0]);
-                document.getElementById('env-daylight').innerText = `${Math.floor(diff/3600000)}h ${Math.round((diff%3600000)/60000)}m`;
-            });
-        }
+        function closeModal() { document.getElementById('leafy-modal').style.display = 'none'; }
+        function showToast(m) { const t = document.getElementById('leafy-toast'); t.innerText = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
+        function setMode(m) { DB.data.settings.mode = m; DB.save(); DB.apply(); }
+        function confirmReset() { if(confirm("Wipe all data?")) { localStorage.removeItem(DB.key); location.reload(); } }
+        function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(DB.data)], { type: 'application/json' })); a.download = `leafy_backup.json`; a.click(); }
+        function handleImport(ev) { const file = ev.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = (e) => { try { const p = JSON.parse(e.target.result); if(p.plants) { DB.data = p; DB.save(); DB.apply(); showPage('sanctuary'); showToast("Imported successfully!"); } else { showToast("Invalid backup."); } } catch(err) { showToast("Error reading file."); } }; reader.readAsText(file); }
+        function confirmDelete() { if(confirm("Delete plant?")) { DB.data.plants = DB.data.plants.filter(x => x.id != document.getElementById('edit-id').value); DB.save(); showPage('sanctuary'); } }
 
         window.onload = () => { DB.init(); render(); fetchEnv(); const hr = new Date().getHours(); document.getElementById('welcome-text').innerText = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening'; };
     </script>
