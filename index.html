@@ -9,6 +9,7 @@
     
     <title>Leafy</title>
 
+    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -103,8 +104,9 @@
 
         /* --- DASHBOARD ELEMENTS --- */
         .stat-grid { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 1rem; margin-bottom: 1.5rem; align-items: stretch; }
-        .card-base { border-radius: 1.5rem; padding: 1.25rem; border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; height: 100%; min-height: 125px; }
+        .card-base { border-radius: 1.5rem; padding: 1rem; border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; }
         
+        .dash-card { min-height: 125px; height: 100%; }
         .weather-box { background: var(--grad-weather); cursor: pointer; }
         .collection-box { background: var(--grad-collection); }
         
@@ -132,10 +134,10 @@
 
         /* --- UI ELEMENTS --- */
         .sort-bar { display: flex; gap: 0.6rem; overflow-x: auto; scrollbar-width: none; padding: 0.5rem 0 1.2rem; }
-        .sort-chip { padding: 0.6rem 1.2rem; border-radius: 99px; background: var(--surf-low); border: 1px solid var(--surf-c); font-size: 11px; font-weight: 800; white-space: nowrap; cursor: pointer; color: var(--secondary); transition: 0.2s; }
+        .sort-chip { padding: 0.5rem 1rem; border-radius: 99px; background: var(--surf-low); border: 1px solid var(--surf-c); font-size: 11px; font-weight: 800; white-space: nowrap; cursor: pointer; color: var(--secondary); transition: 0.2s; }
         .sort-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 10px rgba(27,67,50,0.2); }
 
-        .chip { background: var(--surf-low); padding: 0.8rem 1.3rem; border-radius: 99px; border: 1px solid var(--surf-c); font-weight: 800; cursor: pointer; color: var(--on-surface); flex: 1; text-align: center; font-family: inherit; font-size: 12px; height: 44px; display: flex; align-items: center; justify-content: center; border: none; }
+        .chip { background: var(--surf-low); padding: 0.6rem 1rem; border-radius: 99px; border: 1px solid var(--surf-c); font-weight: 800; cursor: pointer; color: var(--on-surface); flex: 1; text-align: center; font-family: inherit; font-size: 11px; height: 38px; display: flex; align-items: center; justify-content: center; border: none; }
         .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
         /* --- CALENDAR --- */
@@ -143,46 +145,56 @@
         .cal-header span { font-size: 11px; font-weight: 800; color: var(--primary-light); text-align: center; text-transform: uppercase; }
         .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
         .cal-day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; background: var(--surf-low); position: relative; cursor: pointer; border: 1px solid transparent; }
-        .cal-day.today { border: 2.5px solid var(--primary-light); background: #fff; box-shadow: 0 4px 10px rgba(64,145,108,0.1); }
+        /* Dark Mode Fix: Use CSS Variable for today's background */
+        .cal-day.today { border: 2px solid var(--primary-light); background: var(--surface); box-shadow: 0 4px 10px rgba(64,145,108,0.1); }
         .cal-dots { display: flex; gap: 3px; position: absolute; bottom: 6px; }
-        .dot { width: 6px; height: 6px; border-radius: 50%; }
+        .dot { width: 5px; height: 5px; border-radius: 50%; }
         .dot-water { background: var(--water-blue); }
         .dot-fert { background: var(--fert-orange); }
         
-        .cal-nav-row { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: flex-start; }
-        .cal-nav-row .chip { flex: 0 1 auto; min-width: 100px; }
+        .cal-nav-row { display: flex; gap: 0.5rem; margin-bottom: 1.2rem; justify-content: flex-start; }
+        .cal-nav-row .chip { flex: 0 1 auto; min-width: 90px; }
 
         /* --- UTILS --- */
         .flex { display: flex; } .items-center { align-items: center; } .justify-between { justify-content: space-between; }
-        .mb3 { margin-bottom: 1.5rem; } .mt3 { margin-top: 1.5rem; } .mb2 { margin-bottom: 1rem; } .gap1 { gap: 0.5rem; } .gap2 { gap: 1rem; }
-        .small { font-size: 0.85rem; } .uppercase { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; }
-        .field-wrap { background: #fff; border-radius: 1rem; overflow: hidden; margin-top: 4px; border: 1px solid var(--surf-c); position: relative; }
+        .mb3 { margin-bottom: 1.2rem; } .mt3 { margin-top: 1.2rem; } .mb2 { margin-bottom: 0.8rem; } 
+        .mb1 { margin-bottom: 0.5rem; } .mt1 { margin-top: 0.5rem; } .mt2 { margin-top: 0.8rem; }
+        .gap1 { gap: 0.5rem; } .gap2 { gap: 1rem; }
+        .small { font-size: 0.8rem; } .uppercase { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; }
+        .field-wrap { background: #fff; border-radius: 0.8rem; overflow: hidden; margin-top: 4px; border: 1px solid var(--surf-c); position: relative; }
         html.dark-mode .field-wrap { background: #081c15; }
-        .field-wrap input, .field-wrap textarea { width: 100%; padding: 1.1rem; border: none; background: transparent; font-size: 16px; color: var(--on-surface); font-family: inherit; }
+        .field-wrap input, .field-wrap textarea { width: 100%; padding: 0.9rem; border: none; background: transparent; font-size: 15px; color: var(--on-surface); font-family: inherit; }
 
         .search-container { position: relative; width: 100%; }
-        .search-results { background: #fff; border-radius: 1rem; border: 1px solid var(--surf-c); margin-top: 4px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .search-results { background: #fff; border-radius: 1rem; border: 1px solid var(--surf-c); margin-top: 4px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 200; }
         html.dark-mode .search-results { background: #12291f; border-color: #2d6a4f; }
-        .search-item { padding: 1.1rem; border-bottom: 1px solid var(--surf-low); cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+        .search-item { padding: 0.9rem; border-bottom: 1px solid var(--surf-low); cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
 
-        .leafy-toast { position: fixed; bottom: calc(var(--safe-bot) + 6.5rem); left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 0.8rem 1.5rem; border-radius: 99px; font-size: 0.9rem; font-weight: 700; z-index: 3000; opacity: 0; transition: 0.3s; pointer-events: none; }
+        .leafy-toast { position: fixed; bottom: calc(var(--safe-bot) + 6.5rem); left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 0.7rem 1.3rem; border-radius: 99px; font-size: 0.85rem; font-weight: 700; z-index: 3000; opacity: 0; transition: 0.3s; pointer-events: none; }
         .leafy-toast.show { opacity: 1; }
         .leafy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 4000; display: none; align-items: center; justify-content: center; padding: 2rem; backdrop-filter: blur(10px); }
         .leafy-modal-content { background: var(--surface); border-radius: 1.5rem; padding: 1.5rem; width: 100%; max-width: 340px; border: 1px solid var(--surf-c); box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
         
-        .btn-icon { background: none; border: none; cursor: pointer; color: var(--error); }
+        .btn-icon { background: none; border: none; cursor: pointer; color: var(--error); padding: 4px; }
+        
+        /* Confirmation Layout in Modal */
+        .confirm-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+        .confirm-btn { padding: 0.8rem; border-radius: 1rem; font-weight: 800; font-family: inherit; border: none; cursor: pointer; flex: 1; font-size: 0.85rem; }
+        .confirm-yes { background: var(--error); color: #fff; }
+        .confirm-no { background: var(--surf-low); color: var(--on-surface); }
     </style>
 </head>
 <body>
 
     <div id="leafy-toast" class="leafy-toast"></div>
 
+    <!-- MAIN MODAL (Handles Summaries and Confirmations) -->
     <div id="leafy-modal" class="leafy-modal">
         <div class="leafy-modal-content">
             <h3 id="modal-title" style="margin-bottom:1.25rem; color: var(--primary);">Summary</h3>
             <div id="modal-body" class="small" style="line-height: 1.5;"></div>
             <div id="modal-footer" class="mt3">
-                <button class="chip active" onclick="closeModal()" style="width:100%">Close</button>
+                <button id="modal-close-btn" class="chip active" onclick="closeModal()" style="width:100%">Close</button>
             </div>
         </div>
     </div>
@@ -198,9 +210,10 @@
 
     <div class="screens-wrapper">
         
+        <!-- HOME SCREEN -->
         <div id="page-sanctuary" class="page active">
             <h2 id="welcome-text" style="font-size:2.4rem; font-weight:800; color:var(--primary); margin-bottom:0.2rem;">Good evening</h2>
-            <div id="loc-display" style="font-size: 0.85rem; font-weight: 600; color: var(--primary-light); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 4px; opacity: 0.9;">
+            <div id="loc-display" style="font-size: 0.85rem; font-weight: 600; color: var(--primary-light); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 4px; opacity: 0.9;">
                 <span class="mi" style="font-size: 14px;">location_on</span>
                 <span id="loc-name">Somewhere lush...</span>
             </div>
@@ -231,7 +244,7 @@
                 <div class="sort-chip" id="sort-newest" onclick="setSort('newest')">Newest</div>
             </div>
 
-            <div id="plant-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:1.25rem;"></div>
+            <div id="plant-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:1rem;"></div>
             
             <div id="empty-sanctuary" style="text-align:center; padding:5rem 1.5rem; display:none;">
                 <span class="mi" style="font-size:4rem; color:var(--surf-c); font-variation-settings:'FILL' 1">potted_plant</span>
@@ -239,6 +252,7 @@
             </div>
         </div>
 
+        <!-- JOURNAL SCREEN -->
         <div id="page-journal" class="page">
             <h2 id="cal-month-label" style="font-size: 2.4rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">Month</h2>
             
@@ -250,57 +264,59 @@
             <div class="cal-header"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
             <div id="cal-grid" class="cal-grid"></div>
 
-            <div class="card-base mt3" style="background: var(--surf-low); border: 1px dashed var(--primary-light); min-height: auto;">
+            <div class="card-base mt3" style="background: var(--surf-low); border: 1px dashed var(--primary-light); padding: 1rem;">
                 <div class="flex items-center gap1 mb2">
                     <span class="mi" style="color:var(--primary-light); font-size:18px;">auto_awesome</span>
                     <span class="small uppercase" style="color:var(--primary); font-weight:800;">Botanical Insights</span>
                 </div>
-                <div id="journal-stats" class="small" style="font-weight:700; color:var(--on-surf-v); line-height:1.6;">
+                <div id="journal-stats" class="small" style="font-weight:700; color:var(--on-surf-v); line-height:1.4;">
                     This month: <span id="stat-water-count">0</span> waterings and <span id="stat-fert-count">0</span> feedings.
                 </div>
-                <p id="seasonal-tip" class="small mt2 italic" style="color:var(--secondary);"></p>
+                <p id="seasonal-tip" class="small mt1 italic" style="color:var(--secondary); opacity: 0.8;"></p>
             </div>
             
             <h3 class="mt3 uppercase small muted">Recent Activity</h3>
-            <div id="journal-history" class="flex mt2" style="flex-direction:column; gap:0.75rem;"></div>
+            <div id="journal-history" class="flex mt2" style="flex-direction:column; gap:0.6rem;"></div>
         </div>
 
+        <!-- SETTINGS SCREEN -->
         <div id="page-settings" class="page">
-            <div class="card-base mb3" style="background: var(--surf-low); border: none; min-height: auto;">
-                <span class="small uppercase muted" style="font-weight: 800;">Weather Location</span>
-                <div class="flex gap1 mt2 mb2">
+            <div class="card-base mb2" style="background: var(--surf-low); border: none; padding: 1rem;">
+                <span class="small uppercase muted" style="font-weight: 800; display: block; margin-bottom: 0.75rem;">Weather Location</span>
+                <div class="flex gap1 mb1">
                     <button class="chip" id="loc-auto" onclick="setLocationMode('auto')">Auto (GPS)</button>
                     <button class="chip" id="loc-manual" onclick="setLocationMode('manual')">Manual City</button>
                 </div>
                 <div id="manual-loc-inputs" class="search-container" style="display:none;">
-                    <div class="field-wrap">
+                    <div class="field-wrap mt1">
                         <input type="text" id="city-search" placeholder="Search City..." oninput="searchCity(this.value)">
                     </div>
                     <div id="city-results" class="search-results" style="display:none;"></div>
                 </div>
             </div>
-            <div class="card-base mb3" style="background: var(--surf-low); border: none; min-height: auto;">
-                <span class="small uppercase muted" style="font-weight: 800;">Appearance</span>
-                <div class="flex gap1 mt2">
+            <div class="card-base mb2" style="background: var(--surf-low); border: none; padding: 1rem;">
+                <span class="small uppercase muted" style="font-weight: 800; display: block; margin-bottom: 0.75rem;">Appearance</span>
+                <div class="flex gap1 mt1">
                     <button class="chip" id="mode-light" onclick="setMode('light')">Light</button>
                     <button class="chip" id="mode-dark" onclick="setMode('dark')">Dark</button>
                     <button class="chip" id="mode-auto" onclick="setMode('auto')">System</button>
                 </div>
             </div>
-            <div class="card-base mb3" style="background: var(--surf-low); border: none; min-height: auto;">
-                <span class="small uppercase muted" style="font-weight: 800;">Data Management</span>
-                <div class="flex gap2 mt2">
+            <div class="card-base mb2" style="background: var(--surf-low); border: none; padding: 1rem;">
+                <span class="small uppercase muted" style="font-weight: 800; display: block; margin-bottom: 0.75rem;">Data Management</span>
+                <div class="flex gap2 mt1">
                     <button class="chip" onclick="exportData()">Backup</button>
                     <button class="chip" onclick="document.getElementById('import-input').click()">Import</button>
                 </div>
                 <input type="file" id="import-input" style="display:none;" accept=".json" onchange="handleImport(event)">
             </div>
-            <button onclick="confirmReset()" style="color:var(--error); width:100%; border:none; padding:1.25rem; background:var(--surf-low); border-radius:1rem; font-weight:800; font-family:inherit; cursor:pointer;">Reset All Data</button>
+            <button onclick="confirmAppReset()" style="color:var(--error); width:100%; border:none; padding:1.1rem; background:var(--surf-low); border-radius:1.25rem; font-weight:800; font-family:inherit; cursor:pointer; font-size: 13px;">Reset All Data</button>
         </div>
 
+        <!-- ADD/EDIT DRAWER -->
         <div id="page-add" class="page" style="z-index: 200; background: var(--surface);">
             <input type="hidden" id="edit-id">
-            <div style="text-align:center; margin-bottom: 2rem;">
+            <div style="text-align:center; margin-bottom: 1.5rem;">
                 <h1 id="add-page-title">New Plant</h1>
                 <span class="header-subtitle" id="add-page-sub">Add to Sanctuary</span>
             </div>
@@ -330,9 +346,9 @@
             <div class="mb3">
                 <label class="small uppercase muted">Notes</label><div class="field-wrap"><textarea id="p-notes" rows="3" placeholder="Special needs?"></textarea></div>
             </div>
-            <button onclick="savePlant()" style="width:100%; background:var(--primary); border:none; color:#fff; border-radius:1rem; padding:1.25rem; font-weight:800; font-family:inherit; font-size:1rem; cursor:pointer;">Save Plant</button>
-            <button id="delete-btn" onclick="confirmDelete()" style="width:100%; background:transparent; border:none; color:var(--error); margin-top:1.5rem; font-weight:700; font-family:inherit; display:none;">Remove from Sanctuary</button>
-            <button onclick="showPage('sanctuary')" style="width:100%; border:none; color:var(--secondary); margin-top:1rem; font-weight:700; font-family:inherit; background:none;">Cancel</button>
+            <button onclick="savePlant()" style="width:100%; background:var(--primary); border:none; color:#fff; border-radius:1rem; padding:1.1rem; font-weight:800; font-family:inherit; font-size:1rem; cursor:pointer;">Save Plant</button>
+            <button id="delete-btn" onclick="confirmPlantDelete()" style="width:100%; background:transparent; border:none; color:var(--error); margin-top:1.5rem; font-weight:700; font-family:inherit; display:none;">Remove from Sanctuary</button>
+            <button onclick="showPage('sanctuary')" style="width:100%; border:none; color:var(--secondary); margin-top:0.8rem; font-weight:700; font-family:inherit; background:none; cursor: pointer;">Cancel</button>
         </div>
 
     </div>
@@ -371,23 +387,36 @@
                 const mode = this.data.settings.mode;
                 let isDark = mode === 'dark' || (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
                 document.documentElement.classList.toggle('dark-mode', isDark);
-                ['light', 'dark', 'auto'].forEach(m => document.getElementById('mode-' + m).classList.toggle('active', mode === m));
-                ['thirstiest', 'name', 'newest'].forEach(s => document.getElementById('sort-' + s).classList.toggle('active', this.data.settings.sortMode === s));
+                ['light', 'dark', 'auto'].forEach(m => {
+                    const el = document.getElementById('mode-' + m);
+                    if (el) el.classList.toggle('active', mode === m);
+                });
+                ['thirstiest', 'name', 'newest'].forEach(s => {
+                    const el = document.getElementById('sort-' + s);
+                    if (el) el.classList.toggle('active', this.data.settings.sortMode === s);
+                });
                 const locMode = this.data.settings.locationMode || 'auto';
-                document.getElementById('loc-auto').classList.toggle('active', locMode === 'auto');
-                document.getElementById('loc-manual').classList.toggle('active', locMode === 'manual');
-                document.getElementById('manual-loc-inputs').style.display = locMode === 'manual' ? 'block' : 'none';
+                const locAuto = document.getElementById('loc-auto');
+                const locManual = document.getElementById('loc-manual');
+                if (locAuto) locAuto.classList.toggle('active', locMode === 'auto');
+                if (locManual) locManual.classList.toggle('active', locMode === 'manual');
+                const manualInputs = document.getElementById('manual-loc-inputs');
+                if (manualInputs) manualInputs.style.display = locMode === 'manual' ? 'block' : 'none';
                 const currentLoc = this.data.settings.cityName || 'Sanctuary';
-                document.getElementById('loc-name').innerText = currentLoc;
-                document.getElementById('loc-sub').innerText = currentLoc;
+                const locName = document.getElementById('loc-name');
+                const locSub = document.getElementById('loc-sub');
+                if (locName) locName.innerText = currentLoc;
+                if (locSub) locSub.innerText = currentLoc;
             }
         };
 
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             const activePage = document.getElementById('page-' + id);
-            activePage.classList.add('active');
-            activePage.scrollTop = 0; 
+            if (activePage) {
+                activePage.classList.add('active');
+                activePage.scrollTop = 0; 
+            }
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             const navBtn = document.getElementById('nav-' + id);
             if(navBtn) navBtn.classList.add('active');
@@ -484,7 +513,7 @@
                 const fertToday = DB.data.logs.some(l => l.plantId === p.id && l.type === 'fert' && new Date(l.date).toDateString() === today);
                 const div = document.createElement('div'); div.className = 'plant-card';
                 div.onclick = () => openEditPage(p.id);
-                div.innerHTML = `<div class="plant-img-wrap">${p.image ? `<img src="${p.image}" class="plant-img">` : '<div class="flex items-center justify-center h-full"><span class="mi" style="font-size:3rem; opacity:0.1; color: var(--primary)">potted_plant</span></div>'}</div><div style="padding:1.1rem;"><div style="font-weight:800; font-size:1.1rem; color: var(--primary);">${p.name}</div><div class="small muted" style="margin-top:2px;">${p.species || 'Unknown'}</div><div class="flex justify-between items-center mt3"><span class="small uppercase" style="${overdue?'color:var(--error); font-weight:800;':'color:var(--secondary);'}">${overdue?'Thirsty':'Healthy'}</span><div class="flex gap1"><button class="care-btn btn-fert ${fertToday?'active-fert':''}" onclick="logCare(event, ${p.id}, 'fert')"><span class="mi" style="font-size:18px;">${fertToday?'check':'nutrition'}</span></button><button class="care-btn btn-water ${wateredToday?'active-water':''}" onclick="logCare(event, ${p.id}, 'water')"><span class="mi" style="font-size:18px;">${wateredToday?'check':'water_drop'}</span></button></div></div></div>`;
+                div.innerHTML = `<div class="plant-img-wrap">${p.image ? `<img src="${p.image}" class="plant-img">` : '<div class="flex items-center justify-center h-full"><span class="mi" style="font-size:3rem; opacity:0.1; color: var(--primary)">potted_plant</span></div>'}</div><div style="padding:0.9rem;"><div style="font-weight:800; font-size:1.05rem; color: var(--primary);">${p.name}</div><div class="small muted" style="margin-top:2px;">${p.species || 'Unknown'}</div><div class="flex justify-between items-center mt3"><span class="small uppercase" style="${overdue?'color:var(--error); font-weight:800;':'color:var(--secondary);'}">${overdue?'Thirsty':'Healthy'}</span><div class="flex gap1"><button class="care-btn btn-fert ${fertToday?'active-fert':''}" onclick="logCare(event, ${p.id}, 'fert')"><span class="mi" style="font-size:17px;">${fertToday?'check':'nutrition'}</span></button><button class="care-btn btn-water ${wateredToday?'active-water':''}" onclick="logCare(event, ${p.id}, 'water')"><span class="mi" style="font-size:17px;">${wateredToday?'check':'water_drop'}</span></button></div></div></div>`;
                 grid.appendChild(div);
             });
         }
@@ -497,11 +526,19 @@
             label.innerText = calDate.toLocaleString('default', { month: 'long', year: 'numeric' });
             const firstDay = new Date(calDate.getFullYear(), calDate.getMonth(), 1).getDay();
             const daysInMonth = new Date(calDate.getFullYear(), calDate.getMonth() + 1, 0).getDate();
-            const currentMonthLogs = DB.data.logs.filter(l => { const d = new Date(l.date); return d.getMonth() === calDate.getMonth() && d.getFullYear() === calDate.getFullYear(); });
-            document.getElementById('stat-water-count').innerText = currentMonthLogs.filter(l => l.type === 'water').length;
-            document.getElementById('stat-fert-count').innerText = currentMonthLogs.filter(l => l.type === 'fert').length;
+            
+            const currentMonthLogs = DB.data.logs.filter(l => { 
+                const d = new Date(l.date); 
+                return d.getMonth() === calDate.getMonth() && d.getFullYear() === calDate.getFullYear(); 
+            });
+            
+            const swc = document.getElementById('stat-water-count');
+            const sfc = document.getElementById('stat-fert-count');
+            if (swc) swc.innerText = currentMonthLogs.filter(l => l.type === 'water').length;
+            if (sfc) sfc.innerText = currentMonthLogs.filter(l => l.type === 'fert').length;
             const tips = ["Winter rest: reduce watering.", "Winter light: clean leaves.", "Spring growth: start feeding.", "Spring repotting: bigger pots.", "Active growth: don't miss feeding.", "Summer heat: check soil daily.", "Hydration peak: mist on hot days.", "Sun protection: burnt leaf check.", "End of summer: slow feeding.", "Autumn prep: move plants inside.", "Shortening days: move closer to window.", "Feeding pause: dormancy begins."];
-            document.getElementById('seasonal-tip').innerText = `"${tips[calDate.getMonth()]}"`;
+            const tipEl = document.getElementById('seasonal-tip');
+            if (tipEl) tipEl.innerText = `"${tips[calDate.getMonth()]}"`;
             for(let i=0; i<firstDay; i++) grid.innerHTML += '<div class="cal-day" style="background:transparent"></div>';
             for(let d=1; d<=daysInMonth; d++) {
                 const dateStr = new Date(calDate.getFullYear(), calDate.getMonth(), d).toDateString();
@@ -513,7 +550,10 @@
                 grid.appendChild(dayEl);
             }
             const h = document.getElementById('journal-history');
-            h.innerHTML = DB.data.logs.slice(-15).reverse().map(l => `<div style="background: #fff; padding:1.2rem; border-radius:1.25rem; display:flex; justify-content:space-between; align-items:center; border: 1px solid var(--surf-c); box-shadow: 0 4px 10px rgba(0,0,0,0.02);"><div class="flex items-center gap2"><span class="mi" style="color:${l.type==='water'?'var(--water-blue)':'var(--fert-orange)'}; font-size:22px;">${l.type==='water'?'water_drop':'nutrition'}</span><span style="font-weight:700; color: var(--primary);">${l.plant}</span></div><div class="flex items-center gap1"><span class="small muted">${new Date(l.date).toLocaleDateString()}</span><button class="btn-icon" onclick="deleteLog(${l.id})"><span class="mi" style="font-size:18px; color:var(--error)">delete</span></button></div></div>`).join('');
+            if (h) {
+                /* Dark Mode Fix: Activity items use var(--surf-low) instead of #fff */
+                h.innerHTML = DB.data.logs.slice(-15).reverse().map(l => `<div style="background: var(--surf-low); padding:0.9rem 1.1rem; border-radius:1.1rem; display:flex; justify-content:space-between; align-items:center; border: 1px solid var(--surf-c); box-shadow: 0 4px 10px rgba(0,0,0,0.02);"><div class="flex items-center gap2"><span class="mi" style="color:${l.type==='water'?'var(--water-blue)':'var(--fert-orange)'}; font-size:20px;">${l.type==='water'?'water_drop':'nutrition'}</span><span style="font-weight:700; color: var(--primary); font-size: 14px;">${l.plant}</span></div><div class="flex items-center gap1"><span class="small muted">${new Date(l.date).toLocaleDateString([], {month:'short', day:'numeric'})}</span><button class="btn-icon" onclick="deleteLog(${l.id})"><span class="mi" style="font-size:17px; color:var(--error)">delete</span></button></div></div>`).join('');
+            }
         }
 
         function changeMonth(dir) { calDate.setMonth(calDate.getMonth() + dir); renderCalendar(); }
@@ -522,6 +562,8 @@
             const body = document.getElementById('modal-body');
             document.getElementById('modal-title').innerText = date;
             body.innerHTML = logs.length ? logs.map(l => `<div class="flex items-center justify-between mb2" style="border-bottom: 1px solid var(--surf-c); padding-bottom: 8px;"><div class="flex items-center gap2"><span class="mi" style="color:${l.type==='water'?'var(--water-blue)':'var(--fert-orange)'}; font-size:20px;">${l.type==='water'?'water_drop':'nutrition'}</span><div><strong>${l.plant}</strong></div></div><button class="btn-icon" onclick="deleteLog(${l.id})"><span class="mi" style="color:var(--error); font-size:18px;">delete</span></button></div>`).join('') : '<p class="muted">No activity logged.</p>';
+            
+            document.getElementById('modal-footer').innerHTML = '<button class="chip active" onclick="closeModal()" style="width:100%">Close</button>';
             document.getElementById('leafy-modal').style.display = 'flex';
         }
 
@@ -565,6 +607,37 @@
             if(DB.data.settings.locationMode === 'manual' && DB.data.settings.lat) return run(DB.data.settings.lat, DB.data.settings.lon);
             if (!navigator.geolocation) return;
             navigator.geolocation.getCurrentPosition((pos) => run(pos.coords.latitude, pos.coords.longitude));
+        }
+
+        function openConfirmModal(title, message, onYes) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerText = message;
+            document.getElementById('modal-footer').innerHTML = `
+                <div class="confirm-actions">
+                    <button class="confirm-btn confirm-no" onclick="closeModal()">Cancel</button>
+                    <button id="confirm-yes-btn" class="confirm-btn confirm-yes">Confirm</button>
+                </div>
+            `;
+            document.getElementById('confirm-yes-btn').onclick = () => { onYes(); closeModal(); };
+            document.getElementById('leafy-modal').style.display = 'flex';
+        }
+
+        function confirmPlantDelete() {
+            openConfirmModal("Delete Plant?", "This will remove this plant and all its logs from your sanctuary.", () => {
+                const id = document.getElementById('edit-id').value;
+                DB.data.plants = DB.data.plants.filter(x => x.id != id);
+                DB.data.logs = DB.data.logs.filter(x => x.plantId != id);
+                DB.save();
+                showPage('sanctuary');
+                showToast("Plant removed.");
+            });
+        }
+
+        function confirmAppReset() {
+            openConfirmModal("Wipe All Data?", "This will permanently delete everything. Back up your data first if you're not sure.", () => {
+                localStorage.removeItem(DB.key);
+                location.reload();
+            });
         }
 
         function initImageAdjustment(e) {
@@ -614,10 +687,9 @@
         function setLocationMode(m) { DB.data.settings.locationMode = m; if(m === 'auto') DB.data.settings.cityName = 'Sanctuary'; DB.save(); DB.apply(); fetchEnv(true); }
         function closeModal() { document.getElementById('leafy-modal').style.display = 'none'; }
         function showToast(m) { const t = document.getElementById('leafy-toast'); if(t) { t.innerText = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); } }
-        function confirmReset() { if(confirm("Wipe all data?")) { localStorage.removeItem(DB.key); location.reload(); } }
+        
         function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(DB.data)], { type: 'application/json' })); a.download = `leafy_backup.json`; a.click(); }
         function handleImport(ev) { const file = ev.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = (e) => { try { const p = JSON.parse(e.target.result); if(p.plants) { DB.data = p; DB.save(); DB.apply(); showPage('sanctuary'); showToast("Imported!"); } } catch(err) { showToast("Invalid backup."); } }; reader.readAsText(file); }
-        function confirmDelete() { if(confirm("Delete plant?")) { DB.data.plants = DB.data.plants.filter(x => x.id != document.getElementById('edit-id').value); DB.save(); showPage('sanctuary'); } }
 
         function savePlant() {
             const name = document.getElementById('p-name').value.trim();
