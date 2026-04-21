@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <!-- Refined viewport to prevent scaling issues while respecting fit-cover for modern devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -45,7 +44,6 @@
             --on-surface: #d8f3dc; --on-surf-v: #95d5b2; --water-blue: #4db3ff; --fert-orange: #ffb347;
         }
 
-        /* Prevent double-tap zoom and improve touch stability */
         * { 
             box-sizing: border-box; 
             margin: 0; 
@@ -56,7 +54,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* IMPORTANT: Font-size 16px minimum prevents iOS auto-zoom on input focus */
         input, textarea, select { 
             -webkit-user-select: text; 
             user-select: text; 
@@ -141,12 +138,18 @@
             font-family: inherit;
         }
         .care-btn .btn-label { font-size: 9px; font-weight: 900; text-transform: uppercase; }
-        .care-btn.active-water { background: var(--water-blue); color: #fff; }
-        .care-btn.active-fert { background: var(--fert-orange); color: #fff; }
+        
+        /* Specific Active Colors */
+        .active-water { background: var(--water-blue) !important; color: #fff !important; }
+        .active-fert { background: var(--fert-orange) !important; color: #fff !important; }
+        .active-mist { background: var(--mist-teal) !important; color: #fff !important; }
+        .active-move { background: var(--move-purple) !important; color: #fff !important; }
+        .active-repot { background: var(--repot-brown) !important; color: #fff !important; }
 
         .secondary-care-bar { display: flex; justify-content: space-around; padding: 12px 0 0; border-top: 1px dashed var(--surf-c); margin-top: 1.2rem; }
-        .sec-care-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; opacity: 0.7; transition: var(--transition); flex: 1; text-align: center; }
-        .sec-care-item:active { opacity: 1; transform: scale(0.95); }
+        .sec-care-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; opacity: 0.6; transition: var(--transition); flex: 1; text-align: center; border-radius: 12px; padding: 4px 0; }
+        .sec-care-item:active { transform: scale(0.95); }
+        .sec-care-item.active { opacity: 1; }
         .sec-care-item .mi { font-size: 18px; }
         .sec-care-item span:last-child { font-size: 8px; font-weight: 800; text-transform: uppercase; }
 
@@ -164,8 +167,7 @@
         .field-wrap { background: var(--surf-low); border-radius: var(--radius-md); overflow: hidden; margin-top: 4px; border: 1px solid var(--surf-c); }
         .field-wrap input, .field-wrap textarea, .field-wrap select { 
             width: 100%; padding: 1rem; border: none; background: transparent; 
-            font-size: 16px; /* Critical fix for mobile zoom */
-            color: var(--on-surface); font-family: inherit; 
+            font-size: 16px; color: var(--on-surface); font-family: inherit; 
         }
         
         .sort-bar { display: flex; gap: 0.6rem; overflow-x: auto; scrollbar-width: none; padding: 0.5rem 0 1rem; }
@@ -307,6 +309,16 @@
     <!-- SETTINGS SCREEN -->
     <div id="page-settings" class="page">
         <div class="card-base mb-2">
+            <span class="uppercase small muted">Notifications & Reminders</span>
+            <div class="flex gap-1 mt-2 mb-2">
+                <button class="sort-chip" id="reminders-on" onclick="setReminders(true)">Enabled</button>
+                <button class="sort-chip" id="reminders-off" onclick="setReminders(false)">Disabled</button>
+            </div>
+            <button class="sort-chip" style="width:100%; background:rgba(64, 145, 108, 0.1); color:var(--primary-light); border-color:var(--primary-light);" onclick="testNotification()">Test Notification Now</button>
+            <p class="muted small mt-2" style="font-size: 10px;">Note: Reminders require browser notification permission and will trigger when you open the app to check your plants.</p>
+        </div>
+
+        <div class="card-base mb-2">
             <span class="uppercase small muted">Sanctuary Rooms</span>
             <div id="rooms-list" class="mt-2 flex" style="flex-direction:column; gap:8px;"></div>
             <div class="field-wrap mt-2 flex items-center">
@@ -441,7 +453,8 @@
                 locMode: 'auto', 
                 city: 'Local', 
                 lat: 40.71, 
-                lon: -74.00 
+                lon: -74.00,
+                reminders: true
             },
 
             load() {
@@ -473,12 +486,59 @@
                 document.getElementById('gps-manual')?.classList.toggle('active', s.locMode === 'manual');
                 document.getElementById('city-picker').style.display = s.locMode === 'manual' ? 'block' : 'none';
                 
+                document.getElementById('reminders-on')?.classList.toggle('active', s.reminders);
+                document.getElementById('reminders-off')?.classList.toggle('active', !s.reminders);
+
                 document.getElementById('loc-name').innerText = s.city;
                 document.getElementById('loc-sub').innerText = s.city;
 
                 updateRoomUI();
             }
         };
+
+        /* --- NOTIFICATIONS --- */
+        async function setReminders(enabled) {
+            if (enabled && Notification.permission !== "granted") {
+                const permission = await Notification.requestPermission();
+                if (permission !== "granted") {
+                    showToast("Notification permission denied");
+                    return;
+                }
+            }
+            Sanctuary.settings.reminders = enabled;
+            Sanctuary.save();
+            Sanctuary.apply();
+            showToast("Reminders " + (enabled ? "enabled" : "disabled"));
+        }
+
+        function testNotification() {
+            if (Notification.permission === "granted") {
+                new Notification("Leafy Sanctuary", {
+                    body: "🌿 This is a test reminder from your botanical sanctuary!",
+                    icon: "https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/potted_plant/default/48px.svg"
+                });
+            } else {
+                openModal("Permission Required", "Please click 'Enabled' above to grant notification permissions first.");
+            }
+        }
+
+        function checkPlantReminders() {
+            if (!Sanctuary.settings.reminders || Notification.permission !== "granted") return;
+
+            const thirstyCount = Sanctuary.plants.filter(p => {
+                const last = Sanctuary.logs.filter(l => l.pid === p.id && l.type === 'water').pop();
+                const lastDate = last ? new Date(last.at) : new Date(p.created);
+                const isSnoozed = p.snoozedUntil && p.snoozedUntil > Date.now();
+                return ((new Date() - lastDate) / 86400000 > p.waterDays) && !isSnoozed;
+            }).length;
+
+            if (thirstyCount > 0) {
+                new Notification("Thirsty Plants!", {
+                    body: `🌿 You have ${thirstyCount} plant${thirstyCount > 1 ? 's' : ''} in need of attention today.`,
+                    icon: "https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/water_drop/default/48px.svg"
+                });
+            }
+        }
 
         /* --- NAVIGATION & CORE --- */
         function navigate(id) {
@@ -513,7 +573,6 @@
             document.getElementById('stat-total').innerText = Sanctuary.plants.length;
             empty.style.display = list.length === 0 ? 'block' : 'none';
 
-            // Sorting
             list.sort((a, b) => {
                 if (currentSort === 'name') return a.name.localeCompare(b.name);
                 const score = p => {
@@ -557,9 +616,15 @@
                             </div>
                         </div>
                         <div class="secondary-care-bar">
-                            <div class="sec-care-item" onclick="logCare(${p.id}, 'mist')"><span class="mi" style="color:var(--mist-teal)">mist</span><span>Mist</span></div>
-                            <div class="sec-care-item" onclick="movePlantPrompt(${p.id})"><span class="mi" style="color:var(--move-purple)">home_pin</span><span>Move</span></div>
-                            <div class="sec-care-item" onclick="logCare(${p.id}, 'repot')"><span class="mi" style="color:var(--repot-brown)">package_2</span><span>Repot</span></div>
+                            <div class="sec-care-item ${isDoneToday(p.id, 'mist') ? 'active' : ''}" onclick="logCare(${p.id}, 'mist')">
+                                <span class="mi" style="color:var(--mist-teal)">mist</span><span>Mist</span>
+                            </div>
+                            <div class="sec-care-item ${isDoneToday(p.id, 'move') ? 'active' : ''}" onclick="movePlantPrompt(${p.id})">
+                                <span class="mi" style="color:var(--move-purple)">home_pin</span><span>Move</span>
+                            </div>
+                            <div class="sec-care-item ${isDoneToday(p.id, 'repot') ? 'active' : ''}" onclick="logCare(${p.id}, 'repot')">
+                                <span class="mi" style="color:var(--repot-brown)">potted_plant</span><span>Repot</span>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -593,7 +658,8 @@
             const p = Sanctuary.plants.find(x => x.id === pid);
             if (!p) return;
             
-            if (['water', 'fert'].includes(type) && isDoneToday(pid, type)) {
+            // Allow toggle undo for all care types
+            if (isDoneToday(pid, type)) {
                 const today = new Date().toDateString();
                 Sanctuary.logs = Sanctuary.logs.filter(l => !(l.pid === pid && l.type === type && new Date(l.at).toDateString() === today));
             } else {
@@ -665,7 +731,7 @@
             renderJournalInsights();
             
             const recent = [...Sanctuary.logs].reverse().slice(0, 15);
-            const icons = { water:'water_drop', fert:'nutrition', mist:'mist', move:'home_pin', repot:'package_2' };
+            const icons = { water:'water_drop', fert:'nutrition', mist:'mist', move:'home_pin', repot:'potted_plant' };
             history.innerHTML = recent.length ? recent.map(l => `
                 <div class="card-base" style="flex-direction:row; align-items:center; padding:10px 15px; margin-bottom:8px;">
                     <span class="mi" style="margin-right:12px; color:var(--primary); font-size:18px;">${icons[l.type] || 'history'}</span>
@@ -1047,7 +1113,9 @@
         function renderAll() { renderHome(); renderJournal(); }
 
         window.onload = () => {
-            Sanctuary.load(); fetchWeather();
+            Sanctuary.load(); 
+            fetchWeather();
+            checkPlantReminders(); 
             const hr = new Date().getHours();
             document.getElementById('welcome-text').innerText = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening';
         };
