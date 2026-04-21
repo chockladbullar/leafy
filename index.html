@@ -9,24 +9,33 @@
     
     <title>Leafy</title>
 
-    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
     
     <style>
-        /* --- CORE TOKENS --- */
         :root {
-            --primary: #1b4332; --primary-light: #40916c; --primary-fixed: #d8f3dc;
-            --secondary: #52796f; --surface: #f7f9f7; --surf-low: #edf2f0; --surf-c: #dae5e0; 
-            --on-surface: #1a1c16; --on-surf-v: #3f4944; --error: #ba1a1a;
-            --water-blue: #0077b6; --fert-orange: #e67e22;
+            --primary: #1b4332; 
+            --primary-light: #40916c;
+            --primary-dim: #95d5b2;
+            --primary-fixed: #d8f3dc;
+            --secondary: #52796f;
+            --surface: #f7f9f7; 
+            --surf-low: #edf2f0; 
+            --surf-c: #dae5e0; 
+            --on-surface: #1a1c16;
+            --on-surf-v: #3f4944;
+            --error: #ba1a1a;
+            --water-blue: #0077b6; 
+            --fert-orange: #e67e22;
+            --mist-teal: #48cae4;
+            --move-purple: #7209b7;
+            --repot-brown: #9c6644;
             --safe-top: env(safe-area-inset-top, 20px);
             --safe-bot: env(safe-area-inset-bottom, 20px);
             --grad-weather: linear-gradient(135deg, #d8f3dc, #b7e4c7);
             --grad-collection: linear-gradient(135deg, #b7e4c7, #95d5b2);
-            --card-text: #1b4332;
         }
 
         html.dark-mode { 
@@ -34,265 +43,356 @@
             --on-surface: #d8f3dc; --on-surf-v: #95d5b2; --water-blue: #4db3ff; --fert-orange: #ffb347;
             --grad-weather: linear-gradient(135deg, #1b4332, #081c15);
             --grad-collection: linear-gradient(135deg, #2d6a4f, #1b4332);
-            --card-text: #95d5b2;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
         input, textarea, select { -webkit-user-select: text; user-select: text; outline: none; }
 
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--surface); color: var(--on-surface); position: fixed; width: 100%; height: 100%; overflow: hidden; transition: background 0.3s ease; }
-        .mi { font-family: 'Material Symbols Outlined' !important; font-weight: normal; font-size: 24px; line-height: 1; display: inline-block; white-space: nowrap; word-wrap: normal; direction: ltr; -webkit-font-smoothing: antialiased; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--surface); color: var(--on-surface);
+            position: fixed; width: 100%; height: 100%; overflow: hidden;
+            transition: background 0.3s ease;
+        }
+
+        .mi {
+            font-family: 'Material Symbols Outlined' !important;
+            font-weight: normal; font-style: normal; font-size: 24px; line-height: 1;
+            display: inline-block; white-space: nowrap; word-wrap: normal;
+            direction: ltr; -webkit-font-smoothing: antialiased;
+        }
+
         h1, h2, h3 { font-family: 'Noto Serif', serif; }
 
-        /* --- LAYOUT --- */
-        .app-header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: linear-gradient(to bottom, var(--primary-fixed), rgba(216, 243, 220, 0.9)); backdrop-filter: blur(20px); border-bottom: 1px solid var(--surf-c); padding: calc(var(--safe-top) + 0.3rem) 1.5rem 0.5rem; }
-        html.dark-mode .app-header { background: linear-gradient(to bottom, #1b4332, rgba(8, 28, 21, 0.85)); }
-        .app-header h1 { font-size: 1.25rem; text-align: center; }
-        .header-subtitle { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary-light); text-align: center; display: block; margin-top: 2px; }
+        /* --- UI COMPONENTS --- */
+        .app-header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: var(--surface);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--surf-c);
+            padding: calc(var(--safe-top) + 0.5rem) 1.5rem 0.5rem;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+        }
 
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: rgba(247, 249, 247, 0.95); backdrop-filter: blur(20px); border-top: 1px solid var(--surf-c); padding: 0.7rem 0.5rem calc(var(--safe-bot) + 0.5rem); display: flex; justify-content: space-around; }
-        html.dark-mode .bottom-nav { background: rgba(8, 28, 21, 0.95); border-top-color: #2d6a4f; }
+        .app-header h1 { font-size: 1.15rem; color: var(--primary); }
+        .header-subtitle { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary-light); }
 
-        .screens-wrapper { position: absolute; inset: 0; overflow: hidden; }
-        .page { position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; display: none; padding: calc(var(--safe-top) + 4rem) 1.5rem calc(var(--safe-bot) + 7rem); }
-        .page.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+            background: var(--surface);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--surf-c);
+            padding: 0.7rem 0.5rem calc(var(--safe-bot) + 0.5rem);
+            display: flex; justify-content: space-around;
+        }
+
+        .page { 
+            position: absolute; inset: 0;
+            overflow-y: auto; -webkit-overflow-scrolling: touch;
+            display: none; 
+            padding: calc(var(--safe-top) + 4.5rem) 1.5rem calc(var(--safe-bot) + 6.5rem); 
+        }
+        .page.active { display: block; animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
         .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--secondary); opacity: 0.5; border: none; background: none; flex: 1; transition: 0.2s; cursor: pointer; }
         .nav-item.active { opacity: 1; color: var(--primary); transform: translateY(-2px); }
+        .nav-item.active .mi { font-variation-settings: 'FILL' 1; }
         .nav-item .label { font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 4px; }
 
         .stat-grid { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 1rem; margin-bottom: 1.5rem; align-items: stretch; }
-        .card-base { border-radius: 1.5rem; padding: 1rem; border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column; }
-        .dash-card { min-height: 125px; height: 100%; }
-        .weather-box { background: var(--grad-weather); cursor: pointer; }
-        .collection-box { background: var(--grad-collection); }
+        .card-base { border-radius: 1.5rem; padding: 1.1rem; border: 1px solid var(--surf-c); display: flex; flex-direction: column; background: #fff; }
+        html.dark-mode .card-base { background: #12291f; }
         
-        .weather-inner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: auto; }
-        .weather-item { display: flex; align-items: center; gap: 4px; font-size: 0.7rem; font-weight: 800; color: var(--card-text); }
+        .weather-box { background: var(--grad-weather); cursor: pointer; border: none; min-height: 120px; }
+        .collection-box { background: var(--grad-collection); border: none; }
+        
+        .weather-inner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3rem; margin-top: auto; padding-top: 0.8rem; }
+        .weather-item-small { display: flex; align-items: center; gap: 4px; font-size: 0.7rem; font-weight: 800; color: var(--primary); }
+        .weather-item-small .mi { font-size: 16px; opacity: 0.7; }
+        .weather-tip { font-size: 10px; font-weight: 700; color: var(--primary); margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(0,0,0,0.05); }
 
-        .plant-card { background: #fff; border-radius: 1.5rem; border: 1px solid var(--surf-c); box-shadow: 0 8px 24px rgba(27,67,50,0.06); overflow: hidden; cursor: pointer; transition: transform 0.2s; margin-bottom: 1rem; }
-        html.dark-mode .plant-card { background: #1b4332; border-color: #2d6a4f; }
-        .plant-img-wrap { height: 160px; width: 100%; background: var(--surf-c); overflow: hidden; position: relative; }
+        .plant-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        .plant-card { background: #fff; border-radius: 1.5rem; border: 1px solid var(--surf-c); box-shadow: 0 4px 12px rgba(0,0,0,0.02); overflow: hidden; transition: 0.2s; cursor: pointer; display: flex; flex-direction: column; }
+        html.dark-mode .plant-card { background: #1b4332; }
+        .plant-img-wrap { height: 160px; width: 100%; background: var(--surf-low); overflow: hidden; position: relative; }
         .plant-img { width: 100%; height: 100%; object-fit: cover; }
         
-        .care-btn { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid transparent; cursor: pointer; transition: 0.3s; background: var(--surf-low); }
-        .btn-water { color: var(--water-blue); background: rgba(0, 119, 182, 0.08); }
-        .btn-fert { color: var(--fert-orange); background: rgba(230, 126, 34, 0.08); }
-        .care-btn.active-water { background: var(--water-blue) !important; color: #fff !important; }
-        .care-btn.active-fert { background: var(--fert-orange) !important; color: #fff !important; }
+        .card-body { padding: 1.25rem; }
+        
+        .status-text { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; width: fit-content; margin-bottom: 0.6rem; letter-spacing: 0.05em; }
+        
+        .care-btn-group { display: flex; gap: 8px; flex-direction: column; align-items: stretch; min-width: 90px; }
+        .care-btn { 
+            padding: 0.5rem 0.8rem; border-radius: 10px; 
+            display: flex; align-items: center; gap: 6px;
+            border: none; cursor: pointer; transition: 0.2s; 
+            background: var(--surf-low);
+            color: var(--secondary);
+            font-family: inherit;
+            justify-content: center;
+        }
+        .care-btn .mi { font-size: 18px; }
+        .care-btn .btn-label { font-size: 10px; font-weight: 900; text-transform: uppercase; }
+        
+        .care-btn.active-water { background: var(--water-blue); color: #fff; }
+        .care-btn.active-fert { background: var(--fert-orange); color: #fff; }
 
-        .sort-bar { display: flex; gap: 0.6rem; overflow-x: auto; scrollbar-width: none; padding: 0.5rem 0 1.2rem; }
-        .sort-chip { padding: 0.5rem 1rem; border-radius: 99px; background: var(--surf-low); border: 1px solid var(--surf-c); font-size: 11px; font-weight: 800; white-space: nowrap; color: var(--secondary); cursor: pointer; }
-        .sort-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .secondary-care-bar { display: flex; justify-content: space-around; padding: 12px 0 4px; border-top: 1px dashed var(--surf-c); margin-top: 1.2rem; }
+        .sec-care-item { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; opacity: 0.6; transition: 0.2s; flex: 1; }
+        .sec-care-item:active { transform: scale(0.9); opacity: 1; }
+        .sec-care-item .mi { font-size: 18px; }
+        .sec-care-item span:last-child { font-size: 8px; font-weight: 800; text-transform: uppercase; }
 
-        .chip { background: var(--surf-low); padding: 0.6rem 1rem; border-radius: 99px; border: 1px solid var(--surf-c); font-weight: 800; color: var(--on-surface); flex: 1; text-align: center; font-size: 11px; height: 38px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; }
-        .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-
-        .cal-header { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px; }
-        .cal-header span { font-size: 11px; font-weight: 800; color: var(--primary-light); text-align: center; text-transform: uppercase; }
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-        .cal-day { aspect-ratio: 1; border-radius: 0.8rem; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; background: var(--surf-low); position: relative; cursor: pointer; }
-        .cal-day.today { border: 2px solid var(--primary-light); background: var(--surface); }
-        .cal-dots { display: flex; gap: 3px; position: absolute; bottom: 6px; }
-        .dot { width: 5px; height: 5px; border-radius: 50%; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 1rem; }
+        .cal-header { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 10px; font-weight: 800; opacity: 0.5; margin-bottom: 8px; }
+        .cal-day { aspect-ratio: 1; background: var(--surf-low); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; position: relative; cursor: pointer; }
+        .cal-day.today { border: 2px solid var(--primary); }
+        .cal-dots { display: flex; gap: 2px; position: absolute; bottom: 6px; flex-wrap: wrap; justify-content: center; width: 100%; padding: 0 4px; }
+        .dot { width: 4px; height: 4px; border-radius: 50%; }
         .dot-water { background: var(--water-blue); }
         .dot-fert { background: var(--fert-orange); }
+        .dot-mist { background: var(--mist-teal); }
+        .dot-move { background: var(--move-purple); }
+        .dot-repot { background: var(--repot-brown); }
+
+        .sort-bar { display: flex; gap: 0.6rem; overflow-x: auto; scrollbar-width: none; padding: 0.5rem 0 1rem; }
+        .sort-bar::-webkit-scrollbar { display: none; }
+        .sort-chip { padding: 0.6rem 1.1rem; border-radius: 99px; background: var(--surf-low); border: 1px solid var(--surf-c); font-size: 11px; font-weight: 800; white-space: nowrap; cursor: pointer; color: var(--secondary); transition: 0.2s; display: flex; align-items: center; gap: 4px; }
+        .sort-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        .field-wrap { background: #fff; border-radius: 1rem; overflow: hidden; margin-top: 4px; border: 1px solid var(--surf-c); position: relative; }
+        html.dark-mode .field-wrap { background: #081c15; }
+        .field-wrap input, .field-wrap textarea, .field-wrap select { width: 100%; padding: 0.9rem; border: none; background: transparent; font-size: 16px; color: var(--on-surface); font-family: inherit; }
+
+        .leafy-toast { position: fixed; bottom: calc(var(--safe-bot) + 6.5rem); left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 0.8rem 1.5rem; border-radius: 99px; font-size: 0.9rem; font-weight: 700; z-index: 5000; opacity: 0; transition: 0.3s; pointer-events: none; }
+        .leafy-toast.show { opacity: 1; }
+        
+        .leafy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 4000; display: none; align-items: center; justify-content: center; padding: 2rem; backdrop-filter: blur(10px); }
+        .leafy-modal-content { background: var(--surface); border-radius: 1.5rem; padding: 1.5rem; width: 100%; max-width: 340px; border: 1px solid var(--surf-c); }
+        
+        .search-item { padding: 1rem; border-bottom: 1px solid var(--surf-c); cursor: pointer; font-size: 14px; }
+        .search-item:last-child { border-bottom: none; }
 
         .flex { display: flex; } .items-center { align-items: center; } .justify-between { justify-content: space-between; }
-        .mb3 { margin-bottom: 1.2rem; } .mt3 { margin-top: 1.2rem; } .mb2 { margin-bottom: 0.8rem; } 
-        .mb1 { margin-bottom: 0.5rem; } .mt1 { margin-top: 0.5rem; } .mt2 { margin-top: 0.8rem; }
-        .gap1 { gap: 0.5rem; } .gap2 { gap: 1rem; }
+        .mb2 { margin-bottom: 1rem; } .mb1 { margin-bottom: 0.5rem; } .mt2 { margin-top: 1rem; } .gap1 { gap: 0.5rem; }
         .small { font-size: 0.8rem; } .uppercase { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; }
-        .field-wrap { background: #fff; border-radius: 0.8rem; overflow: hidden; margin-top: 4px; border: 1px solid var(--surf-c); position: relative; }
-        html.dark-mode .field-wrap { background: #081c15; }
-        .field-wrap input, .field-wrap textarea { width: 100%; padding: 0.9rem; border: none; background: transparent; font-size: 15px; color: var(--on-surface); font-family: inherit; }
-
-        .leafy-toast { position: fixed; bottom: calc(var(--safe-bot) + 6.5rem); left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 0.7rem 1.3rem; border-radius: 99px; font-size: 0.85rem; font-weight: 700; z-index: 3000; opacity: 0; transition: 0.3s; pointer-events: none; }
-        .leafy-toast.show { opacity: 1; }
-        .leafy-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 4000; display: none; align-items: center; justify-content: center; padding: 2rem; backdrop-filter: blur(10px); }
-        .leafy-modal-content { background: var(--surface); border-radius: 1.5rem; padding: 1.5rem; width: 100%; max-width: 340px; border: 1px solid var(--surf-c); box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+        .btn-icon { background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         
-        .confirm-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
-        .confirm-btn { padding: 0.8rem; border-radius: 1rem; font-weight: 800; font-family: inherit; border: none; cursor: pointer; flex: 1; font-size: 0.85rem; }
-        .confirm-yes { background: var(--error); color: #fff; }
-        .confirm-no { background: var(--surf-low); color: var(--on-surface); }
+        .badge-thirsty { color: var(--error); background: rgba(186, 26, 26, 0.1); padding: 3px 8px; border-radius: 6px; }
+        .badge-healthy { color: var(--primary-light); background: rgba(64, 145, 108, 0.1); padding: 3px 8px; border-radius: 6px; }
+        .badge-snoozed { color: var(--fert-orange); background: rgba(230, 126, 34, 0.1); padding: 3px 8px; border-radius: 6px; }
+        
+        .increment-group { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+        .inc-chip { padding: 4px 10px; border-radius: 8px; background: var(--surf-low); font-size: 10px; font-weight: 700; cursor: pointer; border: 1px solid var(--surf-c); }
+        .inc-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        .log-type-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 6px; margin-right: 12px; }
+        .type-water { background: var(--water-blue); color: #fff; }
+        .type-fert { background: var(--fert-orange); color: #fff; }
+        .type-mist { background: var(--mist-teal); color: #fff; }
+        .type-moved { background: var(--move-purple); color: #fff; }
+        .type-repotted { background: var(--repot-brown); color: #fff; }
     </style>
 </head>
 <body>
 
     <div id="leafy-toast" class="leafy-toast"></div>
-
+    
     <div id="leafy-modal" class="leafy-modal">
         <div class="leafy-modal-content">
-            <h3 id="modal-title" style="margin-bottom:1.25rem; color: var(--primary);">Summary</h3>
-            <div id="modal-body" class="small" style="line-height: 1.5;"></div>
-            <div id="modal-footer" class="mt3">
-                <button id="modal-close-btn" class="chip active" onclick="closeModal()" style="width:100%">Close</button>
+            <h3 id="modal-title" style="margin-bottom:1rem; color: var(--primary);">Summary</h3>
+            <div id="modal-body" class="small" style="line-height: 1.5; max-height: 50vh; overflow-y: auto;"></div>
+            <div id="modal-footer" class="mt2" style="display:flex; gap:10px;">
+                <button id="modal-cancel-btn" class="sort-chip" style="flex:1; display:none;" onclick="closeModal()">Cancel</button>
+                <button id="modal-ok-btn" class="sort-chip active" style="flex:1;" onclick="closeModal()">Close</button>
             </div>
         </div>
     </div>
 
     <header class="app-header">
-        <div class="inner">
-            <div style="text-align:center;">
-                <h1>Leafy</h1>
-                <span class="header-subtitle" id="loc-sub">Sanctuary</span>
-            </div>
-        </div>
+        <h1>Leafy</h1>
+        <span class="header-subtitle" id="loc-sub">Sanctuary</span>
     </header>
 
     <div class="screens-wrapper">
-        
         <!-- HOME SCREEN -->
         <div id="page-sanctuary" class="page active">
-            <h2 id="welcome-text" style="font-size:2.4rem; font-weight:800; color:var(--primary); margin-bottom:0.2rem;">Good evening</h2>
-            <div id="loc-display" style="font-size: 0.85rem; font-weight: 600; color: var(--primary-light); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 4px; opacity: 0.9;">
+            <h2 id="welcome-text" style="font-size:2.2rem; font-weight:800; color:var(--primary); margin-bottom:0.1rem;">Good morning</h2>
+            <div id="loc-display" style="font-size: 0.8rem; font-weight: 600; color: var(--primary-light); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 4px; opacity: 0.8;">
                 <span class="mi" style="font-size: 14px;">location_on</span>
-                <span id="loc-name">Somewhere lush...</span>
+                <span id="loc-name">Sanctuary</span>
             </div>
 
             <div class="stat-grid">
                 <div class="card-base dash-card weather-box" onclick="fetchEnv(true)">
                     <div class="flex items-center justify-between">
-                        <span class="small uppercase" style="color:var(--primary-light); opacity: 0.8; font-weight: 800;">Environment</span>
-                        <span class="mi" style="font-size:16px; color:var(--primary-light)">refresh</span>
+                        <span class="small uppercase" style="color:var(--primary); opacity: 0.8; font-weight: 900;">Environment</span>
+                        <span class="mi" style="font-size:16px; color:var(--primary)">refresh</span>
                     </div>
                     <div class="weather-inner-grid">
-                        <div class="weather-item"><span class="mi">humidity_percentage</span> <span id="env-humidity">--%</span></div>
-                        <div class="weather-item"><span class="mi">wb_sunny</span> <span id="env-sunrise">--:--</span></div>
-                        <div class="weather-item"><span class="mi">dark_mode</span> <span id="env-sunset">--:--</span></div>
-                        <div class="weather-item"><span class="mi">light_mode</span> <span id="env-daylight">--h --m</span></div>
+                        <div class="weather-item-small"><span class="mi">humidity_percentage</span> <span id="env-humidity">--%</span></div>
+                        <div class="weather-item-small"><span class="mi">wb_sunny</span> <span id="env-sunrise">--:--</span></div>
+                        <div class="weather-item-small"><span class="mi">dark_mode</span> <span id="env-sunset">--:--</span></div>
+                        <div class="weather-item-small"><span class="mi">light_mode</span> <span id="env-daylight">--h --m</span></div>
                     </div>
+                    <div id="env-recommendation" class="weather-tip">Updating botanical insights...</div>
                 </div>
                 <div class="card-base dash-card collection-box">
-                    <span class="small uppercase" style="color:var(--primary); opacity: 0.8; font-weight: 800;">Collection</span>
-                    <div id="stat-total" style="font-size:2.8rem; font-family:'Noto Serif'; color:var(--primary); margin-top: auto; line-height: 1;">0</div>
-                    <span class="small" style="font-weight:800; opacity: 0.7; color: var(--primary); text-transform: uppercase; margin-top: 4px;">Plants</span>
+                    <span class="small uppercase" style="color:var(--primary); opacity: 0.8; font-weight: 900;">Collection</span>
+                    <div id="stat-total" style="font-size:2.4rem; font-family:'Noto Serif'; color:var(--primary); margin-top: auto; line-height: 1;">0</div>
+                    <span class="small" style="font-weight:800; opacity: 0.7; color: var(--primary); text-transform: uppercase;">Plants</span>
                 </div>
             </div>
 
+            <div class="sort-bar" id="room-filter-bar"></div>
+
             <div class="sort-bar">
-                <div class="sort-chip active" id="sort-thirstiest" onclick="setSort('thirstiest')">Thirstiest</div>
-                <div class="sort-chip" id="sort-name" onclick="setSort('name')">Alphabetical</div>
-                <div class="sort-chip" id="sort-newest" onclick="setSort('newest')">Newest</div>
+                <div class="sort-chip active" id="sort-thirstiest" onclick="setSort('thirstiest')">Thirstiest First</div>
+                <div class="sort-chip" id="sort-name" onclick="setSort('name')">A-Z</div>
             </div>
 
-            <div id="plant-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:1rem;"></div>
-            
+            <div id="plant-grid" class="plant-grid"></div>
             <div id="empty-sanctuary" style="text-align:center; padding:5rem 1.5rem; display:none;">
-                <span class="mi" style="font-size:4rem; color:var(--surf-c); font-variation-settings:'FILL' 1">potted_plant</span>
-                <p class="muted mt3" style="font-weight: 700; color: var(--secondary);">Your sanctuary is empty.</p>
+                <span class="mi" style="font-size:4rem; color:var(--surf-c);">potted_plant</span>
+                <p class="muted mt2" style="font-weight: 700; color: var(--secondary);">Your sanctuary is empty.</p>
             </div>
         </div>
 
         <!-- JOURNAL SCREEN -->
         <div id="page-journal" class="page">
-            <h2 id="cal-month-label" style="font-size: 2.4rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">Month</h2>
-            
-            <div class="cal-nav-row">
-                <button class="chip" onclick="changeMonth(-1)">Previous</button>
-                <button class="chip" onclick="changeMonth(1)">Next</button>
+            <h2 id="cal-month-label" style="font-size: 2.2rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">Month</h2>
+            <div class="flex gap1 mb2">
+                <button class="sort-chip" onclick="changeMonth(-1)">Previous</button>
+                <button class="sort-chip" onclick="changeMonth(1)">Next</button>
             </div>
-
             <div class="cal-header"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
             <div id="cal-grid" class="cal-grid"></div>
-
-            <div class="card-base mt3" style="background: var(--surf-low); border: 1px dashed var(--primary-light); padding: 1rem;">
-                <div class="flex items-center gap1 mb2">
-                    <span class="mi" style="color:var(--primary-light); font-size:18px;">auto_awesome</span>
-                    <span class="small uppercase" style="color:var(--primary); font-weight:800;">Botanical Insights</span>
-                </div>
-                <div id="journal-stats" class="small" style="font-weight:700; color:var(--on-surf-v); line-height:1.4;">
-                    This month: <span id="stat-water-count">0</span> waterings and <span id="stat-fert-count">0</span> feedings.
-                </div>
-                <p id="seasonal-tip" class="small mt1 italic" style="color:var(--secondary); opacity: 0.8;"></p>
-            </div>
             
-            <h3 class="mt3 uppercase small muted">Recent Activity</h3>
-            <div id="journal-history" class="flex mt2" style="flex-direction:column; gap:0.6rem;"></div>
+            <h3 class="mt2 uppercase small muted">Recent Activity</h3>
+            <div id="journal-history" class="flex mt2" style="flex-direction:column; gap:0.75rem;"></div>
         </div>
 
         <!-- SETTINGS SCREEN -->
         <div id="page-settings" class="page">
-            <div class="card-base mb2" style="background: var(--surf-low); border: none; padding: 1rem;">
-                <span class="small uppercase muted" style="font-weight: 800; display: block; margin-bottom: 0.75rem;">Reminders</span>
-                <div class="flex gap1 mb1">
-                    <button class="chip" id="notify-toggle" onclick="toggleNotifications()">Enable Notifications</button>
-                    <button class="chip" id="notify-test" onclick="sendTestNotify()" style="display:none;">Test Alert</button>
+            <div class="card-base mb2" style="border: none;">
+                <span class="small uppercase muted" style="font-weight: 800;">Sanctuary Rooms</span>
+                <div id="settings-room-list" class="flex mt2" style="flex-direction:column; gap:8px;"></div>
+                <div class="field-wrap mt2 flex items-center">
+                    <input type="text" id="new-room-input" placeholder="New room name..." style="flex:1;">
+                    <button class="btn-icon mr2" onclick="addNewRoom()" style="padding-right:1rem;"><span class="mi" style="color:var(--primary)">add_circle</span></button>
                 </div>
-                <p class="small muted" style="line-height: 1.3;">iOS: Required to "Add to Home Screen" for system alerts.</p>
             </div>
-            <div class="card-base mb2" style="background: var(--surf-low); border: none; padding: 1rem;">
-                <span class="small uppercase muted" style="font-weight: 800; display: block; margin-bottom: 0.75rem;">Weather Location</span>
-                <div class="flex gap1 mb1">
-                    <button class="chip" id="loc-auto" onclick="setLocationMode('auto')">Auto (GPS)</button>
-                    <button class="chip" id="loc-manual" onclick="setLocationMode('manual')">Manual City</button>
+
+            <div class="card-base mb2" style="border: none;">
+                <span class="small uppercase muted" style="font-weight: 800;">Weather Location</span>
+                <div class="flex gap1 mt2 mb2">
+                    <button class="sort-chip" id="loc-auto" onclick="setLocationMode('auto')">Auto (GPS)</button>
+                    <button class="sort-chip" id="loc-manual" onclick="setLocationMode('manual')">Manual City</button>
                 </div>
-                <div id="manual-loc-inputs" class="search-container" style="display:none;">
-                    <div class="field-wrap mt1">
+                <div id="manual-loc-container" style="display:none; position:relative;">
+                    <div class="field-wrap">
                         <input type="text" id="city-search" placeholder="Search City..." oninput="searchCity(this.value)">
                     </div>
                     <div id="city-results" class="search-results" style="display:none;"></div>
                 </div>
             </div>
-            <div class="card-base mb2" style="background: var(--surf-low); border: none; padding: 1rem;">
-                <span class="small uppercase muted" style="font-weight: 800; display: block; margin-bottom: 0.75rem;">Appearance</span>
-                <div class="flex gap1 mt1">
-                    <button class="chip" id="mode-light" onclick="setMode('light')">Light</button>
-                    <button class="chip" id="mode-dark" onclick="setMode('dark')">Dark</button>
-                    <button class="chip" id="mode-auto" onclick="setMode('auto')">System</button>
+
+            <div class="card-base mb2" style="border: none;">
+                <span class="small uppercase muted" style="font-weight: 800;">Reminders</span>
+                <div class="flex gap1 mt2 items-center">
+                    <button class="sort-chip" id="reminders-on" onclick="setReminders(true)">Enabled</button>
+                    <button class="sort-chip" id="reminders-off" onclick="setReminders(false)">Disabled</button>
+                    <button class="sort-chip" style="background: rgba(64, 145, 108, 0.1); color: var(--primary-light); border-color: var(--primary-light);" onclick="testNotification()">Test Now</button>
+                </div>
+                <p class="small muted mt1">Toggle and test push notifications for plant care.</p>
+            </div>
+
+            <div class="card-base mb2" style="border: none;">
+                <span class="small uppercase muted" style="font-weight: 800;">Appearance</span>
+                <div class="flex gap1 mt2">
+                    <button class="sort-chip" id="mode-light" onclick="setMode('light')">Light</button>
+                    <button class="sort-chip" id="mode-dark" onclick="setMode('dark')">Dark</button>
+                    <button class="sort-chip" id="mode-auto" onclick="setMode('auto')">System</button>
                 </div>
             </div>
-            <div class="card-base mb2" style="background: var(--surf-low); border: none; padding: 1rem;">
-                <span class="small uppercase muted" style="font-weight: 800; display: block; margin-bottom: 0.75rem;">Data Management</span>
-                <div class="flex gap2 mt1">
-                    <button class="chip" onclick="exportData()">Backup</button>
-                    <button class="chip" onclick="document.getElementById('import-input').click()">Import</button>
+            
+            <div class="card-base mb2" style="border: none;">
+                <span class="small uppercase muted" style="font-weight: 800;">Data Management</span>
+                <div class="flex gap1 mt2">
+                    <button class="sort-chip" onclick="exportData()">Backup</button>
+                    <button class="sort-chip" onclick="document.getElementById('import-input').click()">Import</button>
                 </div>
                 <input type="file" id="import-input" style="display:none;" accept=".json" onchange="handleImport(event)">
             </div>
-            <button onclick="confirmAppReset()" style="color:var(--error); width:100%; border:none; padding:1.1rem; background:var(--surf-low); border-radius:1.25rem; font-weight:800; font-family:inherit; cursor:pointer; font-size: 13px;">Reset All Data</button>
+            
+            <button onclick="requestReset()" style="color:var(--error); width:100%; border:none; padding:1.25rem; background:var(--surf-low); border-radius:1rem; font-weight:800; font-family:inherit; cursor:pointer;">Reset All Data</button>
         </div>
 
-        <!-- ADD/EDIT DRAWER -->
+        <!-- ADD/EDIT VIEW -->
         <div id="page-add" class="page" style="z-index: 200; background: var(--surface);">
             <input type="hidden" id="edit-id">
-            <div style="text-align:center; margin-bottom: 1.5rem;">
+            <div class="flex justify-between items-center mb2">
                 <h1 id="add-page-title">New Plant</h1>
-                <span class="header-subtitle" id="add-page-sub">Add to Sanctuary</span>
+                <button class="sort-chip active" style="padding: 0.5rem 1rem;" onclick="showLibrary()">Species Guide</button>
             </div>
-            <div class="mb3">
-                <label class="small uppercase muted" style="margin-bottom: 8px; display: block;">Profile Photo</label>
-                <div class="photo-picker" id="photo-box" onmousedown="startDrag(event)" ontouchstart="startDrag(event)" onclick="if(!isDragging) document.getElementById('p-image').click()" style="height: 180px; background: var(--surf-c); border-radius: 1.5rem; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px dashed var(--primary-light);">
-                    <span class="mi" id="photo-icon" style="font-size:3rem; color: var(--primary-light)">add_a_photo</span>
-                    <img id="photo-preview" style="display:none; width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+            
+            <div class="mb2">
+                <div class="photo-picker" id="photo-box" onclick="document.getElementById('p-image').click()" style="height: 200px; background: var(--surf-low); border-radius: 1.5rem; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px dashed var(--surf-c);">
+                    <span class="mi" id="photo-icon" style="font-size:3rem; color: var(--surf-c)">add_a_photo</span>
+                    <img id="photo-preview" style="display:none; width: 100%; height: 100%; object-fit: cover;">
                 </div>
-                <div id="adjust-ui" style="display:none;" class="mt2">
-                    <div class="flex justify-between items-center mb1">
-                        <span class="small uppercase" style="font-weight: 800;">Alignment</span>
-                        <span class="small muted">Drag photo in box</span>
-                    </div>
-                    <input type="range" id="crop-zoom" min="1" max="3" step="0.05" value="1" oninput="updateCropPreview()" style="width: 100%; accent-color: var(--primary);">
-                </div>
-                <input type="file" id="p-image" style="display:none;" accept="image/*" onchange="initImageAdjustment(event)">
+                <input type="file" id="p-image" style="display:none;" accept="image/*" onchange="handleImage(event)">
             </div>
-            <div class="grid2 mb3">
-                <div><label class="small uppercase muted">Nickname</label><div class="field-wrap"><input type="text" id="p-name" placeholder="Monty"></div></div>
-                <div><label class="small uppercase muted">Species</label><div class="field-wrap"><input type="text" id="p-species" placeholder="Monstera"></div></div>
-            </div>
-            <div class="grid2 mb3">
-                <div><label class="small uppercase muted">Water (Days)</label><div class="field-wrap"><input type="number" id="p-water" value="7" min="1"></div></div>
-                <div><label class="small uppercase muted">Fertilize (Days)</label><div class="field-wrap"><input type="number" id="p-fert" value="30" min="0"></div></div>
-            </div>
-            <div class="mb3">
-                <label class="small uppercase muted">Notes</label><div class="field-wrap"><textarea id="p-notes" rows="3" placeholder="Special needs?"></textarea></div>
-            </div>
-            <button onclick="savePlant()" style="width:100%; background:var(--primary); border:none; color:#fff; border-radius:1rem; padding:1.1rem; font-weight:800; font-family:inherit; font-size:1rem; cursor:pointer;">Save Plant</button>
-            <button id="delete-btn" onclick="confirmPlantDelete()" style="width:100%; background:transparent; border:none; color:var(--error); margin-top:1.5rem; font-weight:700; font-family:inherit; display:none;">Remove from Sanctuary</button>
-            <button onclick="showPage('sanctuary')" style="width:100%; border:none; color:var(--secondary); margin-top:0.8rem; font-weight:700; font-family:inherit; background:none; cursor: pointer;">Cancel</button>
-        </div>
 
+            <div class="mb2">
+                <label class="small uppercase muted">Nickname</label>
+                <div class="field-wrap"><input type="text" id="p-name" placeholder="Monty"></div>
+            </div>
+
+            <div class="mb2">
+                <label class="small uppercase muted">Species</label>
+                <div class="field-wrap"><input type="text" id="p-species" placeholder="Monstera Deliciosa"></div>
+            </div>
+
+            <div class="mb2">
+                <label class="small uppercase muted">Room</label>
+                <div class="field-wrap">
+                    <select id="p-room"></select>
+                </div>
+            </div>
+
+            <div class="mb2">
+                <label class="small uppercase muted">Watering Schedule (Days)</label>
+                <div class="field-wrap"><input type="number" id="p-water" value="7"></div>
+                <div class="increment-group">
+                    <div class="inc-chip" onclick="setInc('p-water', 3)">3d</div>
+                    <div class="inc-chip" onclick="setInc('p-water', 7)">Weekly</div>
+                    <div class="inc-chip" onclick="setInc('p-water', 14)">2 Weeks</div>
+                    <div class="inc-chip" onclick="setInc('p-water', 21)">3 Weeks</div>
+                </div>
+            </div>
+
+            <div class="mb2">
+                <label class="small uppercase muted">Fertilizing Schedule (Days)</label>
+                <div class="field-wrap"><input type="number" id="p-fert" value="30"></div>
+                <div class="increment-group">
+                    <div class="inc-chip" onclick="setInc('p-fert', 14)">2 Weeks</div>
+                    <div class="inc-chip" onclick="setInc('p-fert', 30)">Monthly</div>
+                    <div class="inc-chip" onclick="setInc('p-fert', 60)">2 Months</div>
+                    <div class="inc-chip" onclick="setInc('p-fert', 90)">Quarterly</div>
+                </div>
+            </div>
+
+            <div class="mb2">
+                <label class="small uppercase muted">Additional Notes</label>
+                <div class="field-wrap"><textarea id="p-notes" rows="2" placeholder="Loves bright indirect light..."></textarea></div>
+            </div>
+
+            <button onclick="savePlant()" style="width:100%; background:var(--primary); border:none; color:#fff; border-radius:1rem; padding:1.25rem; font-weight:800; font-family:inherit; font-size:1rem; cursor:pointer;">Save Plant</button>
+            <button id="delete-btn" onclick="requestDelete()" style="width:100%; background:transparent; border:none; color:var(--error); margin-top:1.5rem; font-weight:700; font-family:inherit; display:none;">Remove from Sanctuary</button>
+            <button onclick="showPage('sanctuary')" style="width:100%; border:none; color:var(--secondary); margin-top:1rem; font-weight:700; font-family:inherit; background:none;">Cancel</button>
+        </div>
     </div>
 
     <nav class="bottom-nav">
@@ -303,105 +403,156 @@
     </nav>
 
     <script>
+        /* --- GLOBAL STATE --- */
         let calDate = new Date();
-        let rawImage = null;
-        let cropState = { zoom: 1, offsetX: 0, offsetY: 0 };
-        let isDragging = false, dragStart = { x: 0, y: 0 };
+        let currentRoomFilter = 'all';
+        let currentSort = 'thirstiest';
+
+        const DEFAULT_LIBRARY = [
+            { n: "Snake Plant", s: "Sansevieria", w: 21, f: 90 },
+            { n: "Monstera", s: "Monstera Deliciosa", w: 7, f: 30 },
+            { n: "Peace Lily", s: "Spathiphyllum", w: 4, f: 60 },
+            { n: "Spider Plant", s: "Chlorophytum", w: 6, f: 30 },
+            { n: "Fiddle Leaf Fig", s: "Ficus Lyrata", w: 10, f: 30 },
+            { n: "Pothos", s: "Epipremnum aureum", w: 7, f: 60 },
+            { n: "ZZ Plant", s: "Zamioculcas zamiifolia", w: 21, f: 120 }
+        ];
 
         const DB = {
-            key: 'leafy_v22_final_pro',
-            defaults: { plants: [], logs: [], settings: { mode: 'auto', sortMode: 'thirstiest', locationMode: 'auto', lat: null, lon: null, cityName: 'Sanctuary', notificationsEnabled: false } },
-            data: null,
+            key: 'leafy_v7_audit',
+            data: { 
+                plants: [], 
+                logs: [], 
+                library: [...DEFAULT_LIBRARY],
+                settings: { 
+                    mode: 'auto', 
+                    sortMode: 'thirstiest',
+                    locationMode: 'auto',
+                    cityName: 'Sanctuary',
+                    lat: 37.77,
+                    lon: -122.41,
+                    reminders: true,
+                    rooms: ["Living Room", "Bedroom", "Kitchen", "Office"]
+                } 
+            },
             init() {
                 const saved = localStorage.getItem(this.key);
-                this.data = saved ? JSON.parse(saved) : this.defaults;
-                this.data = { ...this.defaults, ...this.data };
-                this.data.settings = { ...this.defaults.settings, ...(this.data.settings || {}) };
+                if(saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        this.data = { ...this.data, ...parsed };
+                    } catch(e) { console.error("DB Load error"); }
+                }
+                currentSort = this.data.settings.sortMode || 'thirstiest';
                 this.apply();
-                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => this.apply());
             },
-            save() { 
-                localStorage.setItem(this.key, JSON.stringify(this.data)); 
-                render(); 
-                if(document.getElementById('page-journal').classList.contains('active')) renderCalendar();
-                setTimeout(checkAndNotify, 500);
+            save() {
+                localStorage.setItem(this.key, JSON.stringify(this.data));
+                render();
             },
             apply() {
-                const mode = this.data.settings.mode;
-                let isDark = mode === 'dark' || (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                const s = this.data.settings;
+                const isDark = s.mode === 'dark' || (s.mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
                 document.documentElement.classList.toggle('dark-mode', isDark);
-                ['light', 'dark', 'auto'].forEach(m => { const el = document.getElementById('mode-' + m); if (el) el.classList.toggle('active', mode === m); });
-                ['thirstiest', 'name', 'newest'].forEach(s => { const el = document.getElementById('sort-' + s); if (el) el.classList.toggle('active', this.data.settings.sortMode === s); });
-                const locMode = this.data.settings.locationMode || 'auto';
-                if (document.getElementById('loc-auto')) document.getElementById('loc-auto').classList.toggle('active', locMode === 'auto');
-                if (document.getElementById('loc-manual')) document.getElementById('loc-manual').classList.toggle('active', locMode === 'manual');
-                if (document.getElementById('manual-loc-inputs')) document.getElementById('manual-loc-inputs').style.display = locMode === 'manual' ? 'block' : 'none';
-                const currentLoc = this.data.settings.cityName || 'Sanctuary';
-                if (document.getElementById('loc-name')) document.getElementById('loc-name').innerText = currentLoc;
-                if (document.getElementById('loc-sub')) document.getElementById('loc-sub').innerText = currentLoc;
+                
+                ['light', 'dark', 'auto'].forEach(m => {
+                    const el = document.getElementById('mode-' + m);
+                    if(el) el.classList.toggle('active', s.mode === m);
+                });
 
-                const notifyBtn = document.getElementById('notify-toggle');
-                const testBtn = document.getElementById('notify-test');
-                if (notifyBtn) {
-                    const enabled = this.data.settings.notificationsEnabled && Notification.permission === 'granted';
-                    notifyBtn.classList.toggle('active', enabled);
-                    notifyBtn.innerText = enabled ? 'Alerts Enabled' : 'Enable Alerts';
-                    if (testBtn) testBtn.style.display = enabled ? 'block' : 'none';
-                }
+                if(document.getElementById('loc-auto')) document.getElementById('loc-auto').classList.toggle('active', s.locationMode === 'auto');
+                if(document.getElementById('loc-manual')) document.getElementById('loc-manual').classList.toggle('active', s.locationMode === 'manual');
+                if(document.getElementById('manual-loc-container')) document.getElementById('manual-loc-container').style.display = s.locationMode === 'manual' ? 'block' : 'none';
+                
+                document.getElementById('loc-name').innerText = s.cityName || 'Sanctuary';
+                document.getElementById('loc-sub').innerText = s.cityName || 'Sanctuary';
+
+                if(document.getElementById('reminders-on')) document.getElementById('reminders-on').classList.toggle('active', s.reminders);
+                if(document.getElementById('reminders-off')) document.getElementById('reminders-off').classList.toggle('active', !s.reminders);
+
+                document.querySelectorAll('.sort-chip[id^="sort-"]').forEach(c => c.classList.remove('active'));
+                const sortEl = document.getElementById('sort-' + currentSort);
+                if(sortEl) sortEl.classList.add('active');
+                
+                renderRoomFilter();
+                renderSettingsRooms();
+                updateRoomSelects();
             }
         };
 
-        // --- NOTIFICATIONS ---
-        async function toggleNotifications() {
-            if (!("Notification" in window)) return showToast("Device incompatible");
-            if (Notification.permission === 'denied') return showToast("Check device settings");
+        /* --- SETTINGS & UI HELPERS --- */
+        function setReminders(v) { DB.data.settings.reminders = v; DB.save(); DB.apply(); showToast("Reminders " + (v ? "on" : "off")); }
 
-            const permission = await Notification.requestPermission();
-            if (permission === 'granted') {
-                DB.data.settings.notificationsEnabled = !DB.data.settings.notificationsEnabled;
-                DB.save(); DB.apply();
-                showToast(DB.data.settings.notificationsEnabled ? "Alerts enabled!" : "Alerts off");
-            } else {
-                showToast("Permission denied");
-            }
+        async function testNotification() {
+            if (!("Notification" in window)) return showToast("Not supported");
+            if (Notification.permission === "granted") {
+                new Notification("Leafy Sanctuary", { body: "🌿 Success! Care reminders are active.", icon: "https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/potted_plant/default/48px.svg" });
+                showToast("Sent!");
+            } else if (Notification.permission !== "denied") {
+                const res = await Notification.requestPermission();
+                if (res === "granted") testNotification();
+                else showToast("Permission denied");
+            } else showToast("Blocked in browser settings");
         }
 
-        function sendTestNotify() {
-            if (Notification.permission === 'granted') {
-                new Notification("Leafy Sanctuary", { body: "Test successful! You'll be alerted when plants are thirsty.", icon: "https://img.icons8.com/color/512/potted-plant.png" });
-            }
+        function setInc(id, val) { document.getElementById(id).value = val; showToast(val + " days set"); }
+
+        function renderSettingsRooms() {
+            const list = document.getElementById('settings-room-list');
+            if(!list) return;
+            list.innerHTML = DB.data.settings.rooms.map(r => `
+                <div class="flex items-center justify-between card-base" style="padding: 0.8rem 1rem; border-radius: 12px; flex-direction: row; margin-bottom: 4px;">
+                    <span style="font-weight: 700;">${r}</span>
+                    <button class="btn-icon" onclick="deleteRoom('${r}')"><span class="mi" style="color:var(--error); font-size:18px;">delete</span></button>
+                </div>
+            `).join('');
         }
 
-        function checkAndNotify() {
-            if (!DB.data.settings.notificationsEnabled || Notification.permission !== 'granted') return;
-            const thirsty = DB.data.plants.filter(p => {
-                const lastW = getLastCaredDate(p.id, 'water') || new Date(p.createdAt || p.id);
-                return (new Date() - lastW) / 3600000 > (p.waterInterval * 24);
-            });
-            if (thirsty.length > 0) {
-                new Notification("Thirsty Plants!", { body: `${thirsty.length} plants in your sanctuary need water.`, icon: "https://img.icons8.com/color/512/potted-plant.png" });
-            }
+        function addNewRoom() {
+            const input = document.getElementById('new-room-input');
+            const name = input.value.trim();
+            if(!name) return;
+            if(DB.data.settings.rooms.includes(name)) return showToast("Exists");
+            DB.data.settings.rooms.push(name);
+            input.value = '';
+            DB.save(); DB.apply(); showToast("Room added");
         }
 
-        // --- CORE UI ---
+        function deleteRoom(name) { DB.data.settings.rooms = DB.data.settings.rooms.filter(r => r !== name); DB.save(); DB.apply(); }
+
+        function updateRoomSelects() {
+            const sel = document.getElementById('p-room');
+            if(!sel) return;
+            sel.innerHTML = DB.data.settings.rooms.map(r => `<option value="${r}">${r}</option>`).join('') + `<option value="Other">Other</option>`;
+        }
+
+        /* --- NAVIGATION --- */
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const activePage = document.getElementById('page-' + id);
-            if (activePage) { activePage.classList.add('active'); activePage.scrollTop = 0; }
+            const p = document.getElementById('page-' + id);
+            if(p) p.classList.add('active');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            const navBtn = document.getElementById('nav-' + id);
-            if(navBtn) navBtn.classList.add('active');
+            const nav = document.getElementById('nav-' + id);
+            if(nav) nav.classList.add('active');
             if(id === 'journal') renderCalendar();
             if(id === 'sanctuary') render();
+            if(id === 'settings') renderSettingsRooms();
         }
 
         function openAddPage() {
             document.getElementById('add-page-title').innerText = "New Plant";
             document.getElementById('edit-id').value = '';
-            document.getElementById('p-name').value = ''; document.getElementById('p-species').value = ''; document.getElementById('p-notes').value = '';
-            document.getElementById('photo-preview').style.display = 'none'; document.getElementById('photo-icon').style.display = 'block';
-            document.getElementById('adjust-ui').style.display = 'none'; document.getElementById('delete-btn').style.display = 'none';
-            rawImage = null; showPage('add');
+            document.getElementById('p-name').value = '';
+            document.getElementById('p-species').value = '';
+            document.getElementById('p-water').value = '7';
+            document.getElementById('p-fert').value = '30';
+            document.getElementById('p-notes').value = '';
+            document.getElementById('photo-preview').style.display = 'none';
+            document.getElementById('photo-preview').src = '';
+            document.getElementById('photo-icon').style.display = 'block';
+            document.getElementById('delete-btn').style.display = 'none';
+            updateRoomSelects();
+            showPage('add');
         }
 
         function openEditPage(id) {
@@ -409,178 +560,328 @@
             if(!p) return;
             document.getElementById('add-page-title').innerText = "Edit Profile";
             document.getElementById('edit-id').value = id;
-            document.getElementById('p-name').value = p.name; document.getElementById('p-species').value = p.species || '';
-            document.getElementById('p-water').value = p.waterInterval; document.getElementById('p-fert').value = p.fertInterval || 0;
+            document.getElementById('p-name').value = p.name;
+            document.getElementById('p-species').value = p.species || '';
+            updateRoomSelects();
+            document.getElementById('p-room').value = p.room || "Living Room";
+            document.getElementById('p-water').value = p.waterInterval;
+            document.getElementById('p-fert').value = p.fertInterval;
             document.getElementById('p-notes').value = p.notes || '';
-            if(p.image) { document.getElementById('photo-preview').src = p.image; document.getElementById('photo-preview').style.display = 'block'; document.getElementById('photo-icon').style.display = 'none'; }
-            document.getElementById('delete-btn').style.display = 'block'; showPage('add');
-        }
-
-        function logCare(e, id, type) {
-            e.stopPropagation();
-            const today = new Date().toDateString();
-            const existingIdx = DB.data.logs.findIndex(l => l.plantId === id && l.type === type && new Date(l.date).toDateString() === today);
-            if (existingIdx !== -1) { DB.data.logs.splice(existingIdx, 1); showToast(`Undone: ${type}`); } 
-            else { 
-                const p = DB.data.plants.find(x => x.id === id);
-                DB.data.logs.push({ id: Date.now(), plantId: id, plant: p.name, type, date: new Date().toISOString() });
-                showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} logged!`);
+            if(p.image) { 
+                const prev = document.getElementById('photo-preview');
+                prev.src = p.image; prev.style.display = 'block';
+                document.getElementById('photo-icon').style.display = 'none';
+            } else {
+                document.getElementById('photo-preview').style.display = 'none';
+                document.getElementById('photo-icon').style.display = 'block';
             }
+            document.getElementById('delete-btn').style.display = 'block';
+            showPage('add');
+        }
+
+        /* --- CORE LOGIC --- */
+        function logCare(e, id, type, extra = null) {
+            if(e) e.stopPropagation();
+            const todayStr = new Date().toDateString();
+            const p = DB.data.plants.find(x => x.id === id);
+            if(!p) return;
+
+            if(['water', 'fert', 'mist'].includes(type)) {
+                const idx = DB.data.logs.findIndex(l => l.plantId === id && l.type === type && new Date(l.date).toDateString() === todayStr);
+                if (idx !== -1) { DB.data.logs.splice(idx, 1); DB.save(); return; }
+            }
+
+            DB.data.logs.push({ id: Date.now(), plantId: id, plant: p.name, type, date: new Date().toISOString(), extra });
+            if(type === 'water') p.snoozedUntil = null;
             DB.save();
+            showToast(type.charAt(0).toUpperCase() + type.slice(1) + " logged");
         }
 
-        function deleteLog(logId) {
-            DB.data.logs = DB.data.logs.filter(l => l.id !== logId);
-            DB.save(); renderCalendar(); render(); closeModal(); showToast("Activity removed");
+        function snoozePlant(e, id) {
+            e.stopPropagation();
+            const p = DB.data.plants.find(x => x.id == id);
+            if(!p) return;
+            p.snoozedUntil = Date.now() + (24 * 60 * 60 * 1000);
+            DB.save();
+            showToast("Snoozed 24h");
         }
 
-        function getLastCaredDate(plantId, type) {
-            const logs = DB.data.logs.filter(l => l.plantId === plantId && l.type === type);
-            if(logs.length === 0) return null;
-            return new Date(Math.max(...logs.map(l => new Date(l.date))));
+        function movePlantPrompt(e, id) {
+            e.stopPropagation();
+            const p = DB.data.plants.find(x => x.id == id);
+            const body = document.getElementById('modal-body');
+            document.getElementById('modal-title').innerText = "Move Location";
+            body.innerHTML = `<p class="mb2">Moving <strong>${p.name}</strong> to:</p>` + 
+                DB.data.settings.rooms.map(r => `<div class="search-item" onclick="confirmMove(${id}, '${r}')"><span class="mi" style="font-size:16px; margin-right:8px; vertical-align:middle;">home_pin</span> ${r}</div>`).join('');
+            openModal();
         }
 
+        function confirmMove(id, room) {
+            const p = DB.data.plants.find(x => x.id == id);
+            const oldRoom = p.room;
+            p.room = room;
+            logCare(null, id, 'moved', `To ${room}`);
+            closeModal(); render(); showToast("Moved to " + room);
+        }
+
+        function deleteLog(id) { DB.data.logs = DB.data.logs.filter(l => l.id !== id); DB.save(); renderCalendar(); showToast("Log deleted"); }
+
+        /* --- RENDERING --- */
         function render() {
-            const grid = document.getElementById('plant-grid'); if(!grid) return;
+            const grid = document.getElementById('plant-grid');
+            if(!grid) return;
             grid.innerHTML = '';
+            
+            let plants = DB.data.plants.filter(p => currentRoomFilter === 'all' || p.room === currentRoomFilter);
             document.getElementById('stat-total').innerText = DB.data.plants.length;
-            document.getElementById('empty-sanctuary').style.display = DB.data.plants.length ? 'none' : 'block';
-            let plants = [...DB.data.plants];
-            const sortMode = DB.data.settings.sortMode || 'thirstiest';
+            document.getElementById('empty-sanctuary').style.display = plants.length ? 'none' : 'block';
+            
             plants.sort((a, b) => {
-                const getL = (id, createdAt) => {
-                    const logs = DB.data.logs.filter(l => l.plantId === id && l.type === 'water');
-                    return logs.length ? new Date(Math.max(...logs.map(l => new Date(l.date)))) : new Date(createdAt);
+                if(currentSort === 'name') return a.name.localeCompare(b.name);
+                const score = (p) => {
+                    const lastW = getLastCare(p.id, 'water') || new Date(p.createdAt || p.id);
+                    const days = (new Date() - lastW) / 86400000;
+                    return days / (p.waterInterval || 7);
                 };
-                if(sortMode === 'thirstiest') {
-                    const aRatio = (new Date() - getL(a.id, a.createdAt || a.id)) / (a.waterInterval * 86400000);
-                    const bRatio = (new Date() - getL(b.id, b.createdAt || b.id)) / (b.waterInterval * 86400000);
-                    return bRatio - aRatio;
-                } else if(sortMode === 'name') return a.name.localeCompare(b.name);
-                return b.id - a.id;
+                return score(b) - score(a);
             });
 
-            const today = new Date().toDateString();
             plants.forEach(p => {
-                const lastW = getLastCaredDate(p.id, 'water') || new Date(p.createdAt || p.id);
-                const overdue = (new Date() - lastW) / 3600000 > (p.waterInterval * 24);
-                const wateredToday = DB.data.logs.some(l => l.plantId === p.id && l.type === 'water' && new Date(l.date).toDateString() === today);
-                const fertToday = DB.data.logs.some(l => l.plantId === p.id && l.type === 'fert' && new Date(l.date).toDateString() === today);
-                const div = document.createElement('div'); div.className = 'plant-card';
+                const lastW = getLastCare(p.id, 'water') || new Date(p.createdAt || p.id);
+                const days = (new Date() - lastW) / 86400000;
+                let overdue = days > p.waterInterval;
+                let isSnoozed = p.snoozedUntil && p.snoozedUntil > Date.now();
+                if(isSnoozed) overdue = false;
+
+                const div = document.createElement('div');
+                div.className = 'plant-card';
                 div.onclick = () => openEditPage(p.id);
-                div.innerHTML = `<div class="plant-img-wrap">${p.image ? `<img src="${p.image}" class="plant-img">` : '<div class="flex items-center justify-center h-full"><span class="mi" style="font-size:3rem; opacity:0.1; color: var(--primary)">potted_plant</span></div>'}</div><div style="padding:0.9rem;"><div style="font-weight:800; font-size:1.05rem; color: var(--primary);">${p.name}</div><div class="small muted" style="margin-top:2px;">${p.species || 'Unknown'}</div><div class="flex justify-between items-center mt3"><span class="small uppercase" style="${overdue?'color:var(--error); font-weight:800;':'color:var(--secondary);'}">${overdue?'Thirsty':'Healthy'}</span><div class="flex gap1"><button class="care-btn btn-fert ${fertToday?'active-fert':''}" onclick="logCare(event, ${p.id}, 'fert')"><span class="mi" style="font-size:17px;">${fertToday?'check':'nutrition'}</span></button><button class="care-btn btn-water ${wateredToday?'active-water':''}" onclick="logCare(event, ${p.id}, 'water')"><span class="mi" style="font-size:17px;">${wateredToday?'check':'water_drop'}</span></button></div></div></div>`;
+                div.innerHTML = `
+                    <div class="plant-img-wrap">
+                        ${p.image ? `<img src="${p.image}" class="plant-img">` : '<div class="flex items-center justify-center h-full"><span class="mi" style="font-size:3rem; opacity:0.1;">potted_plant</span></div>'}
+                    </div>
+                    <div class="card-body">
+                        <div class="flex justify-between items-start">
+                            <div style="flex: 1; padding-right: 10px;">
+                                <div class="status-text ${isSnoozed?'badge-snoozed':(overdue?'badge-thirsty':'badge-healthy')}">${isSnoozed?'Snoozed':(overdue?'Thirsty':'Healthy')}</div>
+                                <div style="font-weight:800; font-size:1.1rem; color: var(--primary);">${p.name}</div>
+                                <div class="small muted mb1">${p.species || 'Species not set'}</div>
+                            </div>
+                            <div class="care-btn-group">
+                                <button class="care-btn ${isCaredToday(p.id,'water')?'active-water':''}" onclick="logCare(event, ${p.id}, 'water')">
+                                    <span class="mi">water_drop</span> <span class="btn-label">Water</span>
+                                </button>
+                                <button class="care-btn ${isCaredToday(p.id,'fert')?'active-fert':''}" onclick="logCare(event, ${p.id}, 'fert')">
+                                    <span class="mi">nutrition</span> <span class="btn-label">Fert</span>
+                                </button>
+                                ${overdue?`<button class="care-btn" onclick="snoozePlant(event, ${p.id})" style="background:rgba(230,126,34,0.1); color:var(--fert-orange);"><span class="mi">snooze</span><span class="btn-label">Snooze</span></button>`:''}
+                            </div>
+                        </div>
+                        <div class="secondary-care-bar">
+                            <div class="sec-care-item" onclick="logCare(event, ${p.id}, 'mist')"><span class="mi" style="color:var(--mist-teal)">mist</span><span>Mist</span></div>
+                            <div class="sec-care-item" onclick="movePlantPrompt(event, ${p.id})"><span class="mi" style="color:var(--move-purple)">home_pin</span><span>Move</span></div>
+                            <div class="sec-care-item" onclick="logCare(event, ${p.id}, 'repotted')"><span class="mi" style="color:var(--repot-brown)">package_2</span><span>Repot</span></div>
+                        </div>
+                    </div>`;
                 grid.appendChild(div);
             });
         }
 
         function renderCalendar() {
-            const grid = document.getElementById('cal-grid'); const label = document.getElementById('cal-month-label');
-            if(!grid || !label) return;
-            grid.innerHTML = ''; label.innerText = calDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-            const firstDay = new Date(calDate.getFullYear(), calDate.getMonth(), 1).getDay();
-            const daysInMonth = new Date(calDate.getFullYear(), calDate.getMonth() + 1, 0).getDate();
-            const currentLogs = DB.data.logs.filter(l => { const d = new Date(l.date); return d.getMonth() === calDate.getMonth() && d.getFullYear() === calDate.getFullYear(); });
-            if (document.getElementById('stat-water-count')) document.getElementById('stat-water-count').innerText = currentLogs.filter(l => l.type === 'water').length;
-            if (document.getElementById('stat-fert-count')) document.getElementById('stat-fert-count').innerText = currentLogs.filter(l => l.type === 'fert').length;
-            const tips = ["Winter rest: reduce watering.", "Winter light: clean leaves.", "Spring growth: start feeding.", "Spring repotting: bigger pots.", "Active growth: don't miss feeding.", "Summer heat: check soil daily.", "Hydration peak: mist on hot days.", "Sun protection: burnt leaf check.", "End of summer: slow feeding.", "Autumn prep: move plants inside.", "Shortening days: move closer to window.", "Feeding pause: dormancy begins."];
-            if (document.getElementById('seasonal-tip')) document.getElementById('seasonal-tip').innerText = `"${tips[calDate.getMonth()]}"`;
-            for(let i=0; i<firstDay; i++) grid.innerHTML += '<div class="cal-day" style="background:transparent"></div>';
-            for(let d=1; d<=daysInMonth; d++) {
-                const dateStr = new Date(calDate.getFullYear(), calDate.getMonth(), d).toDateString();
-                const logs = DB.data.logs.filter(l => new Date(l.date).toDateString() === dateStr);
-                const dayEl = document.createElement('div');
-                dayEl.className = 'cal-day' + (dateStr === new Date().toDateString() ? ' today' : '');
-                dayEl.innerHTML = `<span>${d}</span><div class="cal-dots">${logs.some(l => l.type === 'water')?'<div class="dot dot-water"></div>':''}${logs.some(l => l.type === 'fert')?'<div class="dot dot-fert"></div>':''}</div>`;
-                dayEl.onclick = () => showDaySummary(dateStr, logs);
-                grid.appendChild(dayEl);
+            const label = document.getElementById('cal-month-label');
+            const grid = document.getElementById('cal-grid');
+            if(!label || !grid) return;
+            label.innerText = calDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+            grid.innerHTML = '';
+            const first = new Date(calDate.getFullYear(), calDate.getMonth(), 1).getDay();
+            const days = new Date(calDate.getFullYear(), calDate.getMonth() + 1, 0).getDate();
+            for(let i=0; i<first; i++) grid.innerHTML += '<div class="cal-day" style="background:transparent; cursor:default;"></div>';
+            for(let d=1; d<=days; d++) {
+                const ds = new Date(calDate.getFullYear(), calDate.getMonth(), d).toDateString();
+                const lgs = DB.data.logs.filter(l => new Date(l.date).toDateString() === ds && !l.snoozed);
+                const day = document.createElement('div');
+                day.className = 'cal-day' + (ds === new Date().toDateString() ? ' today' : '');
+                let dots = '';
+                if(lgs.some(l=>l.type==='water')) dots += '<div class="dot dot-water"></div>';
+                if(lgs.some(l=>l.type==='fert')) dots += '<div class="dot dot-fert"></div>';
+                if(lgs.some(l=>l.type==='mist')) dots += '<div class="dot dot-mist"></div>';
+                if(lgs.some(l=>l.type==='moved')) dots += '<div class="dot dot-move"></div>';
+                if(lgs.some(l=>l.type==='repotted')) dots += '<div class="dot dot-repot"></div>';
+                day.innerHTML = `<span>${d}</span><div class="cal-dots">${dots}</div>`;
+                day.onclick = () => showDaySummary(ds, lgs);
+                grid.appendChild(day);
             }
+            renderHistory();
+        }
+
+        function renderHistory() {
             const h = document.getElementById('journal-history');
-            if (h) h.innerHTML = DB.data.logs.slice(-15).reverse().map(l => `<div style="background: var(--surf-low); padding:0.9rem 1.1rem; border-radius:1.1rem; display:flex; justify-content:space-between; align-items:center; border: 1px solid var(--surf-c); box-shadow: 0 4px 10px rgba(0,0,0,0.02);"><div class="flex items-center gap2"><span class="mi" style="color:${l.type==='water'?'var(--water-blue)':'var(--fert-orange)'}; font-size:20px;">${l.type==='water'?'water_drop':'nutrition'}</span><span style="font-weight:700; color: var(--primary); font-size: 14px;">${l.plant}</span></div><div class="flex items-center gap1"><span class="small muted">${new Date(l.date).toLocaleDateString([], {month:'short', day:'numeric'})}</span><button class="btn-icon" onclick="deleteLog(${l.id})"><span class="mi" style="font-size:17px; color:var(--error)">delete</span></button></div></div>`).join('');
+            const recent = DB.data.logs.filter(l => !l.snoozed).slice(-15).reverse();
+            const icons = { water:'water_drop', fert:'nutrition', mist:'mist', moved:'home_pin', repotted:'package_2' };
+            h.innerHTML = recent.length ? recent.map(l => `
+                <div class="card-base" style="flex-direction: row; align-items: center; justify-content: space-between; padding: 0.8rem 1rem;">
+                    <div class="flex items-center">
+                        <div class="log-type-icon type-${l.type}"><span class="mi" style="font-size:16px;">${icons[l.type]}</span></div>
+                        <div><strong style="color:var(--primary)">${l.plant}</strong><br><span class="small muted">${l.type} ${l.extra?`• ${l.extra}`:''} • ${new Date(l.date).toLocaleDateString()}</span></div>
+                    </div>
+                    <button class="btn-icon" onclick="deleteLog(${l.id})"><span class="mi" style="font-size:18px; color:var(--error)">delete</span></button>
+                </div>`).join('') : '<p class="small muted" style="text-align:center">No recent entries.</p>';
         }
 
-        function changeMonth(dir) { calDate.setMonth(calDate.getMonth() + dir); renderCalendar(); }
-        function showDaySummary(date, logs) {
-            const body = document.getElementById('modal-body'); document.getElementById('modal-title').innerText = date;
-            body.innerHTML = logs.length ? logs.map(l => `<div class="flex items-center justify-between mb2" style="border-bottom: 1px solid var(--surf-c); padding-bottom: 8px;"><div class="flex items-center gap2"><span class="mi" style="color:${l.type==='water'?'var(--water-blue)':'var(--fert-orange)'}; font-size:20px;">${l.type==='water'?'water_drop':'nutrition'}</span><div><strong>${l.plant}</strong></div></div><button class="btn-icon" onclick="deleteLog(${l.id})"><span class="mi" style="color:var(--error); font-size:18px;">delete</span></button></div>`).join('') : '<p class="muted">No activity logged.</p>';
-            document.getElementById('modal-footer').innerHTML = '<button class="chip active" onclick="closeModal()" style="width:100%">Close</button>';
-            document.getElementById('leafy-modal').style.display = 'flex';
+        /* --- SPECIES LIBRARY --- */
+        function showLibrary() {
+            const body = document.getElementById('modal-body');
+            document.getElementById('modal-title').innerText = "Species Guide";
+            const items = DB.data.library.map((p, i) => `
+                <div class="search-item flex items-center justify-between" onclick="applyLibrary(${i})">
+                    <div style="flex:1;"><strong>${p.n}</strong><br><span class="small muted">H<sub>2</sub>O: ${p.w}d • ${p.s || ''}</span></div>
+                    <button class="btn-icon" onclick="event.stopPropagation(); deleteLibraryItem(${i})"><span class="mi" style="font-size:18px; color:var(--error)">delete</span></button>
+                </div>`).join('');
+            body.innerHTML = `<button class="sort-chip active mb2" style="width:100%" onclick="event.stopPropagation(); showAddSpeciesForm()"><span class="mi" style="font-size:16px;">add</span> Add New Template</button>${items}`;
+            openModal();
         }
 
-        async function searchCity(q) {
-            const resEl = document.getElementById('city-results'); if (q.length < 3) { resEl.style.display = 'none'; return; }
-            const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=5&format=json`);
-            const d = await res.json();
-            if (d.results) {
-                resEl.innerHTML = d.results.map(c => `<div class="search-item" onclick="selectCity('${c.name}', ${c.latitude}, ${c.longitude})"><strong>${c.name}</strong> <span class="small muted">${c.country_code.toUpperCase()}</span></div>`).join('');
-                resEl.style.display = 'block';
-            }
+        function showAddSpeciesForm() {
+            const body = document.getElementById('modal-body');
+            document.getElementById('modal-title').innerText = "New Template";
+            body.innerHTML = `
+                <label class="small uppercase">Name</label><div class="field-wrap"><input type="text" id="lib-n" placeholder="e.g. Aloe Vera"></div>
+                <label class="small uppercase">Info</label><div class="field-wrap"><input type="text" id="lib-s" placeholder="e.g. Indirect light"></div>
+                <div class="flex gap1 mb2">
+                    <div style="flex:1;"><label class="small uppercase">Water (d)</label><div class="field-wrap"><input type="number" id="lib-w" value="7"></div></div>
+                    <div style="flex:1;"><label class="small uppercase">Fert (d)</label><div class="field-wrap"><input type="number" id="lib-f" value="30"></div></div>
+                </div>
+                <button class="sort-chip active" style="width:100%" onclick="saveLibraryItem()">Save</button>
+            `;
         }
 
-        function selectCity(n, lat, lon) { DB.data.settings.cityName = n; DB.data.settings.lat = lat; DB.data.settings.lon = lon; DB.save(); DB.apply(); document.getElementById('city-search').value = ''; document.getElementById('city-results').style.display = 'none'; fetchEnv(true); }
-
-        async function fetchEnv(manual = false) {
-            const run = async (lat, lon) => {
-                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=relative_humidity_2m&daily=sunrise,sunset&timezone=auto`);
-                const d = await res.json();
-                document.getElementById('env-humidity').innerText = (d.current ? d.current.relative_humidity_2m : '--') + "%";
-                const f24 = (iso) => new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-                document.getElementById('env-sunrise').innerText = f24(d.daily.sunrise[0]);
-                document.getElementById('env-sunset').innerText = f24(d.daily.sunset[0]);
-                const diff = new Date(d.daily.sunset[0]) - new Date(d.daily.sunrise[0]);
-                document.getElementById('env-daylight').innerText = `${Math.floor(diff/3600000)}h ${Math.round((diff%3600000)/60000)}m`;
-                if(manual) showToast("Weather synced!");
-            };
-            if(DB.data.settings.locationMode === 'manual' && DB.data.settings.lat) return run(DB.data.settings.lat, DB.data.settings.lon);
-            if (navigator.geolocation) navigator.geolocation.getCurrentPosition((pos) => run(pos.coords.latitude, pos.coords.longitude));
+        function saveLibraryItem() {
+            const n = document.getElementById('lib-n').value.trim();
+            if(!n) return showToast("Required");
+            DB.data.library.push({ n, s: document.getElementById('lib-s').value, w: parseInt(document.getElementById('lib-w').value)||7, f: parseInt(document.getElementById('lib-f').value)||30 });
+            DB.save(); showLibrary();
         }
 
-        function openConfirmModal(title, message, onYes) {
-            document.getElementById('modal-title').innerText = title; document.getElementById('modal-body').innerText = message;
-            document.getElementById('modal-footer').innerHTML = `<div class="confirm-actions"><button class="confirm-btn confirm-no" onclick="closeModal()">Cancel</button><button id="confirm-yes-btn" class="confirm-btn confirm-yes">Confirm</button></div>`;
-            document.getElementById('confirm-yes-btn').onclick = () => { onYes(); closeModal(); }; document.getElementById('leafy-modal').style.display = 'flex';
+        function deleteLibraryItem(i) { DB.data.library.splice(i, 1); DB.save(); showLibrary(); }
+
+        function applyLibrary(i) {
+            const p = DB.data.library[i];
+            document.getElementById('p-name').value = p.n;
+            document.getElementById('p-species').value = p.n;
+            document.getElementById('p-water').value = p.w;
+            document.getElementById('p-fert').value = p.f;
+            document.getElementById('p-notes').value = p.s || '';
+            closeModal(); showToast("Applied");
         }
 
-        function confirmPlantDelete() { openConfirmModal("Delete Plant?", "This will remove this plant and its history.", () => { const id = document.getElementById('edit-id').value; DB.data.plants = DB.data.plants.filter(x => x.id != id); DB.data.logs = DB.data.logs.filter(x => x.plantId != id); DB.save(); showPage('sanctuary'); }); }
-        function confirmAppReset() { openConfirmModal("Reset All?", "Permanently delete everything?", () => { localStorage.removeItem(DB.key); location.reload(); }); }
-        function closeModal() { document.getElementById('leafy-modal').style.display = 'none'; }
-        function showToast(m) { const t = document.getElementById('leafy-toast'); t.innerText = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
-        function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(DB.data)], { type: 'application/json' })); a.download = `leafy_backup.json`; a.click(); }
-        function handleImport(ev) { const file = ev.target.files[0]; const reader = new FileReader(); reader.onload = (e) => { try { const p = JSON.parse(e.target.result); if(p.plants) { DB.data = p; DB.save(); DB.apply(); showPage('sanctuary'); showToast("Imported!"); } } catch(err) { showToast("Invalid file"); } }; reader.readAsText(file); }
-
-        function initImageAdjustment(e) {
-            const file = e.target.files[0]; const reader = new FileReader();
-            reader.onload = (event) => { rawImage = new Image(); rawImage.onload = () => { cropState = { zoom: 1, offsetX: 0, offsetY: 0 }; document.getElementById('adjust-ui').style.display = 'block'; updateCropPreview(); }; rawImage.src = event.target.result; };
-            reader.readAsDataURL(file);
-        }
-
-        function startDrag(e) {
-            if(!rawImage) return; isDragging = true; const touch = e.touches ? e.touches[0] : e; dragStart = { x: touch.clientX - cropState.offsetX, y: touch.clientY - cropState.offsetY };
-            const onDrag = (ev) => { if(!isDragging) return; const mTouch = ev.touches ? ev.touches[0] : ev; cropState.offsetX = mTouch.clientX - dragStart.x; cropState.offsetY = mTouch.clientY - dragStart.y; updateCropPreview(); };
-            const endDrag = () => { isDragging = false; window.removeEventListener('mousemove', onDrag); window.removeEventListener('mouseup', endDrag); window.removeEventListener('touchmove', onDrag); window.removeEventListener('touchend', endDrag); };
-            window.addEventListener('mousemove', onDrag); window.addEventListener('mouseup', endDrag); window.addEventListener('touchmove', onDrag, { passive: false }); window.addEventListener('touchend', endDrag);
-        }
-
-        function updateCropPreview() {
-            if(!rawImage) return; const zoom = document.getElementById('crop-zoom').value; const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d'); canvas.width = 500; canvas.height = 500;
-            const scale = Math.max(500/rawImage.width, 500/rawImage.height) * zoom;
-            ctx.drawImage(rawImage, (500-rawImage.width*scale)/2 + cropState.offsetX, (500-rawImage.height*scale)/2 + cropState.offsetY, rawImage.width*scale, rawImage.height*scale);
-            document.getElementById('photo-preview').src = canvas.toDataURL('image/jpeg', 0.8);
-            document.getElementById('photo-preview').style.display = 'block'; document.getElementById('photo-icon').style.display = 'none';
-        }
+        /* --- DATA HELPERS --- */
+        function isCaredToday(id, type) { return DB.data.logs.some(l => l.plantId === id && l.type === type && new Date(l.date).toDateString() === new Date().toDateString()); }
+        function getLastCare(id, type) { const logs = DB.data.logs.filter(l => l.plantId === id && l.type === type); return logs.length ? new Date(Math.max(...logs.map(l => new Date(l.date)))) : null; }
+        function openModal() { document.getElementById('leafy-modal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('leafy-modal').style.display = 'none'; document.getElementById('modal-cancel-btn').style.display = 'none'; }
 
         function savePlant() {
-            const name = document.getElementById('p-name').value.trim(); if(!name) return showToast("Name required!");
-            const id = document.getElementById('edit-id').value; const img = document.getElementById('photo-preview').style.display === 'block' ? document.getElementById('photo-preview').src : null;
-            const pData = { name, species: document.getElementById('p-species').value, notes: document.getElementById('p-notes').value, waterInterval: parseInt(document.getElementById('p-water').value), fertInterval: parseInt(document.getElementById('p-fert').value), image: img };
-            if(id) Object.assign(DB.data.plants.find(x => x.id == id), pData); else DB.data.plants.push({ ...pData, id: Date.now(), createdAt: new Date().toISOString() });
-            DB.save(); showPage('sanctuary');
+            const id = document.getElementById('edit-id').value;
+            const pName = document.getElementById('p-name').value.trim();
+            if(!pName) return showToast("Name required");
+            const pData = { 
+                name: pName, species: document.getElementById('p-species').value.trim(), room: document.getElementById('p-room').value, 
+                waterInterval: parseInt(document.getElementById('p-water').value) || 7, fertInterval: parseInt(document.getElementById('p-fert').value) || 30, 
+                notes: document.getElementById('p-notes').value, image: document.getElementById('photo-preview').src.startsWith('data:') ? document.getElementById('photo-preview').src : (id ? DB.data.plants.find(x => x.id == id).image : null)
+            };
+            if(id) { const idx = DB.data.plants.findIndex(x => x.id == id); if(idx !== -1) DB.data.plants[idx] = { ...DB.data.plants[idx], ...pData }; }
+            else DB.data.plants.push({ ...pData, id: Date.now(), createdAt: new Date().toISOString() });
+            DB.save(); showPage('sanctuary'); showToast("Saved");
         }
 
-        function setSort(m) { DB.data.settings.sortMode = m; DB.save(); DB.apply(); render(); }
-        function setMode(m) { DB.data.settings.mode = m; DB.save(); DB.apply(); }
-        function setLocationMode(m) { DB.data.settings.locationMode = m; if(m === 'auto') DB.data.settings.cityName = 'Sanctuary'; DB.save(); DB.apply(); fetchEnv(true); }
+        function renderRoomFilter() {
+            const rooms = DB.data.settings.rooms;
+            const bar = document.getElementById('room-filter-bar');
+            if(!bar) return;
+            bar.innerHTML = `<div class="sort-chip ${currentRoomFilter === 'all'?'active':''}" onclick="setRoomFilter('all')">All Rooms</div>` + rooms.map(r => `<div class="sort-chip ${currentRoomFilter === r?'active':''}" onclick="setRoomFilter('${r}')">${r}</div>`).join('');
+        }
 
-        window.onload = () => { DB.init(); render(); fetchEnv(); const hr = new Date().getHours(); document.getElementById('welcome-text').innerText = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening'; setTimeout(checkAndNotify, 1500); };
+        function setRoomFilter(r) { currentRoomFilter = r; DB.apply(); render(); }
+        function setSort(m) { currentSort = m; DB.data.settings.sortMode = m; DB.save(); DB.apply(); }
+        function setMode(m) { DB.data.settings.mode = m; DB.save(); DB.apply(); }
+        function changeMonth(d) { calDate.setMonth(calDate.getMonth() + d); renderCalendar(); }
+        function setLocationMode(m) { DB.data.settings.locationMode = m; if(m==='auto') navigator.geolocation.getCurrentPosition(p=>{DB.data.settings.lat=p.coords.latitude; DB.data.settings.lon=p.coords.longitude; DB.data.settings.cityName='Local'; DB.save(); DB.apply(); fetchEnv(true);}, ()=>showToast("GPS Denied")); DB.save(); DB.apply(); }
+
+        async function searchCity(val) {
+            if(val.length < 3) { document.getElementById('city-results').style.display = 'none'; return; }
+            try {
+                const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(val)}&count=5&language=en&format=json`);
+                const d = await res.json();
+                if(d.results) {
+                    const box = document.getElementById('city-results');
+                    box.innerHTML = d.results.map(r => `<div class="search-item" onclick="applyCity('${r.name}', ${r.latitude}, ${r.longitude})">${r.name}, ${r.admin1 || ''} (${r.country_code})</div>`).join('');
+                    box.style.display = 'block';
+                }
+            } catch(e) {}
+        }
+
+        function applyCity(name, lat, lon) { DB.data.settings.cityName = name; DB.data.settings.lat = lat; DB.data.settings.lon = lon; document.getElementById('city-results').style.display = 'none'; DB.save(); DB.apply(); fetchEnv(true); }
+
+        async function fetchEnv(manual = false) { 
+            try { 
+                const s = DB.data.settings;
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${s.lat}&longitude=${s.lon}&current=relative_humidity_2m&daily=sunrise,sunset&timezone=auto`); 
+                const d = await res.json(); 
+                let hum = 50; if(d.current) { hum = d.current.relative_humidity_2m; document.getElementById('env-humidity').innerText = hum + "%"; }
+                const fTime = (iso) => new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                if(d.daily) {
+                    document.getElementById('env-sunrise').innerText = fTime(d.daily.sunrise[0]);
+                    document.getElementById('env-sunset').innerText = fTime(d.daily.sunset[0]);
+                    const diff = (new Date(d.daily.sunset[0]) - new Date(d.daily.sunrise[0])) / 3600000;
+                    document.getElementById('env-daylight').innerText = `${Math.floor(diff)}h ${Math.floor((diff%1)*60)}m`;
+                }
+                let tip = "Normal growth conditions.";
+                if(hum < 35) tip = "Air is dry. Mist foliage or use a humidifier.";
+                else if(hum > 70) tip = "High humidity. Avoid watering if soil feels damp.";
+                document.getElementById('env-recommendation').innerText = tip;
+                if(manual) showToast("Synced"); 
+            } catch(e) { if(manual) showToast("Weather unavailable"); }
+        }
+
+        function handleImage(e) { 
+            const f = e.target.files[0]; if(!f) return; 
+            const r = new FileReader(); 
+            r.onload = (ev) => { const p = document.getElementById('photo-preview'); p.src = ev.target.result; p.style.display = 'block'; document.getElementById('photo-icon').style.display = 'none'; }; 
+            r.readAsDataURL(f); 
+        }
+
+        function showDaySummary(d, lgs) {
+            const body = document.getElementById('modal-body'); document.getElementById('modal-title').innerText = d;
+            body.innerHTML = lgs.length ? lgs.map(l => `<div class="flex items-center justify-between mb2"><div><strong>${l.plant}</strong><br><span class="muted small">${l.type} ${l.extra?`(${l.extra})`:''}</span></div><button class="btn-icon" onclick="deleteLog(${l.id})"><span class="mi" style="font-size:18px; color:var(--error)">delete</span></button></div>`).join('') : '<p class="muted">No activity.</p>';
+            openModal();
+        }
+
+        function requestDelete() {
+            document.getElementById('modal-title').innerText = "Remove Plant?";
+            document.getElementById('modal-body').innerText = "Logs remain in journal history.";
+            document.getElementById('modal-cancel-btn').style.display = 'block';
+            document.getElementById('modal-ok-btn').innerText = "Remove";
+            document.getElementById('modal-ok-btn').onclick = () => { DB.data.plants = DB.data.plants.filter(x => x.id != document.getElementById('edit-id').value); DB.save(); showPage('sanctuary'); closeModal(); };
+            openModal();
+        }
+
+        function requestReset() {
+            document.getElementById('modal-title').innerText = "Hard Reset?";
+            document.getElementById('modal-cancel-btn').style.display = 'block';
+            document.getElementById('modal-ok-btn').innerText = "Wipe Data";
+            document.getElementById('modal-ok-btn').onclick = () => { localStorage.removeItem(DB.key); location.reload(); };
+            openModal();
+        }
+
+        function showToast(m) { const t = document.getElementById('leafy-toast'); t.innerText = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+        function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(DB.data)], { type: 'application/json' })); a.download = `leafy_backup.json`; a.click(); }
+        function handleImport(ev) { const f = ev.target.files[0]; if(!f) return; const r = new FileReader(); r.onload = (e) => { try { const p = JSON.parse(e.target.result); if(p.plants) { DB.data = p; DB.save(); DB.apply(); showPage('sanctuary'); showToast("Imported"); } } catch(err) { showToast("Invalid file"); } }; r.readAsText(f); }
+
+        window.onload = () => { 
+            DB.init(); render(); fetchEnv(); 
+            const hr = new Date().getHours(); 
+            document.getElementById('welcome-text').innerText = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening'; 
+        };
     </script>
 </body>
 </html>
