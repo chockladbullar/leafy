@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
+    <!-- Refined viewport to prevent scaling issues while respecting fit-cover for modern devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -44,8 +45,24 @@
             --on-surface: #d8f3dc; --on-surf-v: #95d5b2; --water-blue: #4db3ff; --fert-orange: #ffb347;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
-        input, textarea, select { -webkit-user-select: text; user-select: text; outline: none; }
+        /* Prevent double-tap zoom and improve touch stability */
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            -webkit-user-select: none; 
+            user-select: none; 
+            touch-action: manipulation; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* IMPORTANT: Font-size 16px minimum prevents iOS auto-zoom on input focus */
+        input, textarea, select { 
+            -webkit-user-select: text; 
+            user-select: text; 
+            outline: none; 
+            font-size: 16px !important; 
+        }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -145,7 +162,11 @@
 
         /* FORMS */
         .field-wrap { background: var(--surf-low); border-radius: var(--radius-md); overflow: hidden; margin-top: 4px; border: 1px solid var(--surf-c); }
-        .field-wrap input, .field-wrap textarea, .field-wrap select { width: 100%; padding: 1rem; border: none; background: transparent; font-size: 16px; color: var(--on-surface); font-family: inherit; }
+        .field-wrap input, .field-wrap textarea, .field-wrap select { 
+            width: 100%; padding: 1rem; border: none; background: transparent; 
+            font-size: 16px; /* Critical fix for mobile zoom */
+            color: var(--on-surface); font-family: inherit; 
+        }
         
         .sort-bar { display: flex; gap: 0.6rem; overflow-x: auto; scrollbar-width: none; padding: 0.5rem 0 1rem; }
         .sort-bar::-webkit-scrollbar { display: none; }
